@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlacatl Web Solutions - Interactive Cards</title>
+
+<!-- Google Fonts - Kanit -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container-fluid p-2">
+<!-- Header Section -->
+<header class="header-section mb-3">
+<h1 class="app-title text-center">ATLACATL</h1>
+</header>
+
+<!-- Main Content -->
+<main class="row g-3">
+<!-- Left Column: Card/Comment Generator & Web Console -->
+<div class="col-12 col-md-5 left-column">
+<!-- Dynamic Generator Section -->
+<section class="card-generator-section panel-box mb-3">
+<h2 class="section-title" id="generatorTitle">Card Generator</h2>
+
+<!-- Card Mode Fields -->
+<div id="cardMode">
+<div class="row mb-2">
+<label for="domCardAuthor" class="col-sm-3 col-form-label label-style">Author:</label>
+<div class="col-sm-9">
+<input type="text" class="form-control input-style" placeholder="Type Card AUTHOR" id="domCardAuthor">
+</div>
+</div>
+
+<div class="row mb-2">
+<label for="domCardTitle" class="col-sm-3 col-form-label label-style">Title:</label>
+<div class="col-sm-9">
+<input type="text" class="form-control input-style" placeholder="Type Card TITLE" id="domCardTitle">
+</div>
+</div>
+
+<div class="mb-3">
+<label for="domCardBody" class="form-label label-style">Body:</label>
+<textarea class="form-control textarea-style" placeholder="Type POST (cardBody) data" id="domCardBody" rows="3"></textarea>
+</div>
+
+<button type="button" class="btn button-style w-100" id="domPostBtn">POST CARD</button>
+</div>
+
+<!-- Comment Mode Fields (initially hidden) -->
+<div id="commentMode" style="display: none;">
+<div class="alert alert-info" role="alert" id="commentingOnCard">
+Commenting on: <strong id="selectedCardTitle">Card Title</strong>
+</div>
+
+<div class="row mb-2">
+<label for="domCommentAuthor" class="col-sm-3 col-form-label label-style">Author:</label>
+<div class="col-sm-9">
+<input type="text" class="form-control input-style" placeholder="Type Comment AUTHOR" id="domCommentAuthor">
+</div>
+</div>
+
+<div class="mb-3">
+<label for="domCommentBody" class="form-label label-style">Comment:</label>
+<textarea class="form-control textarea-style" placeholder="Type your comment here" id="domCommentBody" rows="3"></textarea>
+</div>
+
+<div class="d-flex gap-2">
+<button type="button" class="btn button-style flex-fill" id="domPostCommentBtn">POST COMMENT</button>
+<button type="button" class="btn btn-secondary" id="domCancelCommentBtn">CANCEL</button>
+</div>
+</div>
+</section>
+
+<!-- Web Console Section -->
+<section class="web-console-section panel-box">
+<h2 class="section-title">Web Console</h2>
+
+<div class="mb-3">
+<label for="domWebConsole" class="form-label label-style">Live Output:</label>
+<textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2" placeholder="Web console output"></textarea>
+</div>
+
+<button type="button" class="btn button-style w-100" id="domDebugButton">DEBUG BUTTON</button>
+</section>
+</div>
+
+<!-- Right Column: Result Grid -->
+<div class="col-12 col-md-7 right-column">
+<section class="result-grid-section panel-box h-100">
+<h2 class="section-title" id="resultGridTitle">Result Grid</h2>
+
+<div class="mb-3 flex-grow-1 d-flex flex-column">
+<label for="domResultGrid" class="form-label label-style">Query Results:</label>
+<div class="result-grid-display-area flex-grow-1" id="domResultGrid"></div>
+</div>
+
+<div class="button-group-style">
+<button type="button" class="btn button-style me-2" id="domConsoleAscButton">GET ASC</button>
+<button type="button" class="btn button-style me-2" id="domConsoleDescButton">GET DESC</button>
+<button type="button" class="btn btn-secondary" id="domBackToCardsBtn" style="display: none;">BACK TO CARDS</button>
+</div>
+</section>
+</div>
+</main>
+
+<!-- Footer Section -->
+<footer class="footer-section mt-4">
+<div class="text-center">
+<a href="/about.html" class="about-button">Acerca de</a>
+</div>
+</footer>
+</div>
+
+<script src="/dom.js"></script>
+</body>
+</html>
