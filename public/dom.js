@@ -12,7 +12,8 @@ const resultGrid = document.getElementById("domResultGrid");
 
 // IMPORTANT: Set your deployed Railway app's URL here
 // This URL is where your frontend will send all API requests.
-const BASE_API_URL = "https://atlacatl-2-production.up.railway.app"; // <-- THIS IS THE CRITICAL CHANGE
+const BASE_API_URL = "https://www.atlacatl.net";
+
 
 // Global state
 let currentMode = "cards"; // 'cards' or 'comments'
