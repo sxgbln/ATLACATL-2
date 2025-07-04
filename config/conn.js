@@ -1,14 +1,11 @@
 // conn.js
 const mysql = require("mysql2/promise");
-// IMPORTANT: This line is crucial for local development.
-// It loads variables from your .env file.
-// Make sure 'dotenv' is installed (npm install dotenv) and .env is in .gitignore.
-// When deployed on Railway, Railway itself handles injecting these variables,
-// so this line has no effect there, but it's harmless to keep.
+// This line loads variables from your .env file locally.
+// It's harmless when deployed on Railway as Railway injects variables directly.
 require('dotenv').config();
 
 const credentials = {
-  // These variables MUST be set in your environment (either .env locally or Railway variables)
+  // These variables MUST be set in your environment (either local .env or Railway variables)
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT), // Ensure port is parsed as an integer
   user: process.env.DB_USER,
@@ -32,7 +29,7 @@ async function poolGetAsc() {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date ASC`);
     return rows;
   } catch (error) {
-    console.error("Error in poolGetAsc:", error);
+    console.error("Error in poolGetAsc:", error); // Added console.error for backend
     return error;
   }
 }
@@ -42,7 +39,7 @@ async function poolGetDesc() {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date DESC`);
     return rows;
   } catch (error) {
-    console.error("Error in poolGetDesc:", error);
+    console.error("Error in poolGetDesc:", error); // Added console.error for backend
     return error;
   }
 }
@@ -54,7 +51,7 @@ async function poolPost(cardAuthor, cardTitle, cardBody) {
     const [rows, fields] = await pool.query(insertQuery, [cardAuthor, cardTitle, cardBody]);
     return rows;
   } catch (error) {
-    console.error("Error in poolPost:", error);
+    console.error("Error in poolPost:", error); // Added console.error for backend
     return error;
   }
 }
