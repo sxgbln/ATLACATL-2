@@ -100,7 +100,7 @@ async function poolHandleLike(cardId, ipAddress) {
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {
       console.warn("Duplicate like attempt:", error.message);
-      return { status: "already_liked", message: "This card has already been liked by this IP." };
+      return { status: "already_liked", message: "This card has already been liked" };
     }
     console.error("Database error in poolHandleLike:", error);
     throw error;
