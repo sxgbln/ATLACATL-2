@@ -55,11 +55,17 @@ app.get("/server/get/sortdesc", async (request, response) => {
   }
 })
 
-// POST - Create new card
+// POST - Create new card (now with IP tracking)
 app.post("/", async (request, response) => {
   console.log("POST request received:", request.body)
   try {
-    const queryResult = await poolPost(request.body.cardAuthor, request.body.cardTitle, request.body.cardBody)
+    const ipAddress = getClientIP(request)
+    const queryResult = await poolPost(
+      request.body.cardAuthor,
+      request.body.cardTitle,
+      request.body.cardBody,
+      ipAddress,
+    )
     response.send(queryResult)
   } catch (error) {
     response.status(500).send({ error: error.message })
@@ -73,11 +79,9 @@ app.get("/server/card/:cardId", async (request, response) => {
     const cardId = Number.parseInt(request.params.cardId)
     const card = await poolGetCardById(cardId)
     const comments = await poolGetComments(cardId)
-
     if (!card) {
       return response.status(404).send({ error: "Card not found" })
     }
-
     response.send({
       card: card,
       comments: comments,
@@ -93,7 +97,6 @@ app.post("/server/comment", async (request, response) => {
   try {
     const { cardId, commentAuthor, commentBody } = request.body
     const ipAddress = getClientIP(request)
-
     const queryResult = await poolPostComment(cardId, commentAuthor, commentBody, ipAddress)
     response.send(queryResult)
   } catch (error) {
@@ -107,7 +110,6 @@ app.post("/server/like", async (request, response) => {
   try {
     const { cardId } = request.body
     const ipAddress = getClientIP(request)
-
     const result = await poolHandleLike(cardId, ipAddress)
     response.send(result)
   } catch (error) {
