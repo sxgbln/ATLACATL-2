@@ -19,23 +19,43 @@ const credentials = {
 
 const pool = mysql.createPool(credentials)
 
-// Updated card functions with IP tracking and comment count
-async function poolGetAsc() {
+// Updated sorting functions
+async function poolGetByDateAsc() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date ASC`)
     return rows
   } catch (error) {
-    console.error("Error in poolGetAsc:", error)
+    console.error("Error in poolGetByDateAsc:", error)
     return error
   }
 }
 
-async function poolGetDesc() {
+async function poolGetByDateDesc() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date DESC`)
     return rows
   } catch (error) {
-    console.error("Error in poolGetDesc:", error)
+    console.error("Error in poolGetByDateDesc:", error)
+    return error
+  }
+}
+
+async function poolGetByLikes() {
+  try {
+    const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY like_count DESC, card_date DESC`)
+    return rows
+  } catch (error) {
+    console.error("Error in poolGetByLikes:", error)
+    return error
+  }
+}
+
+async function poolGetByComments() {
+  try {
+    const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY comment_count DESC, card_date DESC`)
+    return rows
+  } catch (error) {
+    console.error("Error in poolGetByComments:", error)
     return error
   }
 }
@@ -107,7 +127,7 @@ async function poolHandleLike(cardId, ipAddress) {
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {
       console.warn("Duplicate like attempt:", error.message)
-      return { status: "already_liked", message: "This card has already been liked" }
+      return { status: "already_liked", message: "Esta tarjeta ya ha sido marcada como favorita" }
     }
     console.error("Database error in poolHandleLike:", error)
     throw error
@@ -125,9 +145,11 @@ async function poolGetCardById(cardId) {
 }
 
 module.exports = {
-  poolGetAsc,
+  poolGetByDateAsc,
+  poolGetByDateDesc,
+  poolGetByLikes,
+  poolGetByComments,
   poolPost,
-  poolGetDesc,
   poolGetComments,
   poolPostComment,
   poolHandleLike,

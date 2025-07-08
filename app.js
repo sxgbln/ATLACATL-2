@@ -1,8 +1,10 @@
 const express = require("express")
 const path = require("path")
 const {
-  poolGetAsc,
-  poolGetDesc,
+  poolGetByDateAsc,
+  poolGetByDateDesc,
+  poolGetByLikes,
+  poolGetByComments,
   poolPost,
   poolGetComments,
   poolPostComment,
@@ -27,28 +29,50 @@ function getClientIP(req) {
   )
 }
 
-// GET ASC - All cards
-app.get("/server/get/sortasc", async (request, response) => {
-  console.log("GET request received for /server/get/sortasc")
+// New unified sorting endpoint
+app.get("/server/get/sorted/:sortType", async (request, response) => {
+  const sortType = request.params.sortType
+  console.log(`GET request received for sorting: ${sortType}`)
+
   try {
-    const rows = await poolGetAsc()
+    let rows
+    switch (sortType) {
+      case "newest":
+        rows = await poolGetByDateDesc()
+        break
+      case "oldest":
+        rows = await poolGetByDateAsc()
+        break
+      case "likes":
+        rows = await poolGetByLikes()
+        break
+      case "comments":
+        rows = await poolGetByComments()
+        break
+      default:
+        rows = await poolGetByDateDesc() // Default to newest
+    }
     response.send(rows)
   } catch (error) {
     response.status(500).send({ error: error.message })
   }
 })
 
-// GET DESC - All cards
+// Keep old endpoints for backward compatibility (optional)
+app.get("/server/get/sortasc", async (request, response) => {
+  console.log("GET request received for /server/get/sortasc")
+  try {
+    const rows = await poolGetByDateAsc()
+    response.send(rows)
+  } catch (error) {
+    response.status(500).send({ error: error.message })
+  }
+})
+
 app.get("/server/get/sortdesc", async (request, response) => {
   console.log("GET request received for /server/get/sortdesc")
   try {
-    const rows = await poolGetDesc()
-    console.log(Object.keys(rows))
-    rows.forEach((element) => {
-      console.log(Object.keys(element))
-      console.log(element["card_body"])
-      console.log(element["card_date"])
-    })
+    const rows = await poolGetByDateDesc()
     response.send(rows)
   } catch (error) {
     response.status(500).send({ error: error.message })
