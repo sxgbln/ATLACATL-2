@@ -1,124 +1,161 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acerca de - ATLACATL</title>
-    
-    <!-- Google Fonts - Kanit -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap CSS -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
+        /* Custom Y2K Frutiger Aero styles on top of Bootstrap */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 25%, #e6f7ff 50%, #f0fff0 75%, #e8f5e8 100%);
+            background-attachment: fixed;
+            font-size: 0.9rem;
+            position: relative;
+            min-height: 100vh;
+            /* Ensure body takes full height */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Add subtle texture overlay for that Y2K feel */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(144, 238, 144, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(173, 216, 230, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         /* Kanit Font Classes */
         .kanit-thin {
             font-family: "Kanit", sans-serif;
             font-weight: 100;
             font-style: normal;
         }
-        
+
         .kanit-extralight {
             font-family: "Kanit", sans-serif;
             font-weight: 200;
             font-style: normal;
         }
-        
+
         .kanit-light {
             font-family: "Kanit", sans-serif;
             font-weight: 300;
             font-style: normal;
         }
-        
+
         .kanit-regular {
             font-family: "Kanit", sans-serif;
             font-weight: 400;
             font-style: normal;
         }
-        
+
         .kanit-medium {
             font-family: "Kanit", sans-serif;
             font-weight: 500;
             font-style: normal;
         }
 
-        /* Y2K Aesthetic Styles */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 25%, #ddeeff 50%, #e6f2ff 75%, #f0f8ff 100%);
-            background-attachment: fixed;
-            font-size: 0.9rem;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Header Section - Shiny innovative Y2K */
+        /* Header Section - Enhanced Y2K chrome with taller title */
         .header-section {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%, #ffffff 100%);
+            background: linear-gradient(135deg,
+                    #ffffff 0%,
+                    #f8f8f8 15%,
+                    #e8e8e8 30%,
+                    #d8d8d8 45%,
+                    #e8e8e8 60%,
+                    #f8f8f8 85%,
+                    #ffffff 100%);
             color: #2c3e50;
-            padding: 2rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 
-                0 4px 15px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1.2rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(200, 220, 255, 0.4);
             position: relative;
+            backdrop-filter: blur(10px);
+            /* Re-added for true Frutiger Aero glass effect */
             margin-bottom: 2rem;
         }
 
         .header-section::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 50%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%);
-            border-radius: 12px 12px 0 0;
+            height: 60%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 248, 255, 0.4) 50%, transparent 100%);
+            border-radius: 16px 16px 0 0;
             pointer-events: none;
         }
 
+        /* Enhanced ATLACATL title - taller and more prominent */
         .app-title {
-            font-size: 3.5rem;
-            letter-spacing: 2px;
+            font-size: 3.0rem;
+            /* Adjusted for this page to give it more prominence */
+            font-weight: 200;
+            letter-spacing: 1px;
             margin: 0;
-            background: linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #2c5aa0 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #5ba3f5 25%, #357abd 50%, #4a90e2 75%, #2c5aa0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             position: relative;
             z-index: 1;
+            font-family: "Kanit", sans-serif;
+            text-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+            line-height: 1.1;
             text-align: center;
+            /* Center the title */
         }
 
-        /* Content Panel */
-        .content-panel {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%, #ffffff 100%);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(200, 200, 200, 0.3);
+        /* Panel Box Styling - Enhanced chrome with Y2K depth (reused for content/tech sections) */
+        .content-panel,
+        .tech-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 20%, #f0f8ff 40%, #e8f4ff 60%, #f0f8ff 80%, #ffffff 100%);
+            border-radius: 16px;
+            padding: 1.4rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(173, 216, 230, 0.3);
+            border: 2px solid rgba(173, 216, 230, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
             position: relative;
+            backdrop-filter: blur(5px);
+            /* Re-added for true Frutiger Aero glass effect */
             margin-bottom: 2rem;
         }
 
-        .content-panel::before {
-            content: '';
+        .content-panel::before,
+        .tech-section::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 30%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
-            border-radius: 12px 12px 0 0;
+            height: 40%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(240, 248, 255, 0.3) 50%, transparent 100%);
+            border-radius: 16px 16px 0 0;
             pointer-events: none;
         }
 
@@ -135,40 +172,19 @@
             margin-bottom: 0;
         }
 
-        /* Technology Logos Section */
-        .tech-section {
-            background: linear-gradient(135deg, #f8fbff 0%, #f0f8ff 25%, #e8f4ff 50%, #f0f8ff 75%, #f8fbff 100%);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(200, 200, 200, 0.3);
-            position: relative;
-            margin-bottom: 2rem;
-        }
-
-        .tech-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
-            border-radius: 12px 12px 0 0;
-            pointer-events: none;
-        }
-
+        /* Section Titles - Enhanced with Y2K glow (reused for tech-title) */
         .tech-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #2c3e50;
-            text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 3px solid rgba(74, 144, 226, 0.3);
             position: relative;
             z-index: 1;
+            text-shadow: 0 1px 2px rgba(74, 144, 226, 0.2);
+            text-align: center;
+            /* Center the tech title */
         }
 
         .tech-logos {
@@ -203,44 +219,73 @@
             font-size: 0.9rem;
             color: #4a5568;
             font-weight: 500;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
         }
 
-        /* Button Styling */
+        /* Button Styling - Enhanced Y2K chrome buttons (reused for return-button) */
         .return-button {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%, #ffffff 100%);
-            border: 1px solid rgba(180, 180, 180, 0.4);
-            color: #2c3e50;
+            background: linear-gradient(135deg,
+                    #ffffff 0%,
+                    #f8f8f8 15%,
+                    #e8e8e8 30%,
+                    #d8d8d8 45%,
+                    #e8e8e8 60%,
+                    #f8f8f8 85%,
+                    #ffffff 100%) !important;
+            border: 2px solid rgba(173, 216, 230, 0.5) !important;
+            color: #2c3e50 !important;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 1rem;
-            padding: 0.8rem 2rem;
-            transition: all 0.2s ease;
-            box-shadow: 
-                0 3px 8px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            letter-spacing: 0.8px;
+            font-size: 0.85rem;
+            padding: 0.7rem 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
             text-decoration: none;
+            /* Ensure no underline */
             display: inline-block;
+            /* Allow padding and sizing */
+        }
+
+        .return-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .return-button:hover::before {
+            left: 100%;
         }
 
         .return-button:hover {
-            background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 25%, #d8d8d8 50%, #e8e8e8 75%, #f8f8f8 100%);
-            transform: translateY(-1px);
-            box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            color: #2c3e50;
-            text-decoration: none;
+            background: linear-gradient(135deg,
+                    #f0f8ff 0%,
+                    #e8f4ff 15%,
+                    #d8e8f8 30%,
+                    #c8d8e8 45%,
+                    #d8e8f8 60%,
+                    #e8f4ff 85%,
+                    #f0f8ff 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(173, 216, 230, 0.8);
+            color: #2c3e50 !important;
+            border-color: rgba(144, 238, 144, 0.6) !important;
         }
 
         .return-button:active {
             transform: translateY(1px);
-            box-shadow: 
-                0 1px 3px rgba(0, 0, 0, 0.2),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 3px 6px rgba(0, 0, 0, 0.15);
         }
 
         /* Mobile Responsive */
@@ -249,24 +294,25 @@
                 font-size: 2.5rem;
                 letter-spacing: 1px;
             }
-            
+
+            .header-section,
             .content-panel,
             .tech-section {
                 padding: 1.5rem;
             }
-            
+
             .content-text {
                 font-size: 1rem;
             }
-            
+
             .tech-logos {
                 gap: 1.5rem;
             }
-            
+
             .tech-logo {
                 max-height: 50px;
             }
-            
+
             .return-button {
                 font-size: 0.9rem;
                 padding: 0.7rem 1.5rem;
@@ -277,70 +323,74 @@
             .app-title {
                 font-size: 2rem;
             }
-            
+
             .header-section {
                 padding: 1.5rem 1rem;
             }
-            
+
             .content-panel,
             .tech-section {
                 padding: 1rem;
             }
-            
+
             .tech-logos {
                 gap: 1rem;
             }
-            
+
             .tech-logo {
                 max-height: 40px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid p-3">
-        <!-- Header Section -->
         <header class="header-section">
             <h1 class="app-title kanit-thin">ATLACATL</h1>
         </header>
 
-        <!-- Content Section -->
         <div class="content-panel">
             <p class="content-text">
-                <strong>ATLACATL</strong> es la primera y unica red social salvadoreña, creada como proyecto de portafolio para demostrar competencias en desarrollo web full-stack. Esta plataforma integra tecnologías modernas como Node.js, Express.js, MySQL y arquitectura de software escalable, mostrando el dominio de bases de datos relacionales, desarrollo backend y diseño de interfaces responsivas.
+                <strong>ATLACATL</strong> es la primera y única red social salvadoreña, creada como proyecto de
+                portafolio para demostrar competencias en desarrollo web full-stack. Esta plataforma integra tecnologías
+                modernas como Node.js, Express.js, MySQL y arquitectura de software escalable, mostrando el dominio de
+                bases de datos relacionales, desarrollo backend y diseño de interfaces responsivas.
             </p>
-            
+
             <p class="content-text">
-                Más que una simple demostración técnica, ATLACATL representa un espacio digital que promueve la libertad de expresión y conecta a la comunidad salvadoreña. Con funcionalidades de publicación, comentarios y sistema de likes, esta plataforma establece las bases para el futuro de las redes sociales centroamericanas, combinando innovación tecnológica con valores de comunicación abierta y democrática.
+                Más que una simple demostración técnica, ATLACATL representa un espacio digital que promueve la libertad
+                de expresión y conecta a la comunidad salvadoreña. Con funcionalidades de publicación, comentarios y
+                sistema de likes, esta plataforma establece las bases para el futuro de las redes sociales
+                centroamericanas, combinando innovación tecnológica con valores de comunicación abierta y democrática.
             </p>
         </div>
 
-        <!-- Technology Section -->
         <div class="tech-section">
             <h2 class="tech-title">Desarrollado con</h2>
             <div class="tech-logos">
                 <div class="tech-item">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/250px-Node.js_logo.svg.png" 
-                         alt="Node.js" class="tech-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/250px-Node.js_logo.svg.png"
+                        alt="Node.js" class="tech-logo">
                     <span class="tech-label">Node.js</span>
                 </div>
                 <div class="tech-item">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" 
-                         alt="Express.js" class="tech-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="Express.js"
+                        class="tech-logo">
                     <span class="tech-label">Express.js</span>
                 </div>
                 <div class="tech-item">
-                    <img src="https://upload.wikimedia.org/wikipedia/mg/thumb/6/62/MySQL.svg/1024px-MySQL.svg.png" 
-                         alt="MySQL" class="tech-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/mg/thumb/6/62/MySQL.svg/1024px-MySQL.svg.png"
+                        alt="MySQL" class="tech-logo">
                     <span class="tech-label">MySQL</span>
                 </div>
             </div>
         </div>
 
-        <!-- Return Button -->
         <div class="text-center">
             <a href="/" class="return-button">← Volver a la Plataforma</a>
         </div>
     </div>
 </body>
+
 </html>
