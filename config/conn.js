@@ -19,7 +19,7 @@ const credentials = {
 
 const pool = mysql.createPool(credentials)
 
-// Updated sorting functions
+// Get cards sorted by date ascending
 async function poolGetByDateAsc() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date ASC`)
@@ -30,6 +30,7 @@ async function poolGetByDateAsc() {
   }
 }
 
+// Get cards sorted by date descending
 async function poolGetByDateDesc() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY card_date DESC`)
@@ -40,6 +41,7 @@ async function poolGetByDateDesc() {
   }
 }
 
+// Get cards sorted by likes count
 async function poolGetByLikes() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY like_count DESC, card_date DESC`)
@@ -50,6 +52,7 @@ async function poolGetByLikes() {
   }
 }
 
+// Get cards sorted by comments count
 async function poolGetByComments() {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards ORDER BY comment_count DESC, card_date DESC`)
@@ -60,10 +63,11 @@ async function poolGetByComments() {
   }
 }
 
-// Updated poolPost to include IP address
+// Create new card post
 async function poolPost(cardAuthor, cardTitle, cardBody, ipAddress) {
   const insertQuery = `INSERT INTO cards (card_author, card_title, card_body, card_date, like_count, comment_count, ip_address)
     VALUES (?, ?, ?, UTC_TIMESTAMP(), 0, 0, ?)`
+
   try {
     const [rows, fields] = await pool.query(insertQuery, [cardAuthor, cardTitle, cardBody, ipAddress])
     return rows
@@ -73,7 +77,7 @@ async function poolPost(cardAuthor, cardTitle, cardBody, ipAddress) {
   }
 }
 
-// Comment functions remain the same
+// Get comments for a specific card
 async function poolGetComments(cardId) {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM comments WHERE card_id = ? ORDER BY comment_date DESC`, [
@@ -86,9 +90,10 @@ async function poolGetComments(cardId) {
   }
 }
 
-// Updated poolPostComment to increment comment_count
+// Post new comment with transaction to update comment count
 async function poolPostComment(cardId, commentAuthor, commentBody, ipAddress) {
   const connection = await pool.getConnection()
+
   try {
     await connection.beginTransaction()
 
@@ -111,14 +116,17 @@ async function poolPostComment(cardId, commentAuthor, commentBody, ipAddress) {
   }
 }
 
-// Like functions remain the same
-async function poolHandleLike(cardId, ipAddress) {
+// Handle like with dual verification (IP + device_id)
+async function poolHandleLike(cardId, ipAddress, deviceId) {
   try {
+    // Try to insert new like with both IP and device_id
     const [insertResult] = await pool.query(
-      `INSERT INTO likes (card_id, ip_address, liked_at) VALUES (?, ?, UTC_TIMESTAMP())`,
-      [cardId, ipAddress],
+      `INSERT INTO likes (card_id, ip_address, device_id, liked_at) VALUES (?, ?, ?, UTC_TIMESTAMP())`,
+      [cardId, ipAddress, deviceId],
     )
+
     if (insertResult.affectedRows > 0) {
+      // Update like count on card
       await pool.query(`UPDATE cards SET like_count = like_count + 1 WHERE id = ?`, [cardId])
       return { status: "success", message: "Like recorded and card count updated." }
     } else {
@@ -127,13 +135,14 @@ async function poolHandleLike(cardId, ipAddress) {
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {
       console.warn("Duplicate like attempt:", error.message)
-      return { status: "already_liked", message: "Esta tarjeta ya ha sido marcada como favorita" }
+      return { status: "already_liked", message: "Ya has marcado esta tarjeta como favorita desde este dispositivo" }
     }
     console.error("Database error in poolHandleLike:", error)
     throw error
   }
 }
 
+// Get single card by ID
 async function poolGetCardById(cardId) {
   try {
     const [rows, fields] = await pool.query(`SELECT * FROM cards WHERE id = ?`, [cardId])

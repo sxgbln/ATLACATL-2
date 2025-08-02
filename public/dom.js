@@ -8,18 +8,19 @@ document.getElementById("domBackToCardsBtn").addEventListener("click", backToCar
 const webConsole = document.getElementById("domWebConsole")
 const resultGrid = document.getElementById("domResultGrid")
 const sortSelect = document.getElementById("domSortSelect")
-
 const BASE_API_URL = "https://www.atlacatl.net"
 
-// Global state
+// Global state management
 let currentMode = "cards"
 let selectedCardId = null
 let selectedCardData = null
 
-function postData() {
+// Post new card data to server
+async function postData() {
   const cardTitleInput = document.getElementById("domCardTitle")
   const cardBodyInput = document.getElementById("domCardBody")
   const cardAuthorInput = document.getElementById("domCardAuthor")
+
   const cardTitle = cardTitleInput.value.trim()
   const cardBody = cardBodyInput.value.trim()
   let cardAuthor = cardAuthorInput.value.trim()
@@ -46,24 +47,25 @@ function postData() {
     redirect: "follow",
   }
 
-  async function sendPostRequest() {
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/`, requestOptions)
-      const responseText = await fetchResponse.text()
-      webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${responseText}`
-      cardTitleInput.value = ""
-      cardBodyInput.value = ""
-      cardAuthorInput.value = ""
-      renderCards()
-    } catch (error) {
-      webConsole.value = `Error durante la publicación: ${error.message}`
-    }
-  }
+  try {
+    const fetchResponse = await fetch(`${BASE_API_URL}/`, requestOptions)
+    const responseText = await fetchResponse.text()
+    webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${responseText}`
 
-  sendPostRequest()
+    // Clear form fields
+    cardTitleInput.value = ""
+    cardBodyInput.value = ""
+    cardAuthorInput.value = ""
+
+    // Refresh cards display
+    renderCards()
+  } catch (error) {
+    webConsole.value = `Error durante la publicación: ${error.message}`
+  }
 }
 
-function postComment() {
+// Post comment to selected card
+async function postComment() {
   if (!selectedCardId) {
     webConsole.value = "Error: No hay tarjeta seleccionada para comentar."
     return
@@ -71,6 +73,7 @@ function postComment() {
 
   const commentAuthorInput = document.getElementById("domCommentAuthor")
   const commentBodyInput = document.getElementById("domCommentBody")
+
   const commentBody = commentBodyInput.value.trim()
   let commentAuthor = commentAuthorInput.value.trim()
 
@@ -96,51 +99,53 @@ function postComment() {
     redirect: "follow",
   }
 
-  async function sendCommentRequest() {
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
-      const responseText = await fetchResponse.text()
-      webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${responseText}`
-      commentAuthorInput.value = ""
-      commentBodyInput.value = ""
-      viewCardComments(selectedCardId)
-    } catch (error) {
-      webConsole.value = `Error durante el comentario: ${error.message}`
-    }
-  }
+  try {
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
+    const responseText = await fetchResponse.text()
+    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${responseText}`
 
-  sendCommentRequest()
+    // Clear comment form
+    commentAuthorInput.value = ""
+    commentBodyInput.value = ""
+
+    // Refresh card comments view
+    viewCardComments(selectedCardId)
+  } catch (error) {
+    webConsole.value = `Error durante el comentario: ${error.message}`
+  }
 }
 
-// New unified render function
-function renderCards() {
+// Render cards with selected sorting
+async function renderCards() {
   const sortType = sortSelect.value
   webConsole.value = `Cargando tarjetas ordenadas por: ${getSortDisplayName(sortType)}...`
   currentMode = "cards"
   updateUIMode()
 
-  async function fetchSortedCards() {
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
-      webConsole.value = `HTTP Status: ${fetchResponse.status}`
-      if (!fetchResponse.ok) {
-        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
-      }
-      const recordsArray = await fetchResponse.json()
-      resultGrid.innerHTML = ""
-      recordsArray.forEach((cardElementData) => {
-        const cardDisplayElement = generateCardElement(cardElementData)
-        resultGrid.appendChild(cardDisplayElement)
-      })
-      webConsole.value += `\nTarjetas cargadas y mostradas (${getSortDisplayName(sortType)}).`
-    } catch (error) {
-      webConsole.value = `Error cargando tarjetas: ${error.message}`
-    }
-  }
+  try {
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
+    webConsole.value = `HTTP Status: ${fetchResponse.status}`
 
-  fetchSortedCards()
+    if (!fetchResponse.ok) {
+      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+    }
+
+    const recordsArray = await fetchResponse.json()
+    resultGrid.innerHTML = ""
+
+    // Generate card elements
+    recordsArray.forEach((cardElementData) => {
+      const cardDisplayElement = generateCardElement(cardElementData)
+      resultGrid.appendChild(cardDisplayElement)
+    })
+
+    webConsole.value += `\nTarjetas cargadas y mostradas (${getSortDisplayName(sortType)}).`
+  } catch (error) {
+    webConsole.value = `Error cargando tarjetas: ${error.message}`
+  }
 }
 
+// Get display name for sort type
 function getSortDisplayName(sortType) {
   const names = {
     newest: "Más Recientes",
@@ -151,37 +156,42 @@ function getSortDisplayName(sortType) {
   return names[sortType] || "Más Recientes"
 }
 
-function viewCardComments(cardId) {
+// View specific card with comments
+async function viewCardComments(cardId) {
   webConsole.value = `Cargando tarjeta ${cardId} y comentarios...`
   currentMode = "comments"
   selectedCardId = cardId
   updateUIMode()
 
-  async function fetchCardAndComments() {
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
-      if (!fetchResponse.ok) {
-        throw new Error(`HTTP error! status: ${fetchResponse.status}`)
-      }
-      const data = await fetchResponse.json()
-      selectedCardData = data.card
-      resultGrid.innerHTML = ""
-      const mainCardElement = generateCardElement(data.card, true)
-      resultGrid.appendChild(mainCardElement)
-      data.comments.forEach((commentData) => {
-        const commentElement = generateCommentElement(commentData)
-        resultGrid.appendChild(commentElement)
-      })
-      webConsole.value = `Tarjeta ${cardId} cargada con ${data.comments.length} comentarios.`
-    } catch (error) {
-      webConsole.value = `Error cargando tarjeta: ${error.message}`
-    }
-  }
+  try {
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
 
-  fetchCardAndComments()
+    if (!fetchResponse.ok) {
+      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+    }
+
+    const data = await fetchResponse.json()
+    selectedCardData = data.card
+    resultGrid.innerHTML = ""
+
+    // Display main card
+    const mainCardElement = generateCardElement(data.card, true)
+    resultGrid.appendChild(mainCardElement)
+
+    // Display comments
+    data.comments.forEach((commentData) => {
+      const commentElement = generateCommentElement(commentData)
+      resultGrid.appendChild(commentElement)
+    })
+
+    webConsole.value = `Tarjeta ${cardId} cargada con ${data.comments.length} comentarios.`
+  } catch (error) {
+    webConsole.value = `Error cargando tarjeta: ${error.message}`
+  }
 }
 
-function handleLike(cardId) {
+// Handle like button click with improved feedback
+async function handleLike(cardId) {
   const likeData = { cardId: cardId }
   const requestOptions = {
     method: "POST",
@@ -190,27 +200,25 @@ function handleLike(cardId) {
     redirect: "follow",
   }
 
-  async function sendLikeRequest() {
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions)
-      const response = await fetchResponse.json()
-      webConsole.value = `Estado del Like: ${response.status} - ${response.message}`
-      if (response.status === "success") {
-        if (currentMode === "cards") {
-          renderCards()
-        } else {
-          viewCardComments(selectedCardId)
-        }
-      }
-    } catch (error) {
-      webConsole.value = `Error durante el like: ${error.message}`
-    }
-  }
+  try {
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions)
+    const response = await fetchResponse.json()
+    webConsole.value = `Estado del Like: ${response.status} - ${response.message}`
 
-  sendLikeRequest()
+    if (response.status === "success") {
+      // Refresh current view
+      if (currentMode === "cards") {
+        renderCards()
+      } else {
+        viewCardComments(selectedCardId)
+      }
+    }
+  } catch (error) {
+    webConsole.value = `Error durante el like: ${error.message}`
+  }
 }
 
-// Updated generateCardElement with Spanish text and comment count
+// Generate card display element
 function generateCardElement(cardData, isMainCard = false) {
   const cardDiv = document.createElement("div")
   cardDiv.className = isMainCard ? "result-card main-card" : "result-card"
@@ -242,7 +250,7 @@ function generateCardElement(cardData, isMainCard = false) {
     handleLike(cardData.id)
   })
 
-  // Comment button with count
+  // Comment button (only in cards mode)
   if (currentMode === "cards") {
     const commentButton = document.createElement("button")
     commentButton.textContent = `💬 Comentarios (${cardData.comment_count || 0})`
@@ -253,6 +261,7 @@ function generateCardElement(cardData, isMainCard = false) {
     cardActions.appendChild(commentButton)
   }
 
+  // Add comment button (only in comments mode for main card)
   if (currentMode === "comments" && isMainCard) {
     const addCommentButton = document.createElement("button")
     addCommentButton.textContent = "✏️ Agregar Comentario"
@@ -265,6 +274,7 @@ function generateCardElement(cardData, isMainCard = false) {
 
   cardActions.appendChild(likeButton)
 
+  // Assemble card element
   cardDiv.appendChild(cardHeader)
   cardDiv.appendChild(cardTitle)
   cardDiv.appendChild(cardBody)
@@ -274,6 +284,7 @@ function generateCardElement(cardData, isMainCard = false) {
   return cardDiv
 }
 
+// Generate comment display element
 function generateCommentElement(commentData) {
   const commentDiv = document.createElement("div")
   commentDiv.className = "result-card comment-card"
@@ -297,6 +308,7 @@ function generateCommentElement(commentData) {
   return commentDiv
 }
 
+// Switch UI to comment creation mode
 function switchToCommentMode(cardData) {
   document.getElementById("cardMode").style.display = "none"
   document.getElementById("commentMode").style.display = "block"
@@ -304,6 +316,7 @@ function switchToCommentMode(cardData) {
   document.getElementById("selectedCardTitle").textContent = cardData.card_title
 }
 
+// Cancel comment creation and return to card mode
 function cancelComment() {
   document.getElementById("cardMode").style.display = "block"
   document.getElementById("commentMode").style.display = "none"
@@ -312,6 +325,7 @@ function cancelComment() {
   document.getElementById("domCommentBody").value = ""
 }
 
+// Return to cards view from comments view
 function backToCards() {
   currentMode = "cards"
   selectedCardId = null
@@ -320,9 +334,11 @@ function backToCards() {
   renderCards()
 }
 
+// Update UI elements based on current mode
 function updateUIMode() {
   const backButton = document.getElementById("domBackToCardsBtn")
   const resultTitle = document.getElementById("resultGridTitle")
+
   if (currentMode === "comments") {
     backButton.style.display = "inline-block"
     resultTitle.textContent = "Tarjeta y Comentarios"
@@ -330,9 +346,11 @@ function updateUIMode() {
     backButton.style.display = "none"
     resultTitle.textContent = "Resultados"
   }
+
   cancelComment()
 }
 
+// Format date for display
 function customFormatDate(utcDateInput) {
   try {
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -344,14 +362,17 @@ function customFormatDate(utcDateInput) {
   }
 }
 
+// Debug function to show current state
 function debugFunction() {
   webConsole.value = `Debug Info:
 Modo Actual: ${currentMode}
 ID de Tarjeta Seleccionada: ${selectedCardId}
 Tarjeta Seleccionada: ${selectedCardData ? selectedCardData.card_title : "Ninguna"}
-Ordenamiento: ${getSortDisplayName(sortSelect.value)}`
+Ordenamiento: ${getSortDisplayName(sortSelect.value)}
+Cookie Device ID: ${document.cookie.includes("device_id") ? "Presente" : "No encontrada"}`
 }
 
+// Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
   renderCards() // Load with default sorting (newest)
 })
