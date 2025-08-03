@@ -30,7 +30,6 @@
     <header class="header-section mb-3">
       <h1 class="app-title text-center">ATLACATL</h1>
     </header>
-
     <!-- Main Content -->
     <main class="row g-3">
       <!-- Left Column: Card/Comment Generator & Web Console -->
@@ -38,7 +37,6 @@
         <!-- Dynamic Generator Section -->
         <section class="card-generator-section panel-box mb-3">
           <h2 class="section-title" id="generatorTitle">Generador de Tarjetas</h2>
-
           <!-- Card Mode Fields -->
           <div id="cardMode">
             <div class="row mb-2">
@@ -62,7 +60,6 @@
             </div>
             <button type="button" class="btn button-style w-100" id="domPostBtn">PUBLICAR TARJETA</button>
           </div>
-
           <!-- Comment Mode Fields (initially hidden) -->
           <div id="commentMode" style="display: none;">
             <div class="alert alert-info" role="alert" id="commentingOnCard">
@@ -87,19 +84,20 @@
             </div>
           </div>
         </section>
-
         <!-- Web Console Section -->
         <section class="web-console-section panel-box">
           <h2 class="section-title">Web Console</h2>
           <div class="mb-3">
             <label for="domWebConsole" class="form-label label-style">Live Output:</label>
-            <textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2"
-              placeholder="Web console output"></textarea>
+            <div class="web-console-container">
+              <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
+              <textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2"
+                placeholder="Web console output"></textarea>
+            </div>
           </div>
           <button type="button" class="btn button-style w-100" id="domDebugButton">DEBUG BUTTON</button>
         </section>
       </div>
-
       <!-- Right Column: Result Grid -->
       <div class="col-12 col-md-7 right-column">
         <section class="result-grid-section panel-box h-100">
@@ -108,7 +106,6 @@
             <label for="domResultGrid" class="form-label label-style">Tarjetas:</label>
             <div class="result-grid-display-area flex-grow-1" id="domResultGrid"></div>
           </div>
-
           <!-- New Sorting Controls -->
           <div class="button-group-style">
             <div class="row align-items-center">
@@ -132,7 +129,6 @@
         </section>
       </div>
     </main>
-
     <!-- Footer Section -->
     <footer class="footer-section mt-4">
       <div class="text-center">
@@ -140,7 +136,6 @@
       </div>
     </footer>
   </div>
-
   <script src="/dom.js"></script>
 </body>
 

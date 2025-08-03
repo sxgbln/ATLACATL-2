@@ -119,43 +119,85 @@ body::after {
   overflow-y: auto;
 }
 
-/* Web Console - Updated 90s/2000s CLI Aesthetic */
+/* Web Console Container - New MS DOS/Terminal Style */
+.web-console-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid #1a237e;
+}
+
+.web-console-header {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+  color: #64b5f6;
+  font-family: "Consolas", "Courier New", "Lucida Console", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #3949ab;
+  text-shadow: 0 0 8px rgba(100, 181, 246, 0.5);
+  position: relative;
+}
+
+.web-console-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(100, 181, 246, 0.1) 25%,
+      rgba(100, 181, 246, 0.2) 50%,
+      rgba(100, 181, 246, 0.1) 75%,
+      transparent 100%);
+  animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Web Console - Updated MS DOS/Terminal Aesthetic */
 .web-console,
 #domWebConsole {
-  background: linear-gradient(135deg, #e0e8f0 0%, #d0e0f0 100%) !important;
-  color: #2c3e50 !important;
-  font-family: "Consolas", "Courier New", monospace;
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #0d47a1 100%) !important;
+  color: #81d4fa !important;
+  font-family: "Consolas", "Courier New", "Lucida Console", monospace !important;
   font-size: 0.85rem;
-  border: 1px solid #b0c0d0 !important;
+  border: none !important;
   height: 85px;
   max-height: 85px;
   resize: none;
   overflow-y: auto;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 1.2rem 0.8rem 0.8rem;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  padding: 0.8rem;
   position: relative;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.3);
+  line-height: 1.4;
 }
 
-.web-console::before,
-#domWebConsole::before {
-  content: "Atlacatl Output Console TM";
-  position: absolute;
-  top: 0.4rem;
-  left: 0.8rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+#domWebConsole::placeholder {
+  color: rgba(129, 212, 250, 0.6) !important;
+  font-style: italic;
 }
 
 #domWebConsole:focus {
-  border-color: #90a0b0 !important;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(74, 144, 226, 0.15) !important;
+  border: none !important;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(100, 181, 246, 0.4) !important;
+  outline: none !important;
 }
 
 /* Button Styling - Simplified Y2K chrome */
@@ -396,12 +438,23 @@ body::after {
     padding: 0.6rem 1.4rem;
   }
 
+  /* Web Console Header - Mobile adjustments */
+  .web-console-header {
+    font-size: 0.7rem;
+    padding: 0.4rem;
+  }
+
   /* Disable hover effects on mobile for better performance */
   .panel-box:hover,
   .result-card:hover,
   .button-style:hover,
   .about-button:hover {
     transform: none;
+  }
+
+  /* Disable scanline animation on mobile for performance */
+  .web-console-header::before {
+    animation: none;
   }
 }
 
@@ -450,18 +503,19 @@ body::after {
   background: #c0c0c0;
 }
 
-/* Web Console Scrollbar - Simple terminal style */
+/* Web Console Scrollbar - Terminal style */
 #domWebConsole::-webkit-scrollbar {
   width: 6px;
 }
 
 #domWebConsole::-webkit-scrollbar-thumb {
-  background: #a0b0c0;
+  background: #64b5f6;
   border-radius: 3px;
+  box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
 }
 
 #domWebConsole::-webkit-scrollbar-track {
-  background: #d0e0f0;
+  background: #1565c0;
   border-radius: 3px;
 }
 
