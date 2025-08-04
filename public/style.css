@@ -1,12 +1,44 @@
-/* Optimized Y2K Frutiger Aero styles - Performance Enhanced */
+/* Ace Combat / Terminal Inspired Dark Theme */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #f0fff0 100%);
+  font-family: "Consolas", "Courier New", "Lucida Console", monospace;
+  background: linear-gradient(135deg, #0a1929 0%, #1a237e 30%, #0d47a1 70%, #0a1929 100%);
   background-attachment: fixed;
   font-size: 0.9rem;
+  color: #81d4fa;
+  min-height: 100vh;
+  position: relative;
 }
 
-/* Simplified texture overlay */
+/* Animated background grid overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(100, 181, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 181, 246, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -2;
+  animation: gridPulse 4s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Subtle moving light overlay */
 body::after {
   content: "";
   position: fixed;
@@ -14,10 +46,25 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 70%, rgba(144, 238, 144, 0.08) 0%, transparent 60%),
-    radial-gradient(circle at 70% 30%, rgba(173, 216, 230, 0.08) 0%, transparent 60%);
+  background: radial-gradient(circle at 20% 80%, rgba(100, 181, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(129, 212, 250, 0.06) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
+  animation: ambientGlow 8s ease-in-out infinite;
+}
+
+@keyframes ambientGlow {
+
+  0%,
+  100% {
+    background: radial-gradient(circle at 20% 80%, rgba(100, 181, 246, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(129, 212, 250, 0.06) 0%, transparent 50%);
+  }
+
+  50% {
+    background: radial-gradient(circle at 80% 20%, rgba(100, 181, 246, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(129, 212, 250, 0.08) 0%, transparent 50%);
+  }
 }
 
 /* Kanit Font Classes */
@@ -27,89 +74,237 @@ body::after {
   font-style: normal;
 }
 
-/* Header Section - Simplified chrome effect */
+/* Header Section - Terminal Command Center Style */
 .header-section {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
-  color: #2c3e50;
-  padding: 1.2rem 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(200, 220, 255, 0.4);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+  color: #64b5f6;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow:
+    0 0 20px rgba(100, 181, 246, 0.3),
+    inset 0 1px 0 rgba(100, 181, 246, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 181, 246, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-glow-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(100, 181, 246, 0.1) 25%,
+      rgba(100, 181, 246, 0.2) 50%,
+      rgba(100, 181, 246, 0.1) 75%,
+      transparent 100%);
+  animation: headerSweep 6s linear infinite;
+}
+
+@keyframes headerSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+/* Enhanced ATLACATL title - Military HUD Style */
+.app-title {
+  font-size: 2.4rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin: 0;
+  color: #64b5f6;
+  font-family: "Consolas", "Courier New", monospace;
+  line-height: 1.1;
+  text-shadow:
+    0 0 10px rgba(100, 181, 246, 0.8),
+    0 0 20px rgba(100, 181, 246, 0.4),
+    0 0 30px rgba(100, 181, 246, 0.2);
   position: relative;
 }
 
-/* Enhanced ATLACATL title - taller and more prominent */
-.app-title {
-  font-size: 2.2rem;
-  font-weight: 200;
-  letter-spacing: 1px;
-  margin: 0;
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #2c5aa0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: "Kanit", sans-serif;
-  line-height: 1.1;
+.app-title::before {
+  content: ">> ";
+  color: #81d4fa;
+  font-size: 0.8em;
 }
 
-.trademark {
-  font-size: 0.8rem;
-  vertical-align: super;
-  opacity: 0.7;
+.app-title::after {
+  content: " <<";
+  color: #81d4fa;
+  font-size: 0.8em;
 }
 
-/* Panel Box Styling - Simplified chrome */
+/* Panel Box Styling - Terminal Panels */
 .panel-box {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 50%, #ffffff 100%);
-  border-radius: 16px;
-  padding: 1.4rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(173, 216, 230, 0.4);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 30%, #0d47a1 100%);
+  border-radius: 8px;
+  padding: 1.6rem;
+  box-shadow:
+    0 0 15px rgba(100, 181, 246, 0.2),
+    inset 0 1px 0 rgba(100, 181, 246, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 181, 246, 0.3);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
+}
+
+.panel-glow-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  padding: 1px;
+  background: linear-gradient(45deg,
+      rgba(100, 181, 246, 0.3) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(100, 181, 246, 0.3) 100%);
+  animation: borderGlow 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes borderGlow {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 .panel-box:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transform: translateY(-1px);
+  box-shadow:
+    0 0 25px rgba(100, 181, 246, 0.4),
+    inset 0 1px 0 rgba(100, 181, 246, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
 
-/* Section Titles - Simplified */
+/* Section Titles - HUD Style */
 .section-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 2px solid rgba(74, 144, 226, 0.3);
+  color: #64b5f6;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(100, 181, 246, 0.3);
+  font-family: "Consolas", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(100, 181, 246, 0.6);
+  position: relative;
 }
 
-/* Form Labels */
+.title-bracket {
+  color: #81d4fa;
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.8);
+}
+
+/* Form Labels - Terminal Style */
 .label-style {
   font-weight: 500;
-  color: #4a5568;
-  font-size: 0.9rem;
-  margin-bottom: 0.4rem;
+  color: #81d4fa;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  font-family: "Consolas", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.4);
 }
 
-/* Input and Textarea Styling - Simplified chrome inset */
+.label-indicator {
+  color: #64b5f6;
+  font-weight: 700;
+  margin-right: 0.3rem;
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.8);
+}
+
+/* Input and Textarea Styling - Terminal Inputs */
 .input-style,
 .textarea-style {
-  font-size: 0.9rem;
-  border: 1px solid rgba(173, 216, 230, 0.5);
-  background: linear-gradient(135deg, #fafbff 0%, #ffffff 100%);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(100, 181, 246, 0.4);
+  background: linear-gradient(135deg, #0a1929 0%, #1a237e 100%);
+  color: #81d4fa;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 5px rgba(100, 181, 246, 0.1);
+  border-radius: 6px;
+  font-family: "Consolas", "Courier New", monospace;
+}
+
+.input-style::placeholder,
+.textarea-style::placeholder {
+  color: rgba(129, 212, 250, 0.5);
+  font-style: italic;
 }
 
 .input-style:focus,
 .textarea-style:focus {
-  border-color: rgba(74, 144, 226, 0.7);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(74, 144, 226, 0.15);
-  background: #f8f8ff;
+  border-color: rgba(100, 181, 246, 0.8);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(100, 181, 246, 0.3);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  color: #64b5f6;
+  outline: none;
+}
+
+/* Terminal Select Styling */
+.terminal-select {
+  background: linear-gradient(135deg, #0a1929 0%, #1a237e 100%);
+  border: 1px solid rgba(100, 181, 246, 0.4);
+  color: #81d4fa;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 5px rgba(100, 181, 246, 0.1);
+}
+
+.terminal-select:focus {
+  border-color: rgba(100, 181, 246, 0.8);
+  box-shadow: 0 0 15px rgba(100, 181, 246, 0.3);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+}
+
+.terminal-select option {
+  background: #1a237e;
+  color: #81d4fa;
+}
+
+/* Terminal Alert Styling */
+.terminal-alert {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  border: 1px solid rgba(100, 181, 246, 0.5);
+  color: #64b5f6;
+  font-family: "Consolas", "Courier New", monospace;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(100, 181, 246, 0.2);
+}
+
+.alert-indicator {
+  color: #81d4fa;
+  font-weight: 700;
+  margin-right: 0.3rem;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.8);
 }
 
 /* Card Body - Reduced height */
@@ -119,12 +314,14 @@ body::after {
   overflow-y: auto;
 }
 
-/* Web Console Container - New MS DOS/Terminal Style */
+/* Web Console Container - Enhanced Terminal Style */
 .web-console-container {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 20px rgba(100, 181, 246, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
   border: 2px solid #1a237e;
 }
 
@@ -169,7 +366,7 @@ body::after {
   }
 }
 
-/* Web Console - Updated MS DOS/Terminal Aesthetic */
+/* Web Console - Terminal Aesthetic */
 .web-console,
 #domWebConsole {
   background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #0d47a1 100%) !important;
@@ -200,43 +397,75 @@ body::after {
   outline: none !important;
 }
 
-/* Button Styling - Simplified Y2K chrome */
+/* Button Styling - Military HUD Buttons */
 .button-style {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%) !important;
-  border: 1px solid rgba(173, 216, 230, 0.5) !important;
-  color: #2c3e50 !important;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%) !important;
+  border: 1px solid rgba(100, 181, 246, 0.5) !important;
+  color: #64b5f6 !important;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  font-size: 0.85rem;
-  padding: 0.7rem 1.2rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  padding: 0.8rem 1.4rem;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 10px rgba(100, 181, 246, 0.2),
+    inset 0 1px 0 rgba(100, 181, 246, 0.1);
+  border-radius: 6px;
   position: relative;
+  font-family: "Consolas", "Courier New", monospace;
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.6);
+}
+
+.button-brackets {
+  color: #81d4fa;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(129, 212, 250, 0.8);
 }
 
 .button-style:hover {
-  background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 50%, #f0f8ff 100%) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  color: #2c3e50 !important;
+  background: linear-gradient(135deg, #283593 0%, #3949ab 50%, #283593 100%) !important;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 20px rgba(100, 181, 246, 0.4),
+    inset 0 1px 0 rgba(100, 181, 246, 0.2);
+  color: #64b5f6 !important;
 }
 
 .button-style:active {
   transform: translateY(0px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 0 5px rgba(100, 181, 246, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Result Grid Display Area - Simplified */
+/* Terminal Secondary Button */
+.terminal-secondary-btn {
+  background: linear-gradient(135deg, #0a1929 0%, #1a237e 100%) !important;
+  border: 1px solid rgba(129, 212, 250, 0.4) !important;
+  color: #81d4fa !important;
+  font-family: "Consolas", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.4);
+}
+
+.terminal-secondary-btn:hover {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%) !important;
+  color: #64b5f6 !important;
+  box-shadow: 0 0 15px rgba(129, 212, 250, 0.3);
+}
+
+/* Result Grid Display Area - Terminal Display */
 .result-grid-display-area {
-  background: linear-gradient(135deg, #f0fff0 0%, #f0f8ff 50%, #f0fff0 100%);
-  border: 2px solid rgba(173, 216, 230, 0.4);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #0a1929 0%, #1a237e 100%);
+  border: 2px solid rgba(100, 181, 246, 0.4);
+  border-radius: 8px;
   padding: 1.2rem;
   overflow-y: auto;
   overflow-x: hidden;
-  font-family: "Courier New", monospace;
+  font-family: "Consolas", "Courier New", monospace;
   font-size: 0.8rem;
   line-height: 1.4;
   height: 320px;
@@ -245,112 +474,178 @@ body::after {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.2rem;
   align-content: start;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(100, 181, 246, 0.1);
+  position: relative;
+}
+
+.result-grid-display-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(100, 181, 246, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 181, 246, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
 }
 
 .result-grid-display-area:empty::before {
-  content: "Los resultados aparecerán aquí...";
-  color: #6c757d;
+  content: ">> Los resultados aparecerán aquí...";
+  color: rgba(129, 212, 250, 0.6);
   font-style: italic;
   grid-column: 1 / -1;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: "Consolas", "Courier New", monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 5px rgba(129, 212, 250, 0.3);
 }
 
-/* Dynamic Result Cards - Simplified chrome panels */
+/* Dynamic Result Cards - Terminal Cards */
 .result-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 50%, #ffffff 100%);
-  border: 1px solid rgba(173, 216, 230, 0.4);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+  border: 1px solid rgba(100, 181, 246, 0.4);
+  border-radius: 8px;
   padding: 1.2rem;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: all 0.2s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  box-shadow:
+    0 0 10px rgba(100, 181, 246, 0.2),
+    inset 0 1px 0 rgba(100, 181, 246, 0.1);
+  transition: all 0.3s ease;
+  font-family: "Consolas", "Courier New", monospace;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
   position: relative;
+  color: #81d4fa;
 }
 
 .result-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 20px rgba(100, 181, 246, 0.3),
+    inset 0 1px 0 rgba(100, 181, 246, 0.2);
   transform: translateY(-2px);
-  border-color: rgba(144, 238, 144, 0.6);
+  border-color: rgba(100, 181, 246, 0.6);
 }
 
 .result-card-header {
-  font-size: 0.75rem;
-  color: #4a5568;
-  font-weight: 500;
+  font-size: 0.7rem;
+  color: #64b5f6;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid rgba(173, 216, 230, 0.3);
+  border-bottom: 1px solid rgba(100, 181, 246, 0.3);
   padding-bottom: 0.4rem;
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.4);
 }
 
 .result-card-title {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #64b5f6;
   line-height: 1.3;
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.4);
 }
 
 .result-card-body {
-  font-size: 0.85rem;
-  color: #4a5568;
+  font-size: 0.8rem;
+  color: #81d4fa;
   line-height: 1.4;
   flex-grow: 1;
   overflow-wrap: break-word;
 }
 
 .result-card-date {
-  font-size: 0.7rem;
-  color: #718096;
+  font-size: 0.65rem;
+  color: rgba(129, 212, 250, 0.7);
   font-weight: 400;
   text-align: right;
-  border-top: 1px solid rgba(173, 216, 230, 0.2);
+  border-top: 1px solid rgba(100, 181, 246, 0.2);
   padding-top: 0.5rem;
   margin-top: 0.3rem;
   font-style: italic;
 }
 
-/* Footer Section - Simplified */
+/* Footer Section - Terminal Footer */
 .footer-section {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 50%, #ffffff 100%);
-  border-radius: 16px;
-  padding: 1.2rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(173, 216, 230, 0.4);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+  border-radius: 8px;
+  padding: 1.4rem;
+  box-shadow:
+    0 0 15px rgba(100, 181, 246, 0.2),
+    inset 0 1px 0 rgba(100, 181, 246, 0.1);
+  border: 1px solid rgba(100, 181, 246, 0.3);
   position: relative;
+  overflow: hidden;
+}
+
+.footer-glow-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(100, 181, 246, 0.1) 25%,
+      rgba(100, 181, 246, 0.15) 50%,
+      rgba(100, 181, 246, 0.1) 75%,
+      transparent 100%);
+  animation: footerSweep 8s linear infinite;
+}
+
+@keyframes footerSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
 }
 
 .about-button {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
-  border: 1px solid rgba(173, 216, 230, 0.5);
-  color: #2c3e50;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+  border: 1px solid rgba(100, 181, 246, 0.5);
+  color: #64b5f6;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  font-size: 0.85rem;
-  padding: 0.7rem 1.8rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  padding: 0.8rem 2rem;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 10px rgba(100, 181, 246, 0.2),
+    inset 0 1px 0 rgba(100, 181, 246, 0.1);
+  border-radius: 6px;
   text-decoration: none;
   display: inline-block;
+  font-family: "Consolas", "Courier New", monospace;
+  text-shadow: 0 0 5px rgba(100, 181, 246, 0.6);
+  position: relative;
+  z-index: 1;
 }
 
 .about-button:hover {
-  background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 50%, #f0f8ff 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  color: #2c3e50;
+  background: linear-gradient(135deg, #283593 0%, #3949ab 50%, #283593 100%);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 20px rgba(100, 181, 246, 0.4),
+    inset 0 1px 0 rgba(100, 181, 246, 0.2);
+  color: #64b5f6;
   text-decoration: none;
 }
 
 .about-button:active {
   transform: translateY(0px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 0 5px rgba(100, 181, 246, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Mobile Layout Adjustments */
@@ -392,6 +687,7 @@ body::after {
   /* Mobile title adjustment */
   .app-title {
     font-size: 1.8rem;
+    letter-spacing: 2px;
   }
 
   .panel-box {
@@ -415,17 +711,17 @@ body::after {
   }
 
   .result-card-title {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .result-card-body {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
 
   .result-card-date {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     text-align: center;
   }
 
@@ -434,8 +730,8 @@ body::after {
   }
 
   .about-button {
-    font-size: 0.8rem;
-    padding: 0.6rem 1.4rem;
+    font-size: 0.75rem;
+    padding: 0.7rem 1.5rem;
   }
 
   /* Web Console Header - Mobile adjustments */
@@ -444,7 +740,7 @@ body::after {
     padding: 0.4rem;
   }
 
-  /* Disable hover effects on mobile for better performance */
+  /* Disable heavy animations on mobile for performance */
   .panel-box:hover,
   .result-card:hover,
   .button-style:hover,
@@ -452,8 +748,16 @@ body::after {
     transform: none;
   }
 
-  /* Disable scanline animation on mobile for performance */
-  .web-console-header::before {
+  /* Disable resource-intensive animations on mobile */
+  .web-console-header::before,
+  .header-glow-effect,
+  .footer-glow-effect,
+  .panel-glow-border {
+    animation: none;
+  }
+
+  body::before,
+  body::after {
     animation: none;
   }
 }
@@ -480,7 +784,7 @@ body::after {
   }
 }
 
-/* Simplified Scrollbar Styling */
+/* Terminal Scrollbar Styling */
 .textarea-style::-webkit-scrollbar,
 .result-grid-display-area::-webkit-scrollbar {
   width: 8px;
@@ -488,22 +792,23 @@ body::after {
 
 .textarea-style::-webkit-scrollbar-track,
 .result-grid-display-area::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: #0a1929;
   border-radius: 4px;
 }
 
 .textarea-style::-webkit-scrollbar-thumb,
 .result-grid-display-area::-webkit-scrollbar-thumb {
-  background: #d0d0d0;
+  background: linear-gradient(135deg, #64b5f6 0%, #81d4fa 100%);
   border-radius: 4px;
+  box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
 }
 
 .textarea-style::-webkit-scrollbar-thumb:hover,
 .result-grid-display-area::-webkit-scrollbar-thumb:hover {
-  background: #c0c0c0;
+  background: linear-gradient(135deg, #81d4fa 0%, #64b5f6 100%);
 }
 
-/* Web Console Scrollbar - Terminal style */
+/* Web Console Scrollbar - Enhanced Terminal style */
 #domWebConsole::-webkit-scrollbar {
   width: 6px;
 }
@@ -528,17 +833,17 @@ body::after {
 
 /* Main card styling (when viewing comments) */
 .main-card {
-  border: 2px solid rgba(74, 144, 226, 0.6);
-  background: linear-gradient(135deg, #f8f8ff 0%, #f0f0ff 100%);
-  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(100, 181, 246, 0.6);
+  background: linear-gradient(135deg, #283593 0%, #3949ab 100%);
+  box-shadow: 0 0 20px rgba(100, 181, 246, 0.3);
 }
 
 /* Comment card styling */
 .comment-card {
-  border-left: 4px solid rgba(74, 144, 226, 0.7);
-  background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%);
+  border-left: 4px solid rgba(100, 181, 246, 0.7);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
   margin-left: 1.2rem;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(100, 181, 246, 0.2);
 }
 
 /* Card Actions */
@@ -551,29 +856,35 @@ body::after {
 .like-button,
 .comment-button,
 .add-comment-button {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(100, 181, 246, 0.1);
+  font-family: "Consolas", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .like-button:hover {
-  background-color: rgba(220, 53, 69, 0.1);
-  border-color: #dc3545;
+  background-color: rgba(244, 67, 54, 0.2);
+  border-color: #f44336;
   transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
 }
 
 .comment-button:hover {
-  background-color: rgba(13, 110, 253, 0.1);
-  border-color: #0d6efd;
+  background-color: rgba(100, 181, 246, 0.2);
+  border-color: #64b5f6;
   transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(100, 181, 246, 0.3);
 }
 
 .add-comment-button:hover {
-  background-color: rgba(25, 135, 84, 0.1);
-  border-color: #198754;
+  background-color: rgba(76, 175, 80, 0.2);
+  border-color: #4caf50;
   transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
 /* Mobile adjustments for new elements */
