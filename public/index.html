@@ -28,7 +28,7 @@
   <div class="container-fluid p-2">
     <!-- Header Section -->
     <header class="header-section mb-3">
-      <div class="header-glow-effect"></div>
+      <div class="header-shine-effect"></div>
       <h1 class="app-title text-center">ATLACATL</h1>
     </header>
     <!-- Main Content -->
@@ -37,17 +37,17 @@
       <div class="col-12 col-md-5 left-column">
         <!-- Dynamic Generator Section -->
         <section class="card-generator-section panel-box mb-3">
-          <div class="panel-glow-border"></div>
+          <div class="panel-inner-glow"></div>
           <h2 class="section-title" id="generatorTitle">
-            <span class="title-bracket">[</span>
-            GENERADOR DE TARJETAS
-            <span class="title-bracket">]</span>
+            <span class="title-bracket">›</span>
+            Generador de Tarjetas
+            <span class="title-bracket">‹</span>
           </h2>
           <!-- Card Mode Fields -->
           <div id="cardMode">
             <div class="row mb-2">
               <label for="domCardAuthor" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">></span> Autor:
+                <span class="label-indicator">▶</span> Autor:
               </label>
               <div class="col-sm-9">
                 <input type="text" class="form-control input-style" placeholder="Escribe el AUTOR de la tarjeta"
@@ -56,7 +56,7 @@
             </div>
             <div class="row mb-2">
               <label for="domCardTitle" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">></span> Título:
+                <span class="label-indicator">▶</span> Título:
               </label>
               <div class="col-sm-9">
                 <input type="text" class="form-control input-style" placeholder="Escribe el TÍTULO de la tarjeta"
@@ -65,24 +65,24 @@
             </div>
             <div class="mb-3">
               <label for="domCardBody" class="form-label label-style">
-                <span class="label-indicator">></span> Contenido:
+                <span class="label-indicator">▶</span> Contenido:
               </label>
               <textarea class="form-control textarea-style" placeholder="Redacta el cuerpo de la tarjeta"
                 id="domCardBody" rows="3"></textarea>
             </div>
             <button type="button" class="btn button-style w-100" id="domPostBtn">
-              <span class="button-brackets">[</span> PUBLICAR TARJETA <span class="button-brackets">]</span>
+              PUBLICAR TARJETA
             </button>
           </div>
           <!-- Comment Mode Fields (initially hidden) -->
           <div id="commentMode" style="display: none;">
-            <div class="alert alert-info terminal-alert" role="alert" id="commentingOnCard">
-              <span class="alert-indicator">></span> Comentando en: <strong id="selectedCardTitle">Título de
+            <div class="alert alert-info frutiger-alert" role="alert" id="commentingOnCard">
+              <span class="alert-indicator">▶</span> Comentando en: <strong id="selectedCardTitle">Título de
                 Tarjeta</strong>
             </div>
             <div class="row mb-2">
               <label for="domCommentAuthor" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">></span> Autor:
+                <span class="label-indicator">▶</span> Autor:
               </label>
               <div class="col-sm-9">
                 <input type="text" class="form-control input-style" placeholder="Escribe tu NOMBRE"
@@ -91,31 +91,31 @@
             </div>
             <div class="mb-3">
               <label for="domCommentBody" class="form-label label-style">
-                <span class="label-indicator">></span> Comentario:
+                <span class="label-indicator">▶</span> Comentario:
               </label>
               <textarea class="form-control textarea-style" placeholder="Escribe tu comentario aquí" id="domCommentBody"
                 rows="3"></textarea>
             </div>
             <div class="d-flex gap-2">
               <button type="button" class="btn button-style flex-fill" id="domPostCommentBtn">
-                <span class="button-brackets">[</span> PUBLICAR COMENTARIO <span class="button-brackets">]</span>
+                PUBLICAR COMENTARIO
               </button>
-              <button type="button" class="btn btn-secondary terminal-secondary-btn"
+              <button type="button" class="btn btn-secondary frutiger-secondary-btn"
                 id="domCancelCommentBtn">CANCELAR</button>
             </div>
           </div>
         </section>
         <!-- Web Console Section -->
         <section class="web-console-section panel-box">
-          <div class="panel-glow-border"></div>
+          <div class="panel-inner-glow"></div>
           <h2 class="section-title">
-            <span class="title-bracket">[</span>
-            WEB CONSOLE
-            <span class="title-bracket">]</span>
+            <span class="title-bracket">›</span>
+            Web Console
+            <span class="title-bracket">‹</span>
           </h2>
           <div class="mb-3">
             <label for="domWebConsole" class="form-label label-style">
-              <span class="label-indicator">></span> Live Output:
+              <span class="label-indicator">▶</span> Live Output:
             </label>
             <div class="web-console-container">
               <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
@@ -124,22 +124,22 @@
             </div>
           </div>
           <button type="button" class="btn button-style w-100" id="domDebugButton">
-            <span class="button-brackets">[</span> DEBUG BUTTON <span class="button-brackets">]</span>
+            DEBUG BUTTON
           </button>
         </section>
       </div>
       <!-- Right Column: Result Grid -->
       <div class="col-12 col-md-7 right-column">
         <section class="result-grid-section panel-box h-100">
-          <div class="panel-glow-border"></div>
+          <div class="panel-inner-glow"></div>
           <h2 class="section-title" id="resultGridTitle">
-            <span class="title-bracket">[</span>
-            RESULTADOS
-            <span class="title-bracket">]</span>
+            <span class="title-bracket">›</span>
+            Resultados
+            <span class="title-bracket">‹</span>
           </h2>
           <div class="mb-3 flex-grow-1 d-flex flex-column">
             <label for="domResultGrid" class="form-label label-style">
-              <span class="label-indicator">></span> Tarjetas:
+              <span class="label-indicator">▶</span> Tarjetas:
             </label>
             <div class="result-grid-display-area flex-grow-1" id="domResultGrid"></div>
           </div>
@@ -147,7 +147,7 @@
           <div class="button-group-style">
             <div class="row align-items-center">
               <div class="col-12 col-md-8 mb-2 mb-md-0">
-                <select class="form-select terminal-select" id="domSortSelect">
+                <select class="form-select frutiger-select" id="domSortSelect">
                   <option value="newest">Más Recientes</option>
                   <option value="oldest">Más Antiguas</option>
                   <option value="likes">Más Populares</option>
@@ -156,12 +156,12 @@
               </div>
               <div class="col-12 col-md-4">
                 <button type="button" class="btn button-style w-100" id="domRenderButton">
-                  <span class="button-brackets">[</span> MOSTRAR <span class="button-brackets">]</span>
+                  MOSTRAR
                 </button>
               </div>
             </div>
             <div class="mt-2">
-              <button type="button" class="btn btn-secondary terminal-secondary-btn" id="domBackToCardsBtn"
+              <button type="button" class="btn btn-secondary frutiger-secondary-btn" id="domBackToCardsBtn"
                 style="display: none;">
                 VOLVER A TARJETAS
               </button>
@@ -172,10 +172,10 @@
     </main>
     <!-- Footer Section -->
     <footer class="footer-section mt-4">
-      <div class="footer-glow-effect"></div>
+      <div class="footer-shine-effect"></div>
       <div class="text-center">
         <a href="/about.html" class="about-button">
-          <span class="button-brackets">[</span> ACERCA DE <span class="button-brackets">]</span>
+          Acerca de
         </a>
       </div>
     </footer>
