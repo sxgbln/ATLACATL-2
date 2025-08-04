@@ -101,45 +101,46 @@ body::after {
 }
 
 .title-glass {
-  font-size: 2.4rem;
-  font-weight: 600;
-  letter-spacing: 3px;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 4px;
   font-family: "Kanit", sans-serif;
-  background: linear-gradient(135deg, #01579b 0%, #0288d1 25%, #4fc3f7 50%, #81d4fa 75%, #b3e5fc 100%);
+  background: linear-gradient(135deg, #ff6f61 0%, #ff8a65 25%, #ffab91 50%, #ffccbc 75%, #fff3e0 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow:
-    0 0 8px rgba(2, 136, 209, 0.7),
-    0 0 15px rgba(100, 181, 246, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.2);
+    0 0 10px rgba(255, 111, 97, 0.8),
+    0 0 20px rgba(255, 138, 101, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.3);
   filter: none;
   position: relative;
-  padding: 0.3rem 0.7rem;
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .title-glass::before {
   content: "";
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background: radial-gradient(circle, rgba(100, 181, 246, 0.3) 0%, transparent 60%);
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  background: radial-gradient(circle, rgba(255, 138, 101, 0.4) 0%, transparent 70%);
   z-index: -1;
-  border-radius: 12px;
+  border-radius: 14px;
 }
 
 .motto-text {
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: #0288d1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  margin-top: 0.5rem;
-  letter-spacing: 1px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ff8a65;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin-top: 0.7rem;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
@@ -453,8 +454,8 @@ body::after {
   color: #0d47a1 !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 0.85rem;
   font-weight: 500;
+  font-size: 0.85rem;
   box-shadow:
     0 3px 12px rgba(21, 101, 192, 0.2),
     inset 0 2px 4px rgba(255, 255, 255, 0.9);
@@ -501,12 +502,12 @@ body::after {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(21, 101, 192, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.15) 1px, transparent 1px);
-  background-size: 20px 20px;
+    linear-gradient(rgba(21, 101, 192, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 101, 192, 0.3) 1px, transparent 1px);
+  background-size: 15px 15px;
   pointer-events: none;
   border-radius: 14px;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .result-grid-display-area:empty::before {
