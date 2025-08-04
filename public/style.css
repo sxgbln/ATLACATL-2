@@ -8,38 +8,20 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  animation: backgroundShift 15s ease-in-out infinite;
 }
 
-/* Enhanced floating orbs for depth */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.5) 3px, transparent 3px),
-    radial-gradient(circle at 65% 55%, rgba(100, 181, 246, 0.4) 4px, transparent 4px),
-    radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.6) 2px, transparent 2px);
-  background-size: 180px 180px, 140px 140px, 90px 90px;
-  pointer-events: none;
-  z-index: -2;
-  animation: floatingOrbs 18s ease-in-out infinite;
-}
+@keyframes backgroundShift {
+  0% {
+    background-position: 0 0;
+  }
 
-@keyframes floatingOrbs {
+  50% {
+    background-position: 20% 20%;
+  }
 
-  0%,
   100% {
-    transform: translate(0, 0);
-  }
-
-  33% {
-    transform: translate(12px, -18px);
-  }
-
-  66% {
-    transform: translate(-8px, 12px);
+    background-position: 0 0;
   }
 }
 
@@ -108,32 +90,38 @@ body::after {
   }
 }
 
-/* Enhanced ATLACATL Title - Vibrant Blue Metallic */
+/* Enhanced ATLACATL Title - Glassmorphism with Vibrant Gradient */
 .app-title {
   margin: 0;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.title-glow {
+.title-glass {
   font-size: 2.4rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 3px;
   font-family: "Kanit", sans-serif;
   background: linear-gradient(135deg, #01579b 0%, #0288d1 25%, #4fc3f7 50%, #81d4fa 75%, #b3e5fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow:
-    0 0 8px rgba(2, 136, 209, 0.5),
-    0 0 15px rgba(100, 181, 246, 0.4),
+    0 0 8px rgba(2, 136, 209, 0.7),
+    0 0 15px rgba(100, 181, 246, 0.5),
     0 2px 4px rgba(0, 0, 0, 0.2);
   filter: none;
   position: relative;
-  padding: 0.2rem 0.5rem;
-  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.title-glow::before {
+.title-glass::before {
   content: "";
   position: absolute;
   top: -10px;
@@ -143,6 +131,16 @@ body::after {
   background: radial-gradient(circle, rgba(100, 181, 246, 0.3) 0%, transparent 60%);
   z-index: -1;
   border-radius: 12px;
+}
+
+.motto-text {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #0288d1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 /* Panel Box - Enhanced 3D Beveled Effect */
@@ -470,7 +468,7 @@ body::after {
     inset 0 2px 4px rgba(255, 255, 255, 0.95);
 }
 
-/* Result Grid Display Area - Enhanced Depth */
+/* Result Grid Display Area - Enhanced Blueprint Grid */
 .result-grid-display-area {
   background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 100%);
   border: 3px solid rgba(21, 101, 192, 0.4);
@@ -502,11 +500,13 @@ body::after {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(21, 101, 192, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.04) 1px, transparent 1px);
-  background-size: 25px 25px;
+  background-image:
+    linear-gradient(rgba(21, 101, 192, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 101, 192, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
   pointer-events: none;
   border-radius: 14px;
+  opacity: 0.7;
 }
 
 .result-grid-display-area:empty::before {
@@ -614,16 +614,6 @@ body::after {
   background: linear-gradient(45deg, transparent 40%, rgba(100, 181, 246, 0.2) 50%, transparent 60%);
   animation: footerShine 7s ease-in-out infinite;
   pointer-events: none;
-}
-
-@keyframes footerShine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
 }
 
 .about-button {
@@ -790,9 +780,13 @@ body::after {
     margin: 0 !important;
   }
 
-  .app-title .title-glow {
+  .app-title .title-glass {
     font-size: 1.8rem;
     letter-spacing: 2px;
+  }
+
+  .motto-text {
+    font-size: 0.7rem;
   }
 
   .panel-box {
@@ -873,8 +867,7 @@ body::after {
     animation: none;
   }
 
-  body::before,
-  body::after {
+  body {
     animation: none;
   }
 }
