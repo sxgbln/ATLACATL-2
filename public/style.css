@@ -1,8 +1,7 @@
 /* Frutiger Aero / Enhanced 3D Beveled Aesthetic */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #d0e8ff 0%, #a3cfff 25%, #7bbcff 50%, #4c9eff 75%, #2b86ff 100%);
-  background-attachment: fixed;
+  background: linear-gradient(to bottom, #e0f7ff, #b3e5fc);
   font-size: 0.9rem;
   color: #0d47a1;
   min-height: 100vh;
@@ -25,123 +24,125 @@ body {
   }
 }
 
-/* Enhanced ambient light overlay */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at 25% 15%, rgba(255, 255, 255, 0.2) 0%, transparent 55%),
-    radial-gradient(ellipse at 75% 85%, rgba(100, 181, 246, 0.15) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-  animation: ambientPulse 7s ease-in-out infinite;
-}
-
-@keyframes ambientPulse {
-
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-/* Header Section - Enhanced Beveled Metallic */
-.header-section {
-  background: linear-gradient(135deg, #e6f0fa 0%, #d6eaff 30%, #b3d9ff 70%, #8ecbff 100%);
-  color: #0d47a1;
-  padding: 2rem;
-  border-radius: 14px;
-  box-shadow:
-    0 10px 40px rgba(21, 101, 192, 0.25),
-    inset 0 3px 6px rgba(255, 255, 255, 0.9),
-    inset 0 -3px 6px rgba(21, 101, 192, 0.15),
-    0 2px 10px rgba(21, 101, 192, 0.2);
-  border: 2px solid rgba(21, 101, 192, 0.3);
-  border-style: outset;
+/* Title Container and Glass Strip */
+.title-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  overflow: hidden;
 }
 
-.header-shine-effect {
-  position: absolute;
-  top: -60%;
-  left: -60%;
-  width: 220%;
-  height: 220%;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
-  animation: headerShine 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes headerShine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
-}
-
-/* Enhanced ATLACATL Title - Glassmorphism with Vibrant Gradient */
-.app-title {
-  margin: 0;
-  position: relative;
-  z-index: 1;
+.glass-strip {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-}
-
-.title-glass {
-  font-size: 2.8rem;
-  font-weight: 700;
-  letter-spacing: 4px;
-  font-family: "Kanit", sans-serif;
-  background: linear-gradient(135deg, #ff6f61 0%, #ff8a65 25%, #ffab91 50%, #ffccbc 75%, #fff3e0 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow:
-    0 0 10px rgba(255, 111, 97, 0.8),
-    0 0 20px rgba(255, 138, 101, 0.6),
-    0 2px 6px rgba(0, 0, 0, 0.3);
-  filter: none;
-  position: relative;
-  padding: 0.4rem 1rem;
-  border-radius: 12px;
+  width: 100vw;
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem 0;
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.1),
+    0 5px 10px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  left: 0;
+  right: 0;
+  margin: 0;
 }
 
-.title-glass::before {
-  content: "";
+.glass-strip::before {
+  content: '';
   position: absolute;
-  top: -12px;
-  left: -12px;
-  right: -12px;
-  bottom: -12px;
-  background: radial-gradient(circle, rgba(255, 138, 101, 0.4) 0%, transparent 70%);
-  z-index: -1;
-  border-radius: 14px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+  z-index: 1;
 }
 
-.motto-text {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #ff8a65;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  margin-top: 0.7rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+.glass-strip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  z-index: 2;
+  animation: shine 4s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+.title {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 6rem;
+  color: #ffffff;
+  position: relative;
+  z-index: 3;
+  margin-bottom: 0.5rem;
+  text-shadow:
+    0px 1px 0px #b3e5fc,
+    0px 2px 0px #99d6f5,
+    0px 3px 0px #80c7ef,
+    0px 4px 0px #66b8e9,
+    0px 5px 0px #4da9e3,
+    0px 6px 1px rgba(0, 0, 0, 0.1),
+    0px 7px 3px rgba(0, 0, 0, 0.1),
+    0px 8px 5px rgba(0, 0, 0, 0.15),
+    0px -1px 1px rgba(255, 255, 255, 0.9),
+    0px -2px 2px rgba(255, 255, 255, 0.7);
+  filter: drop-shadow(0 0 2px rgba(0, 198, 255, 0.5));
+}
+
+.title::before {
+  content: "ATLACATL";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  color: transparent;
+  -webkit-text-stroke: 2px transparent;
+  background: linear-gradient(to bottom,
+      rgba(0, 198, 255, 0.8) 0%,
+      rgba(0, 123, 255, 0.7) 50%,
+      rgba(0, 86, 179, 0.6) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: blur(0.1px);
+  opacity: 0.9;
+  transform: scale(1.005);
+}
+
+.tagline {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: #000;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 0;
+  position: relative;
+  z-index: 3;
 }
 
 /* Panel Box - Enhanced 3D Beveled Effect */
@@ -480,7 +481,10 @@ body::after {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: 0.85rem;
   line-height: 1.4;
-  height: 480px;
+  height: 100%;
+  /* Adjusted to prevent cutoff */
+  min-height: 280px;
+  /* Minimum height for mobile */
   max-height: 480px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -502,12 +506,12 @@ body::after {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(21, 101, 192, 0.3) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.3) 1px, transparent 1px);
-  background-size: 15px 15px;
+    linear-gradient(rgba(21, 101, 192, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 101, 192, 0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
   pointer-events: none;
   border-radius: 14px;
-  opacity: 0.8;
+  opacity: 0.4;
 }
 
 .result-grid-display-area:empty::before {
@@ -781,13 +785,16 @@ body::after {
     margin: 0 !important;
   }
 
-  .app-title .title-glass {
-    font-size: 1.8rem;
-    letter-spacing: 2px;
+  .title {
+    font-size: 3rem;
   }
 
-  .motto-text {
-    font-size: 0.7rem;
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .glass-strip {
+    padding: 1.5rem 0;
   }
 
   .panel-box {
@@ -803,7 +810,9 @@ body::after {
     gap: 1rem;
     padding: 1.2rem;
     min-width: 0;
-    height: 280px;
+    height: 100%;
+    /* Adjusted for mobile */
+    min-height: 280px;
     max-height: 280px;
     box-shadow:
       inset 0 3px 10px rgba(21, 101, 192, 0.15),
@@ -876,7 +885,8 @@ body::after {
 /* Desktop Optimizations */
 @media (min-width: 768px) {
   .result-grid-display-area {
-    height: 480px;
+    height: 100%;
+    min-height: 480px;
     max-height: 480px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
@@ -899,7 +909,8 @@ body::after {
 /* Large Desktop */
 @media (min-width: 1200px) {
   .result-grid-display-area {
-    height: 500px;
+    height: 100%;
+    min-height: 500px;
     max-height: 500px;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
