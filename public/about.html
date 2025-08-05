@@ -22,15 +22,14 @@
         /* Custom Y2K Frutiger Aero styles on top of Bootstrap */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 25%, #e6f7ff 50%, #f0fff0 75%, #e8f5e8 100%);
+            background: linear-gradient(135deg, #e0f7ff 0%, #f0f8ff 25%, #e6f7ff 50%, #f0fff0 75%, #e0f7ff 100%);
             background-attachment: fixed;
             font-size: 0.9rem;
             position: relative;
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            color: #2c3e50;
-            /* Default text color */
+            color: #0d47a1;
         }
 
         /* Add subtle texture overlay for that Y2K feel */
@@ -41,7 +40,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%),
+            background: radial-gradient(circle at 20% 80%, rgba(21, 101, 192, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(144, 238, 144, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, rgba(173, 216, 230, 0.05) 0%, transparent 50%);
             pointer-events: none;
@@ -82,19 +81,19 @@
         /* Header Section - Enhanced Y2K chrome with taller title */
         .header-section {
             background: linear-gradient(135deg,
-                    #ffffff 0%,
-                    #f8f8f8 15%,
-                    #e8e8e8 30%,
-                    #d8d8d8 45%,
-                    #e8e8e8 60%,
-                    #f8f8f8 85%,
-                    #ffffff 100%);
-            color: #2c3e50;
+                    #f0f6ff 0%,
+                    #e0edff 15%,
+                    #c9e0ff 30%,
+                    #b3d9ff 45%,
+                    #c9e0ff 60%,
+                    #e0edff 85%,
+                    #f0f6ff 100%);
+            color: #0d47a1;
             padding: 1.2rem 1.5rem;
             border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.5);
-            border: 2px solid rgba(200, 220, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(21, 101, 192, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(173, 216, 230, 0.5);
+            border: 2px solid rgba(21, 101, 192, 0.4);
             position: relative;
             backdrop-filter: blur(10px);
             margin-bottom: 2rem;
@@ -118,14 +117,14 @@
             font-weight: 200;
             letter-spacing: 1px;
             margin: 0;
-            background: linear-gradient(135deg, #4a90e2 0%, #5ba3f5 25%, #357abd 50%, #4a90e2 75%, #2c5aa0 100%);
+            background: linear-gradient(135deg, #0288d1 0%, #4fc3f7 25%, #01579b 50%, #0288d1 75%, #0d47a1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             position: relative;
             z-index: 1;
             font-family: "Kanit", sans-serif;
-            text-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+            text-shadow: 0 2px 4px rgba(21, 101, 192, 0.3);
             line-height: 1.1;
             text-align: center;
         }
@@ -133,16 +132,11 @@
         /* Version number styling */
         .app-version {
             font-family: "Space Mono", monospace;
-            /* Futuristic/Typewriter font */
             font-size: 0.75rem;
-            /* Small font size */
             color: #6c757d;
-            /* Slightly muted color */
             text-align: center;
             display: block;
-            /* Ensure it's on its own line */
             margin-top: 0.5rem;
-            /* Space below the main title */
             position: relative;
             z-index: 1;
         }
@@ -151,15 +145,13 @@
         .content-panel,
         .tech-section,
         .news-section,
-        /* New section */
         .legal-section {
-            /* New section */
-            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 20%, #f0f8ff 40%, #e8f4ff 60%, #f0f8ff 80%, #ffffff 100%);
+            background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 20%, #c9e0ff 40%, #b3d9ff 60%, #e0edff 80%, #f0f6ff 100%);
             border-radius: 16px;
             padding: 1.4rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+            box-shadow: 0 8px 32px rgba(21, 101, 192, 0.1), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.05),
                 0 0 0 1px rgba(173, 216, 230, 0.3);
-            border: 2px solid rgba(173, 216, 230, 0.4);
+            border: 2px solid rgba(21, 101, 192, 0.4);
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
@@ -171,9 +163,7 @@
         .content-panel::before,
         .tech-section::before,
         .news-section::before,
-        /* New section */
         .legal-section::before {
-            /* New section */
             content: "";
             position: absolute;
             top: 0;
@@ -188,7 +178,7 @@
         .content-text {
             font-size: 1.1rem;
             line-height: 1.6;
-            color: #2c3e50;
+            color: #0d47a1;
             margin-bottom: 1.5rem;
             position: relative;
             z-index: 1;
@@ -201,18 +191,16 @@
         /* Section Titles - Enhanced with Y2K glow (reused for tech-title) */
         .tech-title,
         .news-title,
-        /* New section */
         .legal-title {
-            /* New section */
             font-size: 1.2rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: #0d47a1;
             margin-bottom: 1.2rem;
             padding-bottom: 0.6rem;
-            border-bottom: 3px solid rgba(74, 144, 226, 0.3);
+            border-bottom: 3px solid rgba(21, 101, 192, 0.3);
             position: relative;
             z-index: 1;
-            text-shadow: 0 1px 2px rgba(74, 144, 226, 0.2);
+            text-shadow: 0 1px 2px rgba(21, 101, 192, 0.2);
             text-align: center;
         }
 
@@ -246,7 +234,7 @@
 
         .tech-label {
             font-size: 0.9rem;
-            color: #4a5568;
+            color: #0288d1;
             font-weight: 500;
             text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
         }
@@ -254,23 +242,23 @@
         /* Button Styling - Enhanced Y2K chrome buttons (reused for return-button) */
         .return-button {
             background: linear-gradient(135deg,
-                    #ffffff 0%,
-                    #f8f8f8 15%,
-                    #e8e8e8 30%,
-                    #d8d8d8 45%,
-                    #e8e8e8 60%,
-                    #f8f8f8 85%,
-                    #ffffff 100%) !important;
-            border: 2px solid rgba(173, 216, 230, 0.5) !important;
-            color: #2c3e50 !important;
+                    #f0f6ff 0%,
+                    #e0edff 15%,
+                    #c9e0ff 30%,
+                    #b3d9ff 45%,
+                    #c9e0ff 60%,
+                    #e0edff 85%,
+                    #f0f6ff 100%) !important;
+            border: 2px solid rgba(21, 101, 192, 0.4) !important;
+            color: #0d47a1 !important;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             font-size: 0.85rem;
             padding: 0.7rem 1.2rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(173, 216, 230, 0.6);
             border-radius: 10px;
             text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
             position: relative;
@@ -296,23 +284,23 @@
 
         .return-button:hover {
             background: linear-gradient(135deg,
-                    #f0f8ff 0%,
-                    #e8f4ff 15%,
-                    #d8e8f8 30%,
-                    #c8d8e8 45%,
-                    #d8e8f8 60%,
-                    #e8f4ff 85%,
-                    #f0f8ff 100%) !important;
+                    #e0edff 0%,
+                    #c9e0ff 15%,
+                    #b3d9ff 30%,
+                    #a3cfff 45%,
+                    #b3d9ff 60%,
+                    #c9e0ff 85%,
+                    #e0edff 100%) !important;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(173, 216, 230, 0.8);
-            color: #2c3e50 !important;
-            border-color: rgba(144, 238, 144, 0.6) !important;
+            box-shadow: 0 6px 20px rgba(21, 101, 192, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(144, 238, 144, 0.8);
+            color: #0d47a1 !important;
+            border-color: rgba(21, 101, 192, 0.6) !important;
         }
 
         .return-button:active {
             transform: translateY(1px);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 3px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 6px rgba(21, 101, 192, 0.2), inset 0 3px 6px rgba(0, 0, 0, 0.15);
         }
 
         /* News item styling */
@@ -320,21 +308,19 @@
             margin-bottom: 1rem;
             padding-bottom: 1rem;
             border-bottom: 1px dashed rgba(173, 216, 230, 0.5);
-            /* Dashed line for subtle separation */
             position: relative;
             z-index: 1;
         }
 
         .news-item:last-child {
             border-bottom: none;
-            /* No border for the last item */
             margin-bottom: 0;
             padding-bottom: 0;
         }
 
         .news-date {
             font-size: 0.8rem;
-            color: #718096;
+            color: #0288d1;
             font-style: italic;
             margin-bottom: 0.3rem;
             display: block;
@@ -343,34 +329,32 @@
         .news-title-item {
             font-size: 1rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: #0d47a1;
             margin-bottom: 0.3rem;
         }
 
         .news-body {
             font-size: 0.95rem;
             line-height: 1.5;
-            color: #4a5568;
+            color: #0288d1;
         }
 
         /* News link styling */
         .news-link {
-            color: #4a90e2;
-            /* Blue color for links */
+            color: #0288d1;
             text-decoration: underline;
             transition: color 0.3s ease;
         }
 
         .news-link:hover {
-            color: #357abd;
-            /* Darker blue on hover */
+            color: #01579b;
         }
 
         /* Legal text styling */
         .legal-text {
             font-size: 0.9rem;
             line-height: 1.5;
-            color: #4a5568;
+            color: #0288d1;
             position: relative;
             z-index: 1;
         }
