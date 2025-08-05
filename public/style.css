@@ -1,7 +1,7 @@
 /* Frutiger Aero / Enhanced 3D Beveled Aesthetic */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(to bottom, #e0f7ff, #b3e5fc);
+  background: #e0f7ff;
   font-size: 0.9rem;
   color: #0d47a1;
   min-height: 100vh;
@@ -11,20 +11,16 @@ body {
     linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
-  animation: backgroundGridFade 10s ease-in-out infinite;
+  animation: backgroundGridMove 15s linear infinite;
 }
 
-@keyframes backgroundGridFade {
+@keyframes backgroundGridMove {
   0% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
-  }
-
-  50% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.02) 1px, transparent 1px);
+    background-position: 0 0;
   }
 
   100% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
+    background-position: 30px 30px;
   }
 }
 
@@ -45,7 +41,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: linear-gradient(135deg, #d6eaff 0%, #b3d9ff 100%, #e6f0ff 100%);
+  background: linear-gradient(135deg, #b0bec5 0%, #78909c 50%, #546e7a 100%);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   padding: 0.5rem 0;
@@ -65,21 +61,24 @@ body {
 .title {
   font-family: 'Kanit', sans-serif;
   font-weight: 400;
-  font-style: normal;
+  font-style: italic;
   font-size: 3rem;
   color: #ffffff;
   position: relative;
   z-index: 3;
   margin: 0;
   text-shadow:
-    0px 1px 0px #ffffff,
-    0px 2px 0px #e0edff,
-    0px 3px 0px #c9e0ff,
-    0px 4px 0px #b3d9ff,
-    0px 5px 1px rgba(0, 0, 0, 0.1),
-    0px 6px 2px rgba(0, 0, 0, 0.1),
-    0px 7px 3px rgba(0, 0, 0, 0.1);
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+    0px 1px 0px #b3e5fc,
+    0px 2px 0px #99d6f5,
+    0px 3px 0px #80c7ef,
+    0px 4px 0px #66b8e9,
+    0px 5px 0px #4da9e3,
+    0px 6px 1px rgba(0, 0, 0, 0.1),
+    0px 7px 3px rgba(0, 0, 0, 0.1),
+    0px 8px 5px rgba(0, 0, 0, 0.15),
+    0px -1px 1px rgba(255, 255, 255, 0.9),
+    0px -2px 2px rgba(255, 255, 255, 0.7);
+  filter: drop-shadow(0 0 2px rgba(0, 198, 255, 0.5));
 }
 
 /* Panel Box - Enhanced 3D Beveled Effect */
@@ -419,9 +418,7 @@ body {
   font-size: 0.85rem;
   line-height: 1.4;
   height: 100%;
-  /* Adjusted to prevent cutoff */
   min-height: 200px;
-  /* Minimum height for mobile */
   max-height: 400px;
   display: grid;
   grid-template-columns: repeat(2, minmax(250px, 1fr));
@@ -727,7 +724,9 @@ body {
   }
 
   .glass-strip {
-    padding: 0.3rem 0;
+    padding: 1.5rem 0;
+    height: 15vh;
+    min-height: 80px;
   }
 
   .panel-box {
@@ -803,10 +802,6 @@ body {
 
   .footer-glow-effect,
   .panel-inner-glow {
-    animation: none;
-  }
-
-  body {
     animation: none;
   }
 }
