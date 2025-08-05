@@ -1,3 +1,4 @@
+/* Frutiger Aero / Enhanced 3D Beveled Aesthetic */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: #e0f7ff;
@@ -23,27 +24,33 @@ body {
   }
 }
 
+/* Title Container and Title Strip */
 .title-container {
-  height: auto;
+  height: 10vh;
   min-height: 60px;
+  max-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 0.5rem 0;
 }
 
 .title-strip {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: #0047cc;
+  background: linear-gradient(to bottom, #0047cc 0%, #0038a3 100%);
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   text-align: center;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .title {
@@ -53,20 +60,10 @@ body {
   font-size: 3rem;
   color: #ffffff;
   margin: 0;
-  text-shadow:
-    0px 1px 0px #b3e5fc,
-    0px 2px 0px #99d6f5,
-    0px 3px 0px #80c7ef,
-    0px 4px 0px #66b8e9,
-    0px 5px 0px #4da9e3,
-    0px 6px 1px rgba(0, 0, 0, 0.1),
-    0px 7px 3px rgba(0, 0, 0, 0.1),
-    0px 8px 5px rgba(0, 0, 0, 0.15),
-    0px -1px 1px rgba(255, 255, 255, 0.9),
-    0px -2px 2px rgba(255, 255, 255, 0.7);
-  filter: drop-shadow(0 0 2px rgba(0, 198, 255, 0.5));
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3), 0 -1px 1px rgba(0, 0, 0, 0.1);
 }
 
+/* Panel Box - Enhanced 3D Beveled Effect */
 .panel-box {
   background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 50%, #c9e0ff 100%);
   border-radius: 14px;
@@ -110,6 +107,7 @@ body {
   opacity: 1;
 }
 
+/* Section Titles - Enhanced Depth */
 .section-title {
   font-size: 1rem;
   font-weight: 600;
@@ -141,6 +139,7 @@ body {
   font-size: 1.1em;
 }
 
+/* Form Labels */
 .label-style {
   font-weight: 500;
   color: #0288d1;
@@ -156,6 +155,7 @@ body {
   margin-right: 0.3rem;
 }
 
+/* Input and Textarea - Enhanced Beveled Inset */
 .input-style,
 .textarea-style {
   font-size: 0.85rem;
@@ -188,6 +188,7 @@ body {
   outline: none;
 }
 
+/* Frutiger Select */
 .frutiger-select {
   background: linear-gradient(135deg, #f5f8ff 0%, #e6f0ff 100%);
   border: 2px solid rgba(21, 101, 192, 0.4);
@@ -213,6 +214,7 @@ body {
   color: #0d47a1;
 }
 
+/* Frutiger Alert */
 .frutiger-alert {
   background: linear-gradient(135deg, #d6eaff 0%, #b3d9ff 100%);
   border: 2px solid rgba(21, 101, 192, 0.4);
@@ -229,6 +231,7 @@ body {
   margin-right: 0.3rem;
 }
 
+/* Card Body - Reduced height and no resize */
 #domCardBody,
 #domCommentBody {
   max-height: 80px;
@@ -236,6 +239,7 @@ body {
   overflow-y: auto;
 }
 
+/* Web Console - Untouched as Requested */
 .web-console-container {
   position: relative;
   border-radius: 8px;
@@ -325,6 +329,7 @@ body {
   border-radius: 2px;
 }
 
+/* Button Styling - Enhanced 3D Beveled */
 .button-style {
   background: linear-gradient(135deg, #0288d1 0%, #4fc3f7 50%, #0288d1 100%) !important;
   border: 2px solid rgba(21, 101, 192, 0.4) !important;
@@ -361,6 +366,7 @@ body {
     inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Frutiger Secondary Button */
 .frutiger-secondary-btn {
   background: linear-gradient(135deg, #f5f8ff 0%, #e6f0ff 100%) !important;
   border: 2px solid rgba(21, 101, 192, 0.4) !important;
@@ -382,6 +388,7 @@ body {
     inset 0 1px 2px rgba(255, 255, 255, 0.95);
 }
 
+/* Result Grid Display Area - Enhanced Blueprint Grid */
 .result-grid-display-area {
   background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 100%);
   border: 2px solid rgba(21, 101, 192, 0.4);
@@ -435,6 +442,83 @@ body {
   font-weight: 500;
 }
 
+/* Result Card - Enhanced 3D Beveled */
+.result-card {
+  background: linear-gradient(135deg, #f5f8ff 0%, #e6f0ff 50%, #d6eaff 100%);
+  border: 2px solid rgba(21, 101, 192, 0.35);
+  border-style: outset;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow:
+    0 6px 20px rgba(21, 101, 192, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(21, 101, 192, 0.15),
+    0 2px 8px rgba(21, 101, 192, 0.15);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+  color: #0d47a1;
+}
+
+.result-card:hover {
+  box-shadow:
+    0 8px 24px rgba(21, 101, 192, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(21, 101, 192, 0.2);
+  transform: translateY(-2px);
+  border-color: rgba(21, 101, 192, 0.5);
+}
+
+/* Result Card Elements */
+.result-card-header {
+  font-size: 0.7rem;
+  color: #0288d1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid rgba(21, 101, 192, 0.25);
+  padding-bottom: 0.4rem;
+}
+
+.result-card-header::before {
+  content: "👤 ";
+  margin-right: 0.2rem;
+}
+
+.result-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0d47a1;
+  line-height: 1.2;
+}
+
+.result-card-body {
+  font-size: 0.8rem;
+  color: #0288d1;
+  line-height: 1.4;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+}
+
+.result-card-date {
+  font-size: 0.65rem;
+  color: rgba(13, 71, 161, 0.7);
+  font-weight: 400;
+  text-align: right;
+  border-top: 2px solid rgba(21, 101, 192, 0.2);
+  padding-top: 0.4rem;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.result-card-date::before {
+  content: "🗓 ";
+  margin-right: 0.2rem;
+}
+
+/* Footer Section - Subtle Beveled */
 .footer-section {
   padding: 0.8rem;
   position: relative;
@@ -493,6 +577,7 @@ body {
     inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Card Actions */
 .card-actions {
   display: flex;
   gap: 0.5rem;
@@ -535,6 +620,7 @@ body {
   box-shadow: 0 4px 10px rgba(76, 175, 80, 0.25);
 }
 
+/* Main card styling (when viewing comments) */
 .main-card {
   border: 2px solid rgba(21, 101, 192, 0.5);
   background: linear-gradient(135deg, #d6eaff 0%, #b3d9ff 100%);
@@ -543,6 +629,7 @@ body {
     inset 0 2px 4px rgba(255, 255, 255, 0.9);
 }
 
+/* Comment card styling */
 .comment-card {
   border-left: 4px solid rgba(21, 101, 192, 0.7);
   background: linear-gradient(135deg, #f5f8ff 0%, #e6f0ff 100%);
@@ -552,6 +639,7 @@ body {
     inset 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
+/* Scrollbar Styling */
 .textarea-style::-webkit-scrollbar,
 .result-grid-display-area::-webkit-scrollbar {
   width: 10px;
@@ -577,6 +665,7 @@ body {
   background: linear-gradient(135deg, #01579b 0%, #0288d1 100%);
 }
 
+/* Mobile Layout Adjustments */
 @media (max-width: 767px) {
   .left-column {
     order: 2;
@@ -617,9 +706,11 @@ body {
   }
 
   .title-strip {
-    padding: 0.5rem;
-    width: auto;
-    margin: 0 1rem;
+    padding: 1.5rem 0;
+    height: 15vh;
+    min-height: 80px;
+    width: 100%;
+    margin: 0;
     box-sizing: border-box;
   }
 
@@ -686,6 +777,7 @@ body {
     padding: 0.5rem 1.5rem;
   }
 
+  /* Disable heavy animations on mobile */
   .panel-box:hover,
   .result-card:hover,
   .button-style:hover,
@@ -699,6 +791,7 @@ body {
   }
 }
 
+/* Desktop Optimizations */
 @media (min-width: 768px) {
   .result-grid-display-area {
     height: 100%;
@@ -722,6 +815,7 @@ body {
   }
 }
 
+/* Large Desktop */
 @media (min-width: 1200px) {
   .result-grid-display-area {
     height: 100%;
@@ -731,6 +825,7 @@ body {
   }
 }
 
+/* Performance Optimizations */
 * {
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
