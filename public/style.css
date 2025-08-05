@@ -691,19 +691,26 @@ body {
 /* Mobile Layout Adjustments */
 @media (max-width: 767px) {
   .title-container {
-    height: calc(100vh - 600px);
+    height: 10vh;
     min-height: 80px;
     max-height: 100px;
+    margin-top: -1rem;
+    /* Remove gap by pulling up */
   }
 
   .title-strip {
     height: 80px;
     padding: 0.5rem 0;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    transform: none;
     width: 100%;
     margin: 0;
     box-sizing: border-box;
+  }
+
+  .title {
+    font-size: 2.5rem;
+    /* Bigger title for mobile */
   }
 
   .left-column {
@@ -738,10 +745,6 @@ body {
   .button-group-style .btn {
     width: 100%;
     margin: 0 !important;
-  }
-
-  .title {
-    font-size: 1.5rem;
   }
 
   .panel-box {
