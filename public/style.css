@@ -26,9 +26,9 @@ body {
 
 /* Title Container and Title Strip */
 .title-container {
-  height: 10vh;
-  min-height: 60px;
-  max-height: 80px;
+  height: 20vh;
+  min-height: 120px;
+  max-height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,14 +43,28 @@ body {
   width: 100%;
   background: linear-gradient(to bottom, #0047cc 0%, #0038a3 100%);
   border-radius: 8px;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
   text-align: center;
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 0;
   right: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  position: relative;
+}
+
+.title-strip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: shine 3s infinite linear;
+  z-index: 1;
 }
 
 .title {
@@ -61,6 +75,39 @@ body {
   color: #ffffff;
   margin: 0;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3), 0 -1px 1px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: lightning 2s infinite linear;
+  z-index: -1;
+}
+
+@keyframes lightning {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* Panel Box - Enhanced 3D Beveled Effect */
@@ -667,6 +714,22 @@ body {
 
 /* Mobile Layout Adjustments */
 @media (max-width: 767px) {
+  .title-container {
+    height: calc(100vh - 600px);
+    min-height: 120px;
+    max-height: 150px;
+  }
+
+  .title-strip {
+    height: 100%;
+    padding: 1rem 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
   .left-column {
     order: 2;
   }
@@ -703,15 +766,6 @@ body {
 
   .title {
     font-size: 2rem;
-  }
-
-  .title-strip {
-    padding: 1.5rem 0;
-    height: 15vh;
-    min-height: 80px;
-    width: 100%;
-    margin: 0;
-    box-sizing: border-box;
   }
 
   .panel-box {
