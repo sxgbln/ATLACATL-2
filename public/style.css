@@ -8,37 +8,23 @@ body {
   position: relative;
   overflow-x: hidden;
   background-image:
-    linear-gradient(rgba(21, 101, 192, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
-  animation: backgroundGridFade 10s ease-in-out infinite, gradientShift 20s ease-in-out infinite;
+  animation: backgroundGridFade 10s ease-in-out infinite;
 }
 
 @keyframes backgroundGridFade {
   0% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.1) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
   }
 
   50% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(21, 101, 192, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.02) 1px, transparent 1px);
   }
 
   100% {
-    background-image: linear-gradient(rgba(21, 101, 192, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.1) 1px, transparent 1px);
-  }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0 0;
-  }
-
-  50% {
-    background-position: 20% 20%;
-  }
-
-  100% {
-    background-position: 0 0;
+    background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
   }
 }
 
@@ -58,111 +44,42 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  background: rgba(255, 255, 255, 0.15);
+  width: 100%;
+  background: linear-gradient(135deg, #d6eaff 0%, #b3d9ff 100%, #e6f0ff 100%);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   padding: 0.5rem 0;
   text-align: center;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   box-shadow:
     0 5px 10px rgba(0, 0, 0, 0.1),
     0 2px 5px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.6),
     inset 0 -1px 0 rgba(255, 255, 255, 0.3);
   overflow: hidden;
-  left: 0;
-  right: 0;
-  margin: 0;
-}
-
-.glass-strip::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
-  z-index: 1;
-}
-
-.glass-strip::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0) 100%);
-  z-index: 2;
-  animation: shine 4s infinite linear;
-}
-
-@keyframes shine {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 200%;
-  }
 }
 
 .title {
   font-family: 'Kanit', sans-serif;
   font-weight: 400;
-  font-style: italic;
-  font-size: 2.5rem;
+  font-style: normal;
+  font-size: 3rem;
   color: #ffffff;
   position: relative;
   z-index: 3;
-  margin-bottom: 0;
+  margin: 0;
   text-shadow:
-    0px 1px 0px #b3e5fc,
-    0px 2px 0px #99d6f5,
-    0px 3px 0px #80c7ef,
-    0px 4px 0px #66b8e9,
-    0px 5px 0px #4da9e3,
-    0px 6px 1px rgba(0, 0, 0, 0.15),
-    0px 7px 3px rgba(0, 0, 0, 0.15),
-    0px 8px 5px rgba(0, 0, 0, 0.2),
-    0px -1px 1px rgba(255, 255, 255, 1),
-    0px -2px 2px rgba(255, 255, 255, 0.9);
-  filter: drop-shadow(0 0 4px rgba(0, 198, 255, 0.7));
-}
-
-.title::before {
-  content: "ATLACATL";
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  color: transparent;
-  -webkit-text-stroke: 2px transparent;
-  background: linear-gradient(to bottom,
-      rgba(0, 198, 255, 0.9) 0%,
-      rgba(0, 123, 255, 0.8) 50%,
-      rgba(0, 86, 179, 0.7) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: blur(0.1px);
-  opacity: 0.95;
-  transform: scale(1.005);
-}
-
-.tagline {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: #000;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  margin-top: 0;
-  position: relative;
-  z-index: 3;
+    0px 1px 0px #ffffff,
+    0px 2px 0px #e0edff,
+    0px 3px 0px #c9e0ff,
+    0px 4px 0px #b3d9ff,
+    0px 5px 1px rgba(0, 0, 0, 0.1),
+    0px 6px 2px rgba(0, 0, 0, 0.1),
+    0px 7px 3px rgba(0, 0, 0, 0.1);
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
 }
 
 /* Panel Box - Enhanced 3D Beveled Effect */
@@ -333,11 +250,11 @@ body {
   margin-right: 0.3rem;
 }
 
-/* Card Body - Reduced height */
+/* Card Body - Reduced height and no resize */
 #domCardBody,
 #domCommentBody {
   max-height: 80px;
-  resize: vertical;
+  resize: none;
   overflow-y: auto;
 }
 
@@ -507,7 +424,7 @@ body {
   /* Minimum height for mobile */
   max-height: 400px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, minmax(250px, 1fr));
   gap: 1rem;
   align-content: start;
   box-shadow:
@@ -526,8 +443,8 @@ body {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(21, 101, 192, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
   border-radius: 12px;
@@ -806,11 +723,7 @@ body {
   }
 
   .title {
-    font-size: 1.8rem;
-  }
-
-  .tagline {
-    font-size: 0.7rem;
+    font-size: 2rem;
   }
 
   .glass-strip {
@@ -904,7 +817,7 @@ body {
     height: 100%;
     min-height: 300px;
     max-height: 400px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
   }
 
   .result-grid-section {
@@ -928,7 +841,7 @@ body {
     height: 100%;
     min-height: 350px;
     max-height: 450px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
   }
 }
 
