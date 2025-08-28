@@ -13,6 +13,7 @@ const {
   poolHandleLike,
   poolGetCardById,
 } = require("./config/conn.js")
+const rateLimit = require('express-rate-limit')
 
 const app = express()
 const port = 3000
@@ -76,6 +77,31 @@ function sanitizeCommentData(comments) {
   return sanitizedComment
 }
 
+// Rate limiters for spam-prone endpoints
+// Strict limit for new cards: 5 per minute per IP
+const cardLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 3, // Limit each IP to 5 card posts per minute
+  message: { error: 'Too many card posts from current user, please try again later.' },
+  keyGenerator: (req) => getClientIP(req), // Use IP as key
+})
+
+// Moderate limit for comments: 10 per minute per IP
+const commentLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 7, // Limit each IP to 10 comments per minute
+  message: { error: 'Too many comments from current user, please try again later.' },
+  keyGenerator: (req) => getClientIP(req),
+})
+
+// Moderate limit for likes: 10 per minute per IP
+const likeLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 7, // Limit each IP to 10 likes per minute
+  message: { error: 'Too many likes from current user, please try again later.' },
+  keyGenerator: (req) => getClientIP(req),
+})
+
 // New unified sorting endpoint with data sanitization
 app.get("/server/get/sorted/:sortType", async (request, response) => {
   const sortType = request.params.sortType
@@ -138,8 +164,8 @@ app.get("/server/get/sortdesc", async (request, response) => {
   }
 })
 
-// POST - Create new card (with IP and device tracking)
-app.post("/", async (request, response) => {
+// POST - Create new card (with IP and device tracking, and rate limiting)
+app.post("/", cardLimiter, async (request, response) => {
   console.log("POST request received:", request.body)
 
   const deviceId = getOrCreateDeviceId(request, response)
@@ -185,8 +211,8 @@ app.get("/server/card/:cardId", async (request, response) => {
   }
 })
 
-// POST - Add comment to card (with device tracking)
-app.post("/server/comment", async (request, response) => {
+// POST - Add comment to card (with device tracking, and rate limiting)
+app.post("/server/comment", commentLimiter, async (request, response) => {
   console.log("POST comment request received:", request.body)
 
   const deviceId = getOrCreateDeviceId(request, response)
@@ -201,8 +227,8 @@ app.post("/server/comment", async (request, response) => {
   }
 })
 
-// POST - Like a card (with dual IP + device verification)
-app.post("/server/like", async (request, response) => {
+// POST - Like a card (with dual IP + device verification, and rate limiting)
+app.post("/server/like", likeLimiter, async (request, response) => {
   console.log("POST like request received:", request.body)
 
   const deviceId = getOrCreateDeviceId(request, response)
