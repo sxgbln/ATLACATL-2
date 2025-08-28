@@ -49,8 +49,21 @@ async function postData() {
 
   try {
     const fetchResponse = await fetch(`${BASE_API_URL}/`, requestOptions);
-    const responseText = await fetchResponse.text();
-    webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${responseText}`;
+    let responseData;
+    try {
+      responseData = await fetchResponse.json(); // Parse as JSON if possible
+    } catch {
+      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+    }
+
+    if (!fetchResponse.ok) {
+      // Handle errors like rate limiting (429) or others
+      const errorMsg = responseData.error || responseData || 'Unknown error';
+      webConsole.value = `Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
+      return;
+    }
+
+    webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`;
 
     // Clear form fields
     cardTitleInput.value = "";
@@ -101,8 +114,21 @@ async function postComment() {
 
   try {
     const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions);
-    const responseText = await fetchResponse.text();
-    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${responseText}`;
+    let responseData;
+    try {
+      responseData = await fetchResponse.json(); // Parse as JSON if possible
+    } catch {
+      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+    }
+
+    if (!fetchResponse.ok) {
+      // Handle errors like rate limiting (429) or others
+      const errorMsg = responseData.error || responseData || 'Unknown error';
+      webConsole.value = `Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
+      return;
+    }
+
+    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`;
 
     // Clear comment form
     commentAuthorInput.value = "";
@@ -209,10 +235,23 @@ async function handleLike(cardId) {
 
   try {
     const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions);
-    const response = await fetchResponse.json();
-    webConsole.value = `Estado del Like: ${response.status} - ${response.message}`;
+    let responseData;
+    try {
+      responseData = await fetchResponse.json(); // Parse as JSON if possible
+    } catch {
+      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+    }
 
-    if (response.status === "success") {
+    if (!fetchResponse.ok) {
+      // Handle errors like rate limiting (429) or others
+      const errorMsg = responseData.error || responseData || 'Unknown error';
+      webConsole.value = `Error en Like: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
+      return;
+    }
+
+    webConsole.value = `Estado del Like: ${responseData.status} - ${responseData.message}`;
+
+    if (responseData.status === "success") {
       // Refresh current view
       if (currentMode === "cards") {
         renderCards();
