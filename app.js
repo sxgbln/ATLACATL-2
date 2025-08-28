@@ -23,15 +23,24 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
 
-// Helper function to get client IP
+// Helper function to get client IP (handle Cloudflare/proxy chains)
 function getClientIP(req) {
+  // Prefer Cloudflare's trusted header if present
+  if (req.headers['cf-connecting-ip']) {
+    return req.headers['cf-connecting-ip'];
+  }
+  // Fallback to X-Forwarded-For, taking the first (client) IP
+  const forwarded = req.headers["x-forwarded-for"];
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+  // Other fallbacks
   return (
-    req.headers["x-forwarded-for"] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
     (req.connection.socket ? req.connection.socket.remoteAddress : null) ||
     "127.0.0.1"
-  )
+  );
 }
 
 // Helper function to get or create device ID from cookie
