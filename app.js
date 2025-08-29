@@ -87,27 +87,27 @@ function sanitizeCommentData(comments) {
 }
 
 // Rate limiters for spam-prone endpoints
-// Strict limit for new cards: 5 per minute per IP
+// Strict limit for new cards: 2 per 5 minutes per IP
 const cardLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 2, // Limit each IP to 5 card posts per minute
-  message: { error: 'Too many card posts from this IP, please try again later.' },
+  windowMs: 5 * 60 * 1000, // 5 minute window
+  max: 2, // Limit each IP to 2 card posts per 5 minutes
+  message: { error: 'Too many requests from this network, please try again later.' },
   keyGenerator: (req) => getClientIP(req), // Use IP as key
 })
 
-// Moderate limit for comments: 10 per minute per IP
+// Moderate limit for comments: 3 per 5 minutes per IP
 const commentLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 3, // Limit each IP to 10 comments per minute
-  message: { error: 'Too many comments from this IP, please try again later.' },
+  windowMs: 5 * 60 * 1000, // 5 minute window
+  max: 3, // Limit each IP to 3 comments per 5 minutes
+  message: { error: 'Too many requests from this network, please try again later.' },
   keyGenerator: (req) => getClientIP(req),
 })
 
-// Moderate limit for likes: 10 per minute per IP
+// Moderate limit for likes: 4 per 5 minutes per IP
 const likeLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 4, // Limit each IP to 10 likes per minute
-  message: { error: 'Too many likes from this IP, please try again later.' },
+  windowMs: 5 * 60 * 1000, // 5 minute window
+  max: 4, // Limit each IP to 4 likes per 5 minutes
+  message: { error: 'Too many requests from this network, please try again later.' },
   keyGenerator: (req) => getClientIP(req),
 })
 
