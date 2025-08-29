@@ -95,18 +95,18 @@ const cardLimiter = rateLimit({
   keyGenerator: (req) => getClientIP(req), // Use IP as key
 })
 
-// Moderate limit for comments: 3 per 5 minutes per IP
+// Moderate limit for comments: 2 per minute per IP
 const commentLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minute window
-  max: 3, // Limit each IP to 3 comments per 5 minutes
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 2, // Limit each IP to 2 comments per minute
   message: { error: 'Too many requests from this network, please try again later.' },
   keyGenerator: (req) => getClientIP(req),
 })
 
-// Moderate limit for likes: 4 per 5 minutes per IP
+// Moderate limit for likes: 3 per minute per IP
 const likeLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minute window
-  max: 4, // Limit each IP to 4 likes per 5 minutes
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 3, // Limit each IP to 3 likes per minute
   message: { error: 'Too many requests from this network, please try again later.' },
   keyGenerator: (req) => getClientIP(req),
 })
