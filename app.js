@@ -13,10 +13,43 @@ const {
   poolHandleLike,
   poolGetCardById,
 } = require("./config/conn.js")
-const rateLimit = require('express-rate-limit')
+const rateLimit = require("express-rate-limit")
+const { GoogleGenerativeAI } = require("@google/generative-ai")
 
 const app = express()
 const port = 3000
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyBW5ixIBqvhBFB3WvDeafeLSYhcEY7aH8Y"
+
+const systemInstruction = `
+Eres un asistente de IA integrado en Atlacatl.net, la primera red social salvadoreña. Tu función es generar respuestas concisas y contextualmente relevantes basadas en las solicitudes de los usuarios, adecuadas para compartir en la plataforma.
+
+IMPORTANTE: Cuando un usuario te proporcione contenido (autor, título, y cuerpo de mensaje), debes generar una respuesta que complemente o mejore ese contenido, manteniendo el contexto y el tono apropiado para Atlacatl.net.
+
+Contexto sobre Atlacatl.net:
+Atlacatl es la primera red social salvadoreña, creada por salvadoreños para salvadoreños. Es una plataforma que permite compartir ideas e información de manera anónima o no anónima, con integración de IA para mejorar la experiencia del usuario.
+
+Identidad de Atlacatl:
+- Promovemos igualdad, empatía mutua, neutralidad política y valor de la innovación tecnológica
+- Nos fundamentamos en creatividad, empatía, libertad de expresión, innovación y proyección social
+- Apoyamos a la comunidad salvadoreña y latinoamericana
+
+Instrucciones de respuesta:
+1. Siempre responde en el idioma del usuario (principalmente español)
+2. Mantén respuestas breves: máximo un párrafo o 4 oraciones
+3. Sé directo y útil
+4. Complementa el contenido del usuario sin repetirlo exactamente
+5. Mantén un tono apropiado para redes sociales
+6. Si el contenido es inapropiado, responde educadamente que no puedes asistir con eso
+
+Habla en primera persona como asistente. No reveles que te llamas GFAS a menos que te pregunten directamente sobre tu nombre.
+`
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  systemInstruction: systemInstruction,
+})
 
 // Middleware setup
 app.use(express.json())
@@ -26,13 +59,13 @@ app.use(express.static(path.join(__dirname, "public")))
 // Helper function to get client IP (handle Cloudflare/proxy chains)
 function getClientIP(req) {
   // Prefer Cloudflare's trusted header if present
-  if (req.headers['cf-connecting-ip']) {
-    return req.headers['cf-connecting-ip'];
+  if (req.headers["cf-connecting-ip"]) {
+    return req.headers["cf-connecting-ip"]
   }
   // Fallback to X-Forwarded-For, taking the first (client) IP
-  const forwarded = req.headers["x-forwarded-for"];
+  const forwarded = req.headers["x-forwarded-for"]
   if (forwarded) {
-    return forwarded.split(',')[0].trim();
+    return forwarded.split(",")[0].trim()
   }
   // Other fallbacks
   return (
@@ -40,7 +73,7 @@ function getClientIP(req) {
     req.socket.remoteAddress ||
     (req.connection.socket ? req.connection.socket.remoteAddress : null) ||
     "127.0.0.1"
-  );
+  )
 }
 
 // Helper function to get or create device ID from cookie
@@ -91,7 +124,7 @@ function sanitizeCommentData(comments) {
 const cardLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
   max: 2, // Limit each IP to 2 card posts per 5 minutes
-  message: { error: 'Too many requests from this network, please try again later.' },
+  message: { error: "Too many requests from this network, please try again later." },
   keyGenerator: (req) => getClientIP(req), // Use IP as key
 })
 
@@ -99,7 +132,7 @@ const cardLimiter = rateLimit({
 const commentLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute window
   max: 2, // Limit each IP to 2 comments per minute
-  message: { error: 'Too many requests from this network, please try again later.' },
+  message: { error: "Too many requests from this network, please try again later." },
   keyGenerator: (req) => getClientIP(req),
 })
 
@@ -107,7 +140,7 @@ const commentLimiter = rateLimit({
 const likeLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute window
   max: 3, // Limit each IP to 3 likes per minute
-  message: { error: 'Too many requests from this network, please try again later.' },
+  message: { error: "Too many requests from this network, please try again later." },
   keyGenerator: (req) => getClientIP(req),
 })
 
@@ -249,6 +282,54 @@ app.post("/server/like", likeLimiter, async (request, response) => {
     response.send(result)
   } catch (error) {
     response.status(500).send({ error: error.message })
+  }
+})
+
+app.post("/server/gemini", cardLimiter, async (request, response) => {
+  console.log("POST AI request received:", request.body)
+
+  const deviceId = getOrCreateDeviceId(request, response)
+  const ipAddress = getClientIP(request)
+
+  try {
+    const { cardAuthor, cardTitle, cardBody } = request.body
+
+    // Validate input
+    if (!cardTitle || !cardBody) {
+      return response.status(400).json({ error: "Título y contenido son obligatorios." })
+    }
+
+    // Create prompt for Gemini
+    const prompt = `Usuario: ${cardAuthor || "anónimo"}
+Título: ${cardTitle}
+Contenido: ${cardBody}
+
+Por favor, genera una respuesta o complemento apropiado para este contenido en Atlacatl.net.`
+
+    // Get AI response
+    const result = await model.generateContent(prompt)
+    const aiResponse = result.response.text()
+
+    // Combine user content with AI response
+    const combinedBody = `${cardBody}
+
+---
+🤖 Respuesta de IA: ${aiResponse}`
+
+    // Post the combined card to database
+    const queryResult = await poolPost(cardAuthor || "anónimo", cardTitle, combinedBody, ipAddress)
+
+    response.json({
+      status: "success",
+      message: "Tarjeta con IA publicada exitosamente",
+      aiResponse: aiResponse,
+      data: queryResult,
+    })
+  } catch (error) {
+    console.error("Error in AI card creation:", error)
+    response.status(500).json({
+      error: "Error procesando solicitud con IA. Intenta nuevamente.",
+    })
   }
 })
 

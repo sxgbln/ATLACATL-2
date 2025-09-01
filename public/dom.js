@@ -14,15 +14,16 @@ let currentMode = "cards"
 let selectedCardId = null
 let selectedCardData = null
 
-// Post new card data to server
 async function postData() {
   const cardTitleInput = document.getElementById("domCardTitle")
   const cardBodyInput = document.getElementById("domCardBody")
   const cardAuthorInput = document.getElementById("domCardAuthor")
+  const aiSwitch = document.getElementById("aiResponseSwitch")
 
   const cardTitle = cardTitleInput.value.trim()
   const cardBody = cardBodyInput.value.trim()
   let cardAuthor = cardAuthorInput.value.trim()
+  const isAIEnabled = aiSwitch.checked
 
   if (cardTitle.length === 0 || cardBody.length === 0) {
     webConsole.value = "Error: El título y el contenido son obligatorios."
@@ -39,6 +40,11 @@ async function postData() {
     cardAuthor: cardAuthor,
   }
 
+  const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
+  const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
+
+  webConsole.value = statusMessage
+
   const requestOptions = {
     method: "POST",
     headers: { "Content-type": "application/json" },
@@ -47,7 +53,7 @@ async function postData() {
   }
 
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/`, requestOptions)
+    const fetchResponse = await fetch(endpoint, requestOptions)
     let responseData
     try {
       responseData = await fetchResponse.json() // Parse as JSON if possible
@@ -62,7 +68,11 @@ async function postData() {
       return
     }
 
-    webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
+    if (isAIEnabled && responseData.aiResponse) {
+      webConsole.value = `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`
+    } else {
+      webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
+    }
 
     // Clear form fields
     cardTitleInput.value = ""
@@ -263,7 +273,6 @@ async function handleLike(cardId) {
   }
 }
 
-// Generate card display element
 function generateCardElement(cardData, isMainCard = false) {
   const cardDiv = document.createElement("div")
   cardDiv.className = isMainCard ? "result-card main-card" : "result-card"
@@ -278,7 +287,26 @@ function generateCardElement(cardData, isMainCard = false) {
 
   const cardBody = document.createElement("div")
   cardBody.className = "result-card-body"
-  cardBody.textContent = cardData["card_body"].toString()
+
+  const bodyText = cardData["card_body"].toString()
+  if (bodyText.includes("🤖 Respuesta de IA:")) {
+    // Split content and AI response for better formatting
+    const parts = bodyText.split("---")
+    if (parts.length > 1) {
+      const userContent = parts[0].trim()
+      const aiContent = parts[1].trim()
+
+      cardBody.innerHTML = `
+        <div class="user-content">${userContent}</div>
+        <hr style="margin: 8px 0; border-color: #007bff;">
+        <div class="ai-content" style="font-style: italic; color: #007bff;">${aiContent}</div>
+      `
+    } else {
+      cardBody.textContent = bodyText
+    }
+  } else {
+    cardBody.textContent = bodyText
+  }
 
   const cardDate = document.createElement("div")
   cardDate.className = "result-card-date"
