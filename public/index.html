@@ -36,93 +36,99 @@
     </header>
     <main class="row g-2">
       <div class="col-12 col-md-5 left-column">
-        <section class="card-generator-section panel-box mb-2">
+        <!-- Merged card generator and web console into single container -->
+        <section class="combined-controls-section panel-box h-100">
           <div class="panel-inner-glow"></div>
-          <h2 class="section-title" id="generatorTitle">
-            <span class="title-bracket">›</span>
-            Generador de Tarjetas
-            <span class="title-bracket">‹</span>
-          </h2>
-          <div id="cardMode">
-            <div class="row mb-1">
-              <label for="domCardAuthor" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">▶</span> Autor:
-              </label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control input-style" placeholder="Escribe el Autor de la tarjeta"
-                  id="domCardAuthor">
+
+          <!-- Card Generator Section -->
+          <div class="card-generator-subsection mb-3">
+            <h2 class="section-title" id="generatorTitle">
+              <span class="title-bracket">›</span>
+              Generador de Tarjetas
+              <span class="title-bracket">‹</span>
+            </h2>
+            <div id="cardMode">
+              <div class="row mb-1">
+                <label for="domCardAuthor" class="col-sm-3 col-form-label label-style">
+                  <span class="label-indicator">▶</span> Autor:
+                </label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-style" placeholder="Escribe el Autor de la tarjeta"
+                    id="domCardAuthor">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label for="domCardTitle" class="col-sm-3 col-form-label label-style">
+                  <span class="label-indicator">▶</span> Título:
+                </label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-style" placeholder="Escribe el Título de la tarjeta"
+                    id="domCardTitle">
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="domCardBody" class="form-label label-style">
+                  <span class="label-indicator">▶</span> Contenido:
+                </label>
+                <textarea class="form-control textarea-style" placeholder="Redacta el contenido de la tarjeta"
+                  id="domCardBody" rows="3"></textarea>
+              </div>
+              <button type="button" class="btn button-style w-100" id="domPostBtn">
+                PUBLICAR TARJETA
+              </button>
+            </div>
+            <div id="commentMode" style="display: none;">
+              <div class="alert alert-info frutiger-alert" role="alert" id="commentingOnCard">
+                <span class="alert-indicator">▶</span> Comentando en: <strong id="selectedCardTitle">Título de
+                  Tarjeta</strong>
+              </div>
+              <div class="row mb-1">
+                <label for="domCommentAuthor" class="col-sm-3 col-form-label label-style">
+                  <span class="label-indicator">▶</span> Autor:
+                </label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-style" placeholder="Escribe tu Nombre"
+                    id="domCommentAuthor">
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="domCommentBody" class="form-label label-style">
+                  <span class="label-indicator">▶</span> Comentario:
+                </label>
+                <textarea class="form-control textarea-style" placeholder="Escribe tu comentario aquí"
+                  id="domCommentBody" rows="3"></textarea>
+              </div>
+              <div class="d-flex gap-1">
+                <button type="button" class="btn button-style flex-fill" id="domPostCommentBtn">
+                  PUBLICAR COMENTARIO
+                </button>
+                <button type="button" class="btn btn-secondary frutiger-secondary-btn"
+                  id="domCancelCommentBtn">CANCELAR</button>
               </div>
             </div>
-            <div class="row mb-1">
-              <label for="domCardTitle" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">▶</span> Título:
-              </label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control input-style" placeholder="Escribe el Título de la tarjeta"
-                  id="domCardTitle">
-              </div>
-            </div>
+          </div>
+
+          <!-- Web Console Section -->
+          <div class="web-console-subsection">
+            <h2 class="section-title">
+              <span class="title-bracket">›</span>
+              Web Console
+              <span class="title-bracket">‹</span>
+            </h2>
             <div class="mb-2">
-              <label for="domCardBody" class="form-label label-style">
-                <span class="label-indicator">▶</span> Contenido:
+              <label for="domWebConsole" class="form-label label-style">
+                <span class="label-indicator">▶</span> Live Output:
               </label>
-              <textarea class="form-control textarea-style" placeholder="Redacta el contenido de la tarjeta"
-                id="domCardBody" rows="3"></textarea>
+              <div class="web-console-container">
+                <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
+                <textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2"
+                  placeholder="Web console output"></textarea>
+              </div>
             </div>
-            <button type="button" class="btn button-style w-100" id="domPostBtn">
-              PUBLICAR TARJETA
+            <button type="button" class="btn button-style w-100" id="domDebugButton">
+              DEBUG BUTTON
             </button>
           </div>
-          <div id="commentMode" style="display: none;">
-            <div class="alert alert-info frutiger-alert" role="alert" id="commentingOnCard">
-              <span class="alert-indicator">▶</span> Comentando en: <strong id="selectedCardTitle">Título de
-                Tarjeta</strong>
-            </div>
-            <div class="row mb-1">
-              <label for="domCommentAuthor" class="col-sm-3 col-form-label label-style">
-                <span class="label-indicator">▶</span> Autor:
-              </label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control input-style" placeholder="Escribe tu Nombre"
-                  id="domCommentAuthor">
-              </div>
-            </div>
-            <div class="mb-2">
-              <label for="domCommentBody" class="form-label label-style">
-                <span class="label-indicator">▶</span> Comentario:
-              </label>
-              <textarea class="form-control textarea-style" placeholder="Escribe tu comentario aquí" id="domCommentBody"
-                rows="3"></textarea>
-            </div>
-            <div class="d-flex gap-1">
-              <button type="button" class="btn button-style flex-fill" id="domPostCommentBtn">
-                PUBLICAR COMENTARIO
-              </button>
-              <button type="button" class="btn btn-secondary frutiger-secondary-btn"
-                id="domCancelCommentBtn">CANCELAR</button>
-            </div>
-          </div>
-        </section>
-        <section class="web-console-section panel-box">
-          <div class="panel-inner-glow"></div>
-          <h2 class="section-title">
-            <span class="title-bracket">›</span>
-            Web Console
-            <span class="title-bracket">‹</span>
-          </h2>
-          <div class="mb-2">
-            <label for="domWebConsole" class="form-label label-style">
-              <span class="label-indicator">▶</span> Live Output:
-            </label>
-            <div class="web-console-container">
-              <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
-              <textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2"
-                placeholder="Web console output"></textarea>
-            </div>
-          </div>
-          <button type="button" class="btn button-style w-100" id="domDebugButton">
-            DEBUG BUTTON
-          </button>
         </section>
       </div>
       <div class="col-12 col-md-7 right-column">
