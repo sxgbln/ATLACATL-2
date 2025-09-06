@@ -677,6 +677,7 @@ body {
     /* Make cards container take most of viewport height with proper scrolling */
     height: calc(100vh - 120px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding-bottom: 20px;
   }
 
@@ -693,6 +694,7 @@ body {
     height: auto;
     min-height: auto;
     max-height: none;
+    overflow: visible;
   }
 
   .result-card {
@@ -720,40 +722,30 @@ body {
     height: 60px;
     border-radius: 50%;
     border: none;
-    background: linear-gradient(135deg, #0288d1 0%, #4fc3f7 50%, #0288d1 100%);
+    /* Simplified background to remove visual artifacts */
+    background: #0288d1;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 25px rgba(21, 101, 192, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(21, 101, 192, 0.2);
+    box-shadow: 0 8px 25px rgba(21, 101, 192, 0.4), 0 2px 4px rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     pointer-events: auto;
-    /* Re-enable clicks on buttons */
   }
 
-  .mobile-fab::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(21, 101, 192, 0.1) 100%);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .mobile-fab:hover::before {
-    opacity: 1;
+  /* Removed problematic pseudo-element that caused visual artifacts */
+  .mobile-fab:hover {
+    background: #0277bd;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(21, 101, 192, 0.5);
   }
 
   .mobile-fab:active {
     transform: scale(0.95);
-    box-shadow: 0 3px 12px rgba(21, 101, 192, 0.3), inset 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 12px rgba(21, 101, 192, 0.3);
   }
 
   .mobile-fab svg {
@@ -878,6 +870,7 @@ body {
     display: flex;
     flex-direction: column;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   .mobile-popup-content::-webkit-scrollbar {
