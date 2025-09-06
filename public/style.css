@@ -1,27 +1,16 @@
 /* Frutiger Aero / Enhanced 3D Beveled Aesthetic */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #e0f7ff;
+  /* Replaced moving grid animation with simple static gradient background */
+  background: linear-gradient(135deg, #e0f7ff 0%, #f0f6ff 50%, #e0edff 100%);
   font-size: 0.9rem;
   color: #0d47a1;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
-  animation: backgroundGridMove 10s linear infinite;
 }
 
-@keyframes backgroundGridMove {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 60px 60px;
-  }
-}
+/* Removed backgroundGridMove animation keyframes to reduce complexity */
 
 /* Title Container and Title Strip */
 .title-container {
@@ -400,8 +389,7 @@ body {
   background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 100%);
   border: 2px solid rgba(21, 101, 192, 0.4);
   border-radius: 12px;
-  padding: 1rem 1rem 2rem 1rem;
-  /* Added bottom padding to avoid cut-off look */
+  padding: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -419,6 +407,7 @@ body {
   position: relative;
 }
 
+/* Removed moving grid background from result display area */
 .result-grid-display-area::before {
   content: "";
   position: absolute;
@@ -426,9 +415,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(21, 101, 192, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 101, 192, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
+  background: rgba(21, 101, 192, 0.02);
   pointer-events: none;
   border-radius: 12px;
   opacity: 0.4;
@@ -653,14 +640,7 @@ body {
 
 /* Mobile Layout Adjustments */
 @media (max-width: 767px) {
-  body {
-    overflow: hidden;
-    /* Prevent full-page scrolling */
-  }
-
   .container-fluid {
-    height: 100vh;
-    overflow: hidden;
     padding: 0.5rem;
   }
 
@@ -668,6 +648,12 @@ body {
     margin-bottom: 0.5rem;
   }
 
+  .main-content {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Hide left column completely on mobile and make cards container take full viewport */
   .left-column {
     display: none !important;
   }
@@ -676,58 +662,46 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    height: 100%;
-    /* Full viewport height minus header */
+    /* Fixed mobile container to be static while allowing inner scrolling */
+    height: calc(100vh - 120px);
     overflow: hidden;
-    /* Static outer */
+    padding-bottom: 80px;
     position: relative;
   }
 
   .result-grid-section {
+    /* Made this the scrollable container for cards */
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    /* Static section */
-  }
-
-  .mb-2 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   .result-grid-display-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    overflow-y: auto;
-    /* Scrollable cards */
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    height: auto;
-    /* Dynamic height */
-    min-height: auto;
-    max-height: none;
-    padding: 1rem 1rem 2rem 1rem;
-    /* Extra bottom padding to avoid cut-off */
-    margin-bottom: 1rem;
-    /* Space for buttons */
+    /* Removed height restrictions to allow full content display */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   .result-card {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    flex: none;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    flex: none !important;
   }
 
+  /* Fixed positioning for floating action buttons to always stay in viewport */
   .mobile-fab-container {
-    position: fixed;
-    right: 20px;
-    bottom: 30px;
-    z-index: 1050;
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 30px !important;
+    z-index: 1050 !important;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -739,34 +713,38 @@ body {
     height: 60px;
     border-radius: 50%;
     border: none;
-    background: #0288d1;
-    /* Solid color for no artifact */
+    /* Simplified background to fix visual artifacts */
+    background: linear-gradient(135deg, #0288d1 0%, #0277bd 100%);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
-    /* Simplified shadow */
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(2, 136, 209, 0.4);
+    transition: all 0.2s ease;
     cursor: pointer;
+    position: relative;
     pointer-events: auto;
+    border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
   .mobile-fab:hover {
-    background: #0277bd;
+    background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(21, 101, 192, 0.4);
+    box-shadow: 0 6px 16px rgba(2, 136, 209, 0.5);
   }
 
   .mobile-fab:active {
     transform: scale(0.95);
-    box-shadow: 0 2px 6px rgba(21, 101, 192, 0.3);
+    box-shadow: 0 2px 8px rgba(2, 136, 209, 0.3);
   }
 
   .mobile-fab svg {
+    width: 24px;
+    height: 24px;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
   }
 
+  /* Fixed popup positioning and improved scrolling */
   .mobile-popup-overlay {
     position: fixed;
     top: 0;
@@ -792,6 +770,7 @@ body {
     border-radius: 16px;
     width: 100%;
     max-width: 380px;
+    /* Better height management for different screen sizes */
     height: 85vh;
     max-height: 600px;
     min-height: 400px;
