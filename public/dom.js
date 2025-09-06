@@ -465,78 +465,226 @@ function initializeMobilePopup() {
   function openMobilePopup(isCommentMode = false, cardData = null) {
     if (!isMobile()) return
 
-    const cardGeneratorContent = document.querySelector(".card-generator-subsection")
-    const webConsoleContent = document.querySelector(".web-console-subsection")
+    const mobilePopupTitle = document.querySelector(".mobile-popup-title")
+    const mobileCardMode = document.getElementById("mobileCardMode")
+    const mobileCommentMode = document.getElementById("mobileCommentMode")
+    const mobileGeneratorTitle = document.getElementById("mobileGeneratorTitle")
+    const mobileSelectedCardTitle = document.getElementById("mobileSelectedCardTitle")
+    const mobileAiSwitch = document.getElementById("mobileAiResponseSwitch")
+    const mobileCommentAiSwitch = document.getElementById("mobileCommentAiSwitch")
 
-    // Clear previous content
-    mobileCardGenerator.innerHTML = ""
-    mobileWebConsole.innerHTML = ""
-
-    if (cardGeneratorContent && mobileCardGenerator) {
-      const clonedContent = cardGeneratorContent.cloneNode(true)
-      mobileCardGenerator.appendChild(clonedContent)
-
-      if (isCommentMode && cardData) {
-        const cardMode = clonedContent.querySelector("#cardMode")
-        const commentMode = clonedContent.querySelector("#commentMode")
-        const generatorTitle = clonedContent.querySelector("#generatorTitle")
-        const selectedCardTitle = clonedContent.querySelector("#selectedCardTitle")
-        const aiSwitchContainer = clonedContent.querySelector(".ai-switch-container")
-
-        if (cardMode) cardMode.style.display = "none"
-        if (commentMode) commentMode.style.display = "block"
-        if (generatorTitle) generatorTitle.textContent = "Generador de Comentarios"
-        if (selectedCardTitle) selectedCardTitle.textContent = cardData.card_title
-
-        if (aiSwitchContainer) {
-          aiSwitchContainer.classList.add("comment-mode")
-          const aiSwitch = aiSwitchContainer.querySelector("#aiResponseSwitch")
-          if (aiSwitch) {
-            aiSwitch.checked = false
-            aiSwitch.disabled = true
-          }
-        }
-
-        // Re-bind event listeners for comment mode
-        const postCommentBtn = clonedContent.querySelector("#domPostCommentBtn")
-        const cancelCommentBtn = clonedContent.querySelector("#domCancelCommentBtn")
-
-        if (postCommentBtn) {
-          postCommentBtn.addEventListener("click", postComment)
-        }
-        if (cancelCommentBtn) {
-          cancelCommentBtn.addEventListener("click", () => {
-            window.closeMobilePopup()
-            cancelComment()
-          })
-        }
-      } else {
-        const postBtn = clonedContent.querySelector("#domPostBtn")
-        if (postBtn) {
-          postBtn.addEventListener("click", () => {
-            postData().then(() => {
-              window.closeMobilePopup()
-            })
-          })
-        }
-      }
+    // Sync web console content
+    const desktopWebConsole = document.getElementById("domWebConsole")
+    if (desktopWebConsole && mobileWebConsole) {
+      mobileWebConsole.value = desktopWebConsole.value
     }
 
-    if (webConsoleContent && mobileWebConsole) {
-      mobileWebConsole.appendChild(webConsoleContent.cloneNode(true))
+    if (isCommentMode && cardData) {
+      // Comment mode
+      if (mobilePopupTitle) mobilePopupTitle.textContent = "AGREGAR COMENTARIO"
+      if (mobileCardMode) mobileCardMode.style.display = "none"
+      if (mobileCommentMode) mobileCommentMode.style.display = "block"
+      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Comentarios"
+      if (mobileSelectedCardTitle) mobileSelectedCardTitle.textContent = cardData.card_title
+
+      // Disable AI switch for comments
+      if (mobileCommentAiSwitch) {
+        mobileCommentAiSwitch.checked = false
+        mobileCommentAiSwitch.disabled = true
+      }
+
+      // Bind mobile comment event listeners
+      const mobilePostCommentBtn = document.getElementById("mobilePostCommentBtn")
+      const mobileCancelCommentBtn = document.getElementById("mobileCancelCommentBtn")
+
+      if (mobilePostCommentBtn) {
+        mobilePostCommentBtn.replaceWith(mobilePostCommentBtn.cloneNode(true))
+        document.getElementById("mobilePostCommentBtn").addEventListener("click", async () => {
+          await postMobileComment()
+          closeMobilePopup()
+        })
+      }
+      if (mobileCancelCommentBtn) {
+        mobileCancelCommentBtn.replaceWith(mobileCancelCommentBtn.cloneNode(true))
+        document.getElementById("mobileCancelCommentBtn").addEventListener("click", () => {
+          closeMobilePopup()
+          cancelComment()
+        })
+      }
+    } else {
+      // Card creation mode
+      if (mobilePopupTitle) mobilePopupTitle.textContent = "GENERADOR DE TARJETAS"
+      if (mobileCardMode) mobileCardMode.style.display = "block"
+      if (mobileCommentMode) mobileCommentMode.style.display = "none"
+      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Tarjetas"
+
+      // Enable AI switch for cards
+      if (mobileAiSwitch) {
+        mobileAiSwitch.disabled = false
+      }
+
+      // Bind mobile card creation event listener
+      const mobilePostBtn = document.getElementById("mobilePostBtn")
+      if (mobilePostBtn) {
+        mobilePostBtn.replaceWith(mobilePostBtn.cloneNode(true))
+        document.getElementById("mobilePostBtn").addEventListener("click", async () => {
+          await postMobileData()
+          closeMobilePopup()
+        })
+      }
     }
 
     mobilePopupOverlay.classList.add("active")
     document.body.style.overflow = "hidden"
   }
 
+  async function postMobileData() {
+    const cardTitleInput = document.getElementById("mobileCardTitle")
+    const cardBodyInput = document.getElementById("mobileCardBody")
+    const cardAuthorInput = document.getElementById("mobileCardAuthor")
+    const aiSwitch = document.getElementById("mobileAiResponseSwitch")
+
+    const cardTitle = cardTitleInput.value.trim()
+    const cardBody = cardBodyInput.value.trim()
+    let cardAuthor = cardAuthorInput.value.trim()
+    const isAIEnabled = aiSwitch.checked
+
+    if (cardTitle.length === 0 || cardBody.length === 0) {
+      updateWebConsole("Error: El título y el contenido son obligatorios.")
+      return
+    }
+
+    if (cardAuthor.length === 0) {
+      cardAuthor = "anónimo"
+    }
+
+    const cardDataToSend = {
+      cardTitle: cardTitle,
+      cardBody: cardBody,
+      cardAuthor: cardAuthor,
+    }
+
+    const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
+    const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
+
+    updateWebConsole(statusMessage)
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(cardDataToSend),
+      redirect: "follow",
+    }
+
+    try {
+      const fetchResponse = await fetch(endpoint, requestOptions)
+      let responseData
+      try {
+        responseData = await fetchResponse.json()
+      } catch {
+        responseData = await fetchResponse.text()
+      }
+
+      if (!fetchResponse.ok) {
+        const errorMsg = responseData.error || responseData || "Unknown error"
+        updateWebConsole(`Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
+        return
+      }
+
+      if (isAIEnabled && responseData.aiResponse) {
+        updateWebConsole(
+          `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`,
+        )
+      } else {
+        updateWebConsole(`Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
+      }
+
+      // Clear mobile form fields
+      cardTitleInput.value = ""
+      cardBodyInput.value = ""
+      cardAuthorInput.value = ""
+
+      // Refresh cards display
+      renderCards()
+    } catch (error) {
+      updateWebConsole(`Error durante la publicación: ${error.message}`)
+    }
+  }
+
+  async function postMobileComment() {
+    if (!selectedCardId) {
+      updateWebConsole("Error: No hay tarjeta seleccionada para comentar.")
+      return
+    }
+
+    const commentAuthorInput = document.getElementById("mobileCommentAuthor")
+    const commentBodyInput = document.getElementById("mobileCommentBody")
+
+    const commentBody = commentBodyInput.value.trim()
+    let commentAuthor = commentAuthorInput.value.trim()
+
+    if (commentBody.length === 0) {
+      updateWebConsole("Error: El comentario es obligatorio.")
+      return
+    }
+
+    if (commentAuthor.length === 0) {
+      commentAuthor = "anónimo"
+    }
+
+    const commentDataToSend = {
+      cardId: selectedCardId,
+      commentAuthor: commentAuthor,
+      commentBody: commentBody,
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(commentDataToSend),
+      redirect: "follow",
+    }
+
+    try {
+      const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
+      let responseData
+      try {
+        responseData = await fetchResponse.json()
+      } catch {
+        responseData = await fetchResponse.text()
+      }
+
+      if (!fetchResponse.ok) {
+        const errorMsg = responseData.error || responseData || "Unknown error"
+        updateWebConsole(`Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
+        return
+      }
+
+      updateWebConsole(`Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
+
+      // Clear mobile comment form
+      commentAuthorInput.value = ""
+      commentBodyInput.value = ""
+
+      // Refresh card comments view
+      await viewCardComments(selectedCardId)
+    } catch (error) {
+      updateWebConsole(`Error durante el comentario: ${error.message}`)
+    }
+  }
+
+  function updateWebConsole(message) {
+    const desktopWebConsole = document.getElementById("domWebConsole")
+    const mobileWebConsole = document.getElementById("mobileWebConsole")
+
+    if (desktopWebConsole) desktopWebConsole.value = message
+    if (mobileWebConsole) mobileWebConsole.value = message
+  }
+
   // Close mobile popup
   function closeMobilePopup() {
     mobilePopupOverlay.classList.remove("active")
     document.body.style.overflow = ""
-    // Clear popup content
-    mobileCardGenerator.innerHTML = ""
-    mobileWebConsole.innerHTML = ""
   }
 
   window.openMobilePopup = openMobilePopup
