@@ -383,14 +383,18 @@ function generateCommentElement(commentData) {
 
 // Switch UI to comment creation mode
 function switchToCommentMode(cardData) {
-  document.getElementById("cardMode").style.display = "none"
-  document.getElementById("commentMode").style.display = "block"
-  document.getElementById("generatorTitle").textContent = "Generador de Comentarios"
-  document.getElementById("selectedCardTitle").textContent = cardData.card_title
-
-  // Scroll to card generator on mobile
   const isMobile = window.matchMedia("(max-width: 767px)").matches
+
   if (isMobile) {
+    // Open mobile popup in comment mode
+    window.openMobilePopup(true, cardData)
+  } else {
+    // Desktop comment mode
+    document.getElementById("cardMode").style.display = "none"
+    document.getElementById("commentMode").style.display = "block"
+    document.getElementById("generatorTitle").textContent = "Generador de Comentarios"
+    document.getElementById("selectedCardTitle").textContent = cardData.card_title
+
     const cardGenerator = document.querySelector(".card-generator-section")
     if (cardGenerator) {
       cardGenerator.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -458,29 +462,72 @@ function initializeMobilePopup() {
     return window.matchMedia("(max-width: 767px)").matches
   }
 
-  // Move content to mobile popup when on mobile
-  function moveContentToMobile() {
-    if (isMobile()) {
-      const cardGeneratorContent = document.querySelector(".card-generator-subsection")
-      const webConsoleContent = document.querySelector(".web-console-subsection")
+  function openMobilePopup(isCommentMode = false, cardData = null) {
+    if (!isMobile()) return
 
-      if (cardGeneratorContent && mobileCardGenerator) {
-        mobileCardGenerator.appendChild(cardGeneratorContent.cloneNode(true))
-      }
-      if (webConsoleContent && mobileWebConsole) {
-        mobileWebConsole.appendChild(webConsoleContent.cloneNode(true))
+    const cardGeneratorContent = document.querySelector(".card-generator-subsection")
+    const webConsoleContent = document.querySelector(".web-console-subsection")
+
+    // Clear previous content
+    mobileCardGenerator.innerHTML = ""
+    mobileWebConsole.innerHTML = ""
+
+    if (cardGeneratorContent && mobileCardGenerator) {
+      const clonedContent = cardGeneratorContent.cloneNode(true)
+      mobileCardGenerator.appendChild(clonedContent)
+
+      if (isCommentMode && cardData) {
+        const cardMode = clonedContent.querySelector("#cardMode")
+        const commentMode = clonedContent.querySelector("#commentMode")
+        const generatorTitle = clonedContent.querySelector("#generatorTitle")
+        const selectedCardTitle = clonedContent.querySelector("#selectedCardTitle")
+        const aiSwitchContainer = clonedContent.querySelector(".ai-switch-container")
+
+        if (cardMode) cardMode.style.display = "none"
+        if (commentMode) commentMode.style.display = "block"
+        if (generatorTitle) generatorTitle.textContent = "Generador de Comentarios"
+        if (selectedCardTitle) selectedCardTitle.textContent = cardData.card_title
+
+        if (aiSwitchContainer) {
+          aiSwitchContainer.classList.add("comment-mode")
+          const aiSwitch = aiSwitchContainer.querySelector("#aiResponseSwitch")
+          if (aiSwitch) {
+            aiSwitch.checked = false
+            aiSwitch.disabled = true
+          }
+        }
+
+        // Re-bind event listeners for comment mode
+        const postCommentBtn = clonedContent.querySelector("#domPostCommentBtn")
+        const cancelCommentBtn = clonedContent.querySelector("#domCancelCommentBtn")
+
+        if (postCommentBtn) {
+          postCommentBtn.addEventListener("click", postComment)
+        }
+        if (cancelCommentBtn) {
+          cancelCommentBtn.addEventListener("click", () => {
+            window.closeMobilePopup()
+            cancelComment()
+          })
+        }
+      } else {
+        const postBtn = clonedContent.querySelector("#domPostBtn")
+        if (postBtn) {
+          postBtn.addEventListener("click", () => {
+            postData().then(() => {
+              window.closeMobilePopup()
+            })
+          })
+        }
       }
     }
-  }
 
-  // Open mobile popup
-  function openMobilePopup() {
-    if (isMobile()) {
-      // Move fresh content to popup
-      moveContentToMobile()
-      mobilePopupOverlay.classList.add("active")
-      document.body.style.overflow = "hidden"
+    if (webConsoleContent && mobileWebConsole) {
+      mobileWebConsole.appendChild(webConsoleContent.cloneNode(true))
     }
+
+    mobilePopupOverlay.classList.add("active")
+    document.body.style.overflow = "hidden"
   }
 
   // Close mobile popup
@@ -492,9 +539,12 @@ function initializeMobilePopup() {
     mobileWebConsole.innerHTML = ""
   }
 
+  window.openMobilePopup = openMobilePopup
+  window.closeMobilePopup = closeMobilePopup
+
   // Event listeners for mobile FABs
   if (mobileFabCreate) {
-    mobileFabCreate.addEventListener("click", openMobilePopup)
+    mobileFabCreate.addEventListener("click", () => openMobilePopup())
   }
 
   if (mobileFabInfo) {
