@@ -570,6 +570,16 @@ body {
   box-shadow: 0 2px 6px rgba(21, 101, 192, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+@keyframes footerShine {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Card Actions */
 .card-actions {
   display: flex;
@@ -674,33 +684,39 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    /* Fixed mobile scrolling by setting proper height and overflow on the right container */
     height: calc(100vh - 120px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /* Fixed height to keep outer container static */
+    overflow-y: hidden;
+    /* Prevent outer scrolling */
     padding-bottom: 80px;
     position: relative;
   }
 
   .result-grid-section {
-    /* Ensure the grid section takes full height and allows scrolling */
     height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /* Full height of the right column */
+    overflow-y: hidden;
+    /* Prevent section-level scrolling */
   }
 
   .result-grid-display-area {
-    /* Force single column layout and better height management */
     display: flex !important;
     flex-direction: column !important;
     gap: 1rem !important;
     grid-template-columns: none !important;
-    /* Remove height restrictions to allow natural content flow */
-    height: auto !important;
-    min-height: auto !important;
+    height: calc(100% - 100px);
+    /* Adjust height to fit within section, leaving space for buttons */
+    min-height: 200px;
     max-height: none !important;
-    overflow: visible !important;
-    padding-bottom: 20px;
+    overflow-y: auto !important;
+    /* Only this scrolls */
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem;
+    /* Ensure no cut-off with padding */
+    border-radius: 12px;
+    /* Match panel-box radius */
+    margin-bottom: 1rem;
+    /* Space before buttons */
   }
 
   .result-card {
@@ -728,8 +744,8 @@ body {
     height: 60px;
     border-radius: 50%;
     border: none;
-    /* Simplified background to remove visual artifacts */
     background: #0288d1;
+    /* Solid color to remove gradient artifacts */
     color: white;
     display: flex;
     align-items: center;
@@ -742,7 +758,6 @@ body {
     pointer-events: auto;
   }
 
-  /* Removed problematic pseudo-element that caused visual artifacts */
   .mobile-fab:hover {
     background: #0277bd;
     transform: translateY(-2px);
@@ -784,7 +799,6 @@ body {
     border-radius: 16px;
     width: 100%;
     max-width: 380px;
-    /* Better height management for different screen sizes */
     height: 85vh;
     max-height: 600px;
     min-height: 400px;
