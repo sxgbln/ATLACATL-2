@@ -674,15 +674,19 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    /* Make cards container take most of viewport height with proper scrolling */
+    /* Fixed mobile scrolling by setting proper height and overflow on the right container */
     height: calc(100vh - 120px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 20px;
+    padding-bottom: 80px;
+    position: relative;
   }
 
   .result-grid-section {
+    /* Ensure the grid section takes full height and allows scrolling */
     height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .result-grid-display-area {
@@ -691,10 +695,12 @@ body {
     flex-direction: column !important;
     gap: 1rem !important;
     grid-template-columns: none !important;
-    height: auto;
-    min-height: auto;
-    max-height: none;
-    overflow: visible;
+    /* Remove height restrictions to allow natural content flow */
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-bottom: 20px;
   }
 
   .result-card {
