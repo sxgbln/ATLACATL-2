@@ -444,7 +444,87 @@ function customFormatDate(utcDateInput) {
   }
 }
 
+// Mobile popup functionality
+function initializeMobilePopup() {
+  const mobileFabCreate = document.getElementById("mobileFabCreate")
+  const mobileFabInfo = document.getElementById("mobileFabInfo")
+  const mobilePopupOverlay = document.getElementById("mobilePopupOverlay")
+  const mobilePopupClose = document.getElementById("mobilePopupClose")
+  const mobileCardGenerator = document.getElementById("mobileCardGenerator")
+  const mobileWebConsole = document.getElementById("mobileWebConsole")
+
+  // Check if we're on mobile
+  function isMobile() {
+    return window.matchMedia("(max-width: 767px)").matches
+  }
+
+  // Move content to mobile popup when on mobile
+  function moveContentToMobile() {
+    if (isMobile()) {
+      const cardGeneratorContent = document.querySelector(".card-generator-subsection")
+      const webConsoleContent = document.querySelector(".web-console-subsection")
+
+      if (cardGeneratorContent && mobileCardGenerator) {
+        mobileCardGenerator.appendChild(cardGeneratorContent.cloneNode(true))
+      }
+      if (webConsoleContent && mobileWebConsole) {
+        mobileWebConsole.appendChild(webConsoleContent.cloneNode(true))
+      }
+    }
+  }
+
+  // Open mobile popup
+  function openMobilePopup() {
+    if (isMobile()) {
+      // Move fresh content to popup
+      moveContentToMobile()
+      mobilePopupOverlay.classList.add("active")
+      document.body.style.overflow = "hidden"
+    }
+  }
+
+  // Close mobile popup
+  function closeMobilePopup() {
+    mobilePopupOverlay.classList.remove("active")
+    document.body.style.overflow = ""
+    // Clear popup content
+    mobileCardGenerator.innerHTML = ""
+    mobileWebConsole.innerHTML = ""
+  }
+
+  // Event listeners for mobile FABs
+  if (mobileFabCreate) {
+    mobileFabCreate.addEventListener("click", openMobilePopup)
+  }
+
+  if (mobileFabInfo) {
+    mobileFabInfo.addEventListener("click", () => {
+      window.location.href = "/about.html"
+    })
+  }
+
+  if (mobilePopupClose) {
+    mobilePopupClose.addEventListener("click", closeMobilePopup)
+  }
+
+  if (mobilePopupOverlay) {
+    mobilePopupOverlay.addEventListener("click", (e) => {
+      if (e.target === mobilePopupOverlay) {
+        closeMobilePopup()
+      }
+    })
+  }
+
+  // Handle window resize
+  window.addEventListener("resize", () => {
+    if (!isMobile() && mobilePopupOverlay.classList.contains("active")) {
+      closeMobilePopup()
+    }
+  })
+}
+
 // Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
   renderCards() // Load with default sorting (newest)
+  initializeMobilePopup() // Initialize mobile popup functionality
 })
