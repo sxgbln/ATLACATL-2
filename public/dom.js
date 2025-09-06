@@ -1,189 +1,189 @@
-document.getElementById("domPostBtn").addEventListener("click", postData);
-document.getElementById("domRenderButton").addEventListener("click", renderCards);
-document.getElementById("domPostCommentBtn").addEventListener("click", postComment);
-document.getElementById("domCancelCommentBtn").addEventListener("click", cancelComment);
-document.getElementById("domBackToCardsBtn").addEventListener("click", backToCards);
+document.getElementById("domPostBtn").addEventListener("click", postData)
+document.getElementById("domRenderButton").addEventListener("click", renderCards)
+document.getElementById("domPostCommentBtn").addEventListener("click", postComment)
+document.getElementById("domCancelCommentBtn").addEventListener("click", cancelComment)
+document.getElementById("domBackToCardsBtn").addEventListener("click", backToCards)
 
-const webConsole = document.getElementById("domWebConsole");
-const resultGrid = document.getElementById("domResultGrid");
-const sortSelect = document.getElementById("domSortSelect");
-const BASE_API_URL = "https://www.atlacatl.net";
+const webConsole = document.getElementById("domWebConsole")
+const resultGrid = document.getElementById("domResultGrid")
+const sortSelect = document.getElementById("domSortSelect")
+const BASE_API_URL = "https://www.atlacatl.net"
 
 // Global state management
-let currentMode = "cards";
-let selectedCardId = null;
-let selectedCardData = null;
+let currentMode = "cards"
+let selectedCardId = null
+let selectedCardData = null
 
 async function postData() {
-  const cardTitleInput = document.getElementById("domCardTitle");
-  const cardBodyInput = document.getElementById("domCardBody");
-  const cardAuthorInput = document.getElementById("domCardAuthor");
-  const aiSwitch = document.getElementById("aiResponseSwitch");
+  const cardTitleInput = document.getElementById("domCardTitle")
+  const cardBodyInput = document.getElementById("domCardBody")
+  const cardAuthorInput = document.getElementById("domCardAuthor")
+  const aiSwitch = document.getElementById("aiResponseSwitch")
 
-  const cardTitle = cardTitleInput.value.trim();
-  const cardBody = cardBodyInput.value.trim();
-  let cardAuthor = cardAuthorInput.value.trim();
-  const isAIEnabled = aiSwitch.checked;
+  const cardTitle = cardTitleInput.value.trim()
+  const cardBody = cardBodyInput.value.trim()
+  let cardAuthor = cardAuthorInput.value.trim()
+  const isAIEnabled = aiSwitch.checked
 
   if (cardTitle.length === 0 || cardBody.length === 0) {
-    webConsole.value = "Error: El título y el contenido son obligatorios.";
-    return;
+    webConsole.value = "Error: El título y el contenido son obligatorios."
+    return
   }
 
   if (cardAuthor.length === 0) {
-    cardAuthor = "anónimo";
+    cardAuthor = "anónimo"
   }
 
   const cardDataToSend = {
     cardTitle: cardTitle,
     cardBody: cardBody,
     cardAuthor: cardAuthor,
-  };
+  }
 
-  const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`;
-  const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta...";
+  const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
+  const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
 
-  webConsole.value = statusMessage;
+  webConsole.value = statusMessage
 
   const requestOptions = {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(cardDataToSend),
     redirect: "follow",
-  };
+  }
 
   try {
-    const fetchResponse = await fetch(endpoint, requestOptions);
-    let responseData;
+    const fetchResponse = await fetch(endpoint, requestOptions)
+    let responseData
     try {
-      responseData = await fetchResponse.json(); // Parse as JSON if possible
+      responseData = await fetchResponse.json() // Parse as JSON if possible
     } catch {
-      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+      responseData = await fetchResponse.text() // Fallback to text if not JSON
     }
 
     if (!fetchResponse.ok) {
       // Handle errors like rate limiting (429) or others
-      const errorMsg = responseData.error || responseData || "Unknown error";
-      webConsole.value = `Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
-      return;
+      const errorMsg = responseData.error || responseData || "Unknown error"
+      webConsole.value = `Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`
+      return
     }
 
     if (isAIEnabled && responseData.aiResponse) {
-      webConsole.value = `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`;
+      webConsole.value = `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`
     } else {
-      webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`;
+      webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
     }
 
     // Clear form fields
-    cardTitleInput.value = "";
-    cardBodyInput.value = "";
-    cardAuthorInput.value = "";
+    cardTitleInput.value = ""
+    cardBodyInput.value = ""
+    cardAuthorInput.value = ""
 
     // Refresh cards display
-    renderCards();
+    renderCards()
   } catch (error) {
-    webConsole.value = `Error durante la publicación: ${error.message}`;
+    webConsole.value = `Error durante la publicación: ${error.message}`
   }
 }
 
 // Post comment to selected card
 async function postComment() {
   if (!selectedCardId) {
-    webConsole.value = "Error: No hay tarjeta seleccionada para comentar.";
-    return;
+    webConsole.value = "Error: No hay tarjeta seleccionada para comentar."
+    return
   }
 
-  const commentAuthorInput = document.getElementById("domCommentAuthor");
-  const commentBodyInput = document.getElementById("domCommentBody");
+  const commentAuthorInput = document.getElementById("domCommentAuthor")
+  const commentBodyInput = document.getElementById("domCommentBody")
 
-  const commentBody = commentBodyInput.value.trim();
-  let commentAuthor = commentAuthorInput.value.trim();
+  const commentBody = commentBodyInput.value.trim()
+  let commentAuthor = commentAuthorInput.value.trim()
 
   if (commentBody.length === 0) {
-    webConsole.value = "Error: El comentario es obligatorio.";
-    return;
+    webConsole.value = "Error: El comentario es obligatorio."
+    return
   }
 
   if (commentAuthor.length === 0) {
-    commentAuthor = "anónimo";
+    commentAuthor = "anónimo"
   }
 
   const commentDataToSend = {
     cardId: selectedCardId,
     commentAuthor: commentAuthor,
     commentBody: commentBody,
-  };
+  }
 
   const requestOptions = {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(commentDataToSend),
     redirect: "follow",
-  };
+  }
 
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions);
-    let responseData;
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
+    let responseData
     try {
-      responseData = await fetchResponse.json(); // Parse as JSON if possible
+      responseData = await fetchResponse.json() // Parse as JSON if possible
     } catch {
-      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+      responseData = await fetchResponse.text() // Fallback to text if not JSON
     }
 
     if (!fetchResponse.ok) {
       // Handle errors like rate limiting (429) or others
-      const errorMsg = responseData.error || responseData || "Unknown error";
-      webConsole.value = `Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
-      return;
+      const errorMsg = responseData.error || responseData || "Unknown error"
+      webConsole.value = `Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`
+      return
     }
 
-    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`;
+    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
 
     // Clear comment form
-    commentAuthorInput.value = "";
-    commentBodyInput.value = "";
+    commentAuthorInput.value = ""
+    commentBodyInput.value = ""
 
     // Refresh card comments view and scroll to new comment on mobile
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    await viewCardComments(selectedCardId);
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    await viewCardComments(selectedCardId)
     if (isMobile) {
-      const newComment = resultGrid.querySelector(".comment-card:last-child");
+      const newComment = resultGrid.querySelector(".comment-card:last-child")
       if (newComment) {
-        newComment.scrollIntoView({ behavior: "smooth", block: "center" });
+        newComment.scrollIntoView({ behavior: "smooth", block: "center" })
       }
     }
   } catch (error) {
-    webConsole.value = `Error durante el comentario: ${error.message}`;
+    webConsole.value = `Error durante el comentario: ${error.message}`
   }
 }
 
 // Render cards with selected sorting
 async function renderCards() {
-  const sortType = sortSelect.value;
-  webConsole.value = `Cargando tarjetas ordenadas por: ${getSortDisplayName(sortType)}...`;
-  currentMode = "cards";
-  updateUIMode();
+  const sortType = sortSelect.value
+  webConsole.value = `Cargando tarjetas ordenadas por: ${getSortDisplayName(sortType)}...`
+  currentMode = "cards"
+  updateUIMode()
 
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`);
-    webConsole.value = `HTTP Status: ${fetchResponse.status}`;
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
+    webConsole.value = `HTTP Status: ${fetchResponse.status}`
 
     if (!fetchResponse.ok) {
-      throw new Error(`HTTP error! status: ${fetchResponse.status}`);
+      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
     }
 
-    const recordsArray = await fetchResponse.json();
-    resultGrid.innerHTML = "";
+    const recordsArray = await fetchResponse.json()
+    resultGrid.innerHTML = ""
 
     // Generate card elements
     recordsArray.forEach((cardElementData) => {
-      const cardDisplayElement = generateCardElement(cardElementData);
-      resultGrid.appendChild(cardDisplayElement);
-    });
+      const cardDisplayElement = generateCardElement(cardElementData)
+      resultGrid.appendChild(cardDisplayElement)
+    })
 
-    webConsole.value += `\nTarjetas cargadas y mostradas (${getSortDisplayName(sortType)}).`;
+    webConsole.value += `\nTarjetas cargadas y mostradas (${getSortDisplayName(sortType)}).`
   } catch (error) {
-    webConsole.value = `Error cargando tarjetas: ${error.message}`;
+    webConsole.value = `Error cargando tarjetas: ${error.message}`
   }
 }
 
@@ -194,531 +194,535 @@ function getSortDisplayName(sortType) {
     oldest: "Más Antiguas",
     likes: "Más Populares",
     comments: "Más Comentadas",
-  };
-  return names[sortType] || "Más Recientes";
+  }
+  return names[sortType] || "Más Recientes"
 }
 
 // View specific card with comments
 async function viewCardComments(cardId) {
-  webConsole.value = `Cargando tarjeta ${cardId} y comentarios...`;
-  currentMode = "comments";
-  selectedCardId = cardId;
-  updateUIMode();
+  webConsole.value = `Cargando tarjeta ${cardId} y comentarios...`
+  currentMode = "comments"
+  selectedCardId = cardId
+  updateUIMode()
 
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/card/${cardId}`);
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
 
     if (!fetchResponse.ok) {
-      throw new Error(`HTTP error! status: ${fetchResponse.status}`);
+      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
     }
 
-    const data = await fetchResponse.json();
-    selectedCardData = data.card;
-    resultGrid.innerHTML = "";
+    const data = await fetchResponse.json()
+    selectedCardData = data.card
+    resultGrid.innerHTML = ""
 
     // Display main card
-    const mainCardElement = generateCardElement(data.card, true);
-    resultGrid.appendChild(mainCardElement);
+    const mainCardElement = generateCardElement(data.card, true)
+    resultGrid.appendChild(mainCardElement)
 
     // Display comments
     data.comments.forEach((commentData) => {
-      const commentElement = generateCommentElement(commentData);
-      resultGrid.appendChild(commentElement);
-    });
+      const commentElement = generateCommentElement(commentData)
+      resultGrid.appendChild(commentElement)
+    })
 
-    webConsole.value = `Tarjeta ${cardId} cargada con ${data.comments.length} comentarios.`;
+    webConsole.value = `Tarjeta ${cardId} cargada con ${data.comments.length} comentarios.`
   } catch (error) {
-    webConsole.value = `Error cargando tarjeta: ${error.message}`;
+    webConsole.value = `Error cargando tarjeta: ${error.message}`
   }
 }
 
 // Handle like button click with improved feedback
 async function handleLike(cardId) {
-  const likeData = { cardId: cardId };
+  const likeData = { cardId: cardId }
   const requestOptions = {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(likeData),
     redirect: "follow",
-  };
+  }
 
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions);
-    let responseData;
+    const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions)
+    let responseData
     try {
-      responseData = await fetchResponse.json(); // Parse as JSON if possible
+      responseData = await fetchResponse.json() // Parse as JSON if possible
     } catch {
-      responseData = await fetchResponse.text(); // Fallback to text if not JSON
+      responseData = await fetchResponse.text() // Fallback to text if not JSON
     }
 
     if (!fetchResponse.ok) {
       // Handle errors like rate limiting (429) or others
-      const errorMsg = responseData.error || responseData || "Unknown error";
-      webConsole.value = `Error en Like: HTTP Status ${fetchResponse.status} - ${errorMsg}`;
-      return;
+      const errorMsg = responseData.error || responseData || "Unknown error"
+      webConsole.value = `Error en Like: HTTP Status ${fetchResponse.status} - ${errorMsg}`
+      return
     }
 
-    webConsole.value = `Estado del Like: ${responseData.status} - ${responseData.message}`;
+    webConsole.value = `Estado del Like: ${responseData.status} - ${responseData.message}`
 
     if (responseData.status === "success") {
       // Refresh current view
       if (currentMode === "cards") {
-        renderCards();
+        renderCards()
       } else {
-        viewCardComments(selectedCardId);
+        viewCardComments(selectedCardId)
       }
     }
   } catch (error) {
-    webConsole.value = `Error durante el like: ${error.message}`;
+    webConsole.value = `Error durante el like: ${error.message}`
   }
 }
 
 function generateCardElement(cardData, isMainCard = false) {
-  const cardDiv = document.createElement("div");
-  cardDiv.className = isMainCard ? "result-card main-card" : "result-card";
+  const cardDiv = document.createElement("div")
+  cardDiv.className = isMainCard ? "result-card main-card" : "result-card"
 
-  const cardHeader = document.createElement("div");
-  cardHeader.className = "result-card-header";
-  cardHeader.textContent = `Por: ${cardData["card_author"].toString()}`;
+  const cardHeader = document.createElement("div")
+  cardHeader.className = "result-card-header"
+  cardHeader.textContent = `Por: ${cardData["card_author"].toString()}`
 
-  const cardTitle = document.createElement("div");
-  cardTitle.className = "result-card-title";
-  cardTitle.textContent = cardData["card_title"].toString();
+  const cardTitle = document.createElement("div")
+  cardTitle.className = "result-card-title"
+  cardTitle.textContent = cardData["card_title"].toString()
 
-  const cardBody = document.createElement("div");
-  cardBody.className = "result-card-body";
+  const cardBody = document.createElement("div")
+  cardBody.className = "result-card-body"
 
-  const bodyText = cardData["card_body"].toString();
+  const bodyText = cardData["card_body"].toString()
   if (bodyText.includes("🤖 Respuesta de IA:")) {
     // Split content and AI response for better formatting
-    const parts = bodyText.split("---");
+    const parts = bodyText.split("---")
     if (parts.length > 1) {
-      const userContent = parts[0].trim();
-      const aiContent = parts[1].trim();
+      const userContent = parts[0].trim()
+      const aiContent = parts[1].trim()
 
       cardBody.innerHTML = `
         <div class="user-content">${userContent}</div>
         <hr style="margin: 8px 0; border-color: #007bff;">
         <div class="ai-content" style="font-style: italic; color: #007bff;">${aiContent}</div>
-      `;
+      `
     } else {
-      cardBody.textContent = bodyText;
+      cardBody.textContent = bodyText
     }
   } else {
-    cardBody.textContent = bodyText;
+    cardBody.textContent = bodyText
   }
 
-  const cardDate = document.createElement("div");
-  cardDate.className = "result-card-date";
-  cardDate.textContent = customFormatDate(cardData["card_date"].toString());
+  const cardDate = document.createElement("div")
+  cardDate.className = "result-card-date"
+  cardDate.textContent = customFormatDate(cardData["card_date"].toString())
 
-  const cardActions = document.createElement("div");
-  cardActions.className = "card-actions";
+  const cardActions = document.createElement("div")
+  cardActions.className = "card-actions"
 
   // Like button
-  const likeButton = document.createElement("button");
-  likeButton.textContent = `❤️ Me Gusta (${cardData.like_count || 0})`;
-  likeButton.className = "btn btn-sm btn-outline-danger like-button";
+  const likeButton = document.createElement("button")
+  likeButton.textContent = `❤️ Me Gusta (${cardData.like_count || 0})`
+  likeButton.className = "btn btn-sm btn-outline-danger like-button"
   likeButton.addEventListener("click", () => {
-    handleLike(cardData.id);
-  });
+    handleLike(cardData.id)
+  })
 
   // Comment button (only in cards mode)
   if (currentMode === "cards") {
-    const commentButton = document.createElement("button");
-    commentButton.textContent = `💬 Comentarios (${cardData.comment_count || 0})`;
-    commentButton.className = "btn btn-sm btn-outline-primary comment-button";
+    const commentButton = document.createElement("button")
+    commentButton.textContent = `💬 Comentarios (${cardData.comment_count || 0})`
+    commentButton.className = "btn btn-sm btn-outline-primary comment-button"
     commentButton.addEventListener("click", () => {
-      viewCardComments(cardData.id);
-    });
-    cardActions.appendChild(commentButton);
+      viewCardComments(cardData.id)
+    })
+    cardActions.appendChild(commentButton)
   }
 
   // Add comment button (only in comments mode for main card)
   if (currentMode === "comments" && isMainCard) {
-    const addCommentButton = document.createElement("button");
-    addCommentButton.textContent = "✏️ Agregar Comentario";
-    addCommentButton.className = "btn btn-sm btn-outline-success add-comment-button";
+    const addCommentButton = document.createElement("button")
+    addCommentButton.textContent = "✏️ Agregar Comentario"
+    addCommentButton.className = "btn btn-sm btn-outline-success add-comment-button"
     addCommentButton.addEventListener("click", () => {
-      switchToCommentMode(cardData);
-    });
-    cardActions.appendChild(addCommentButton);
+      switchToCommentMode(cardData)
+    })
+    cardActions.appendChild(addCommentButton)
   }
 
-  cardActions.appendChild(likeButton);
+  cardActions.appendChild(likeButton)
 
   // Assemble card element
-  cardDiv.appendChild(cardHeader);
-  cardDiv.appendChild(cardTitle);
-  cardDiv.appendChild(cardBody);
-  cardDiv.appendChild(cardDate);
-  cardDiv.appendChild(cardActions);
+  cardDiv.appendChild(cardHeader)
+  cardDiv.appendChild(cardTitle)
+  cardDiv.appendChild(cardBody)
+  cardDiv.appendChild(cardDate)
+  cardDiv.appendChild(cardActions)
 
-  return cardDiv;
+  return cardDiv
 }
 
 // Generate comment display element
 function generateCommentElement(commentData) {
-  const commentDiv = document.createElement("div");
-  commentDiv.className = "result-card comment-card";
+  const commentDiv = document.createElement("div")
+  commentDiv.className = "result-card comment-card"
 
-  const commentHeader = document.createElement("div");
-  commentHeader.className = "result-card-header";
-  commentHeader.textContent = `💬 Comentario por: ${commentData["comment_author"].toString()}`;
+  const commentHeader = document.createElement("div")
+  commentHeader.className = "result-card-header"
+  commentHeader.textContent = `💬 Comentario por: ${commentData["comment_author"].toString()}`
 
-  const commentBody = document.createElement("div");
-  commentBody.className = "result-card-body";
-  commentBody.textContent = commentData["comment_body"].toString();
+  const commentBody = document.createElement("div")
+  commentBody.className = "result-card-body"
+  commentBody.textContent = commentData["comment_body"].toString()
 
-  const commentDate = document.createElement("div");
-  commentDate.className = "result-card-date";
-  commentDate.textContent = customFormatDate(commentData["comment_date"].toString());
+  const commentDate = document.createElement("div")
+  commentDate.className = "result-card-date"
+  commentDate.textContent = customFormatDate(commentData["comment_date"].toString())
 
-  commentDiv.appendChild(commentHeader);
-  commentDiv.appendChild(commentBody);
-  commentDiv.appendChild(commentDate);
+  commentDiv.appendChild(commentHeader)
+  commentDiv.appendChild(commentBody)
+  commentDiv.appendChild(commentDate)
 
-  return commentDiv;
+  return commentDiv
 }
 
 // Switch UI to comment creation mode
 function switchToCommentMode(cardData) {
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const isMobile = window.matchMedia("(max-width: 767px)").matches
 
   if (isMobile) {
     // Open mobile popup in comment mode
-    window.openMobilePopup(true, cardData);
+    window.openMobilePopup(true, cardData)
   } else {
     // Desktop comment mode
-    document.getElementById("cardMode").style.display = "none";
-    document.getElementById("commentMode").style.display = "block";
-    document.getElementById("generatorTitle").textContent = "Generador de Comentarios";
-    document.getElementById("selectedCardTitle").textContent = cardData.card_title;
+    document.getElementById("cardMode").style.display = "none"
+    document.getElementById("commentMode").style.display = "block"
+    document.getElementById("generatorTitle").textContent = "Generador de Comentarios"
+    document.getElementById("selectedCardTitle").textContent = cardData.card_title
 
-    const cardGenerator = document.querySelector(".card-generator-section");
+    const cardGenerator = document.querySelector(".card-generator-section")
     if (cardGenerator) {
-      cardGenerator.scrollIntoView({ behavior: "smooth", block: "start" });
+      cardGenerator.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }
 }
 
 // Cancel comment creation and return to card mode
 function cancelComment() {
-  document.getElementById("cardMode").style.display = "block";
-  document.getElementById("commentMode").style.display = "none";
-  document.getElementById("generatorTitle").textContent = "Generador de Tarjetas";
-  document.getElementById("domCommentAuthor").value = "";
-  document.getElementById("domCommentBody").value = "";
+  document.getElementById("cardMode").style.display = "block"
+  document.getElementById("commentMode").style.display = "none"
+  document.getElementById("generatorTitle").textContent = "Generador de Tarjetas"
+  document.getElementById("domCommentAuthor").value = ""
+  document.getElementById("domCommentBody").value = ""
 }
 
 // Return to cards view from comments view
 function backToCards() {
-  currentMode = "cards";
-  selectedCardId = null;
-  selectedCardData = null;
-  updateUIMode();
-  renderCards();
+  currentMode = "cards"
+  selectedCardId = null
+  selectedCardData = null
+  updateUIMode()
+  renderCards()
 }
 
 // Update UI elements based on current mode
 function updateUIMode() {
-  const backButton = document.getElementById("domBackToCardsBtn");
-  const resultTitle = document.getElementById("resultGridTitle");
+  const backButton = document.getElementById("domBackToCardsBtn")
+  const resultTitle = document.getElementById("resultGridTitle")
 
   if (currentMode === "comments") {
-    backButton.style.display = "inline-block";
-    resultTitle.textContent = "Tarjeta y Comentarios";
+    backButton.style.display = "inline-block"
+    resultTitle.textContent = "Tarjeta y Comentarios"
   } else {
-    backButton.style.display = "none";
-    resultTitle.textContent = "Resultados";
+    backButton.style.display = "none"
+    resultTitle.textContent = "Resultados"
   }
 
-  cancelComment();
+  cancelComment()
 }
 
 // Format date for display
 function customFormatDate(utcDateInput) {
   try {
-    const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const userLanguage = navigator.language;
-    const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone });
-    return `pref: ${userLanguage} date: ${convertedTimeZone}`;
+    const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const userLanguage = navigator.language
+    const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
+    return `pref: ${userLanguage} date: ${convertedTimeZone}`
   } catch (error) {
-    return `Error formatting date: ${error.message}`;
+    return `Error formatting date: ${error.message}`
   }
 }
 
 // Mobile popup functionality
 function initializeMobilePopup() {
-  const mobileFabCreate = document.getElementById("mobileFabCreate");
-  const mobileFabInfo = document.getElementById("mobileFabInfo");
-  const mobilePopupOverlay = document.getElementById("mobilePopupOverlay");
-  const mobilePopupClose = document.getElementById("mobilePopupClose");
-  const mobilePopupContainer = document.querySelector(".mobile-popup-container");
+  const mobileFabCreate = document.getElementById("mobileFabCreate")
+  const mobileFabInfo = document.getElementById("mobileFabInfo")
+  const mobilePopupOverlay = document.getElementById("mobilePopupOverlay")
+  const mobilePopupClose = document.getElementById("mobilePopupClose")
+  const mobileCardGenerator = document.getElementById("mobileCardGenerator")
+  const mobileWebConsole = document.getElementById("mobileWebConsole")
 
+  // Check if we're on mobile
   function isMobile() {
-    return window.matchMedia("(max-width: 767px)").matches;
+    return window.matchMedia("(max-width: 767px)").matches
   }
 
   function openMobilePopup(isCommentMode = false, cardData = null) {
-    if (!isMobile()) return;
+    if (!isMobile()) return
 
-    const mobilePopupTitle = document.querySelector(".mobile-popup-title");
-    const mobileCardMode = document.getElementById("mobileCardMode");
-    const mobileCommentMode = document.getElementById("mobileCommentMode");
-    const mobileGeneratorTitle = document.getElementById("mobileGeneratorTitle");
-    const mobileSelectedCardTitle = document.getElementById("mobileSelectedCardTitle");
-    const mobileAiSwitch = document.getElementById("mobileAiResponseSwitch");
-    const mobileCommentAiSwitch = document.getElementById("mobileCommentAiSwitch");
-    const mobileWebConsole = document.getElementById("mobileWebConsole");
+    const mobilePopupTitle = document.querySelector(".mobile-popup-title")
+    const mobileCardMode = document.getElementById("mobileCardMode")
+    const mobileCommentMode = document.getElementById("mobileCommentMode")
+    const mobileGeneratorTitle = document.getElementById("mobileGeneratorTitle")
+    const mobileSelectedCardTitle = document.getElementById("mobileSelectedCardTitle")
+    const mobileAiSwitch = document.getElementById("mobileAiResponseSwitch")
+    const mobileCommentAiSwitch = document.getElementById("mobileCommentAiSwitch")
 
     // Sync web console content
-    const desktopWebConsole = document.getElementById("domWebConsole");
+    const desktopWebConsole = document.getElementById("domWebConsole")
     if (desktopWebConsole && mobileWebConsole) {
-      mobileWebConsole.value = desktopWebConsole.value;
+      mobileWebConsole.value = desktopWebConsole.value
     }
 
     if (isCommentMode && cardData) {
       // Comment mode
-      if (mobilePopupTitle) mobilePopupTitle.textContent = "AGREGAR COMENTARIO";
-      if (mobileCardMode) mobileCardMode.style.display = "none";
-      if (mobileCommentMode) mobileCommentMode.style.display = "block";
-      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Comentarios";
-      if (mobileSelectedCardTitle) mobileSelectedCardTitle.textContent = cardData.card_title;
+      if (mobilePopupTitle) mobilePopupTitle.textContent = "AGREGAR COMENTARIO"
+      if (mobileCardMode) mobileCardMode.style.display = "none"
+      if (mobileCommentMode) mobileCommentMode.style.display = "block"
+      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Comentarios"
+      if (mobileSelectedCardTitle) mobileSelectedCardTitle.textContent = cardData.card_title
 
       // Disable AI switch for comments
       if (mobileCommentAiSwitch) {
-        mobileCommentAiSwitch.checked = false;
-        mobileCommentAiSwitch.disabled = true;
+        mobileCommentAiSwitch.checked = false
+        mobileCommentAiSwitch.disabled = true
       }
 
       // Bind mobile comment event listeners
-      const mobilePostCommentBtn = document.getElementById("mobilePostCommentBtn");
-      const mobileCancelCommentBtn = document.getElementById("mobileCancelCommentBtn");
+      const mobilePostCommentBtn = document.getElementById("mobilePostCommentBtn")
+      const mobileCancelCommentBtn = document.getElementById("mobileCancelCommentBtn")
 
       if (mobilePostCommentBtn) {
-        mobilePostCommentBtn.replaceWith(mobilePostCommentBtn.cloneNode(true));
+        mobilePostCommentBtn.replaceWith(mobilePostCommentBtn.cloneNode(true))
         document.getElementById("mobilePostCommentBtn").addEventListener("click", async () => {
-          await postMobileComment();
-          closeMobilePopup();
-        });
+          await postMobileComment()
+          closeMobilePopup()
+        })
       }
       if (mobileCancelCommentBtn) {
-        mobileCancelCommentBtn.replaceWith(mobileCancelCommentBtn.cloneNode(true));
+        mobileCancelCommentBtn.replaceWith(mobileCancelCommentBtn.cloneNode(true))
         document.getElementById("mobileCancelCommentBtn").addEventListener("click", () => {
-          closeMobilePopup();
-          cancelComment();
-        });
+          closeMobilePopup()
+          cancelComment()
+        })
       }
     } else {
       // Card creation mode
-      if (mobilePopupTitle) mobilePopupTitle.textContent = "GENERADOR DE TARJETAS";
-      if (mobileCardMode) mobileCardMode.style.display = "block";
-      if (mobileCommentMode) mobileCommentMode.style.display = "none";
-      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Tarjetas";
+      if (mobilePopupTitle) mobilePopupTitle.textContent = "GENERADOR DE TARJETAS"
+      if (mobileCardMode) mobileCardMode.style.display = "block"
+      if (mobileCommentMode) mobileCommentMode.style.display = "none"
+      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Tarjetas"
 
       // Enable AI switch for cards
       if (mobileAiSwitch) {
-        mobileAiSwitch.disabled = false;
+        mobileAiSwitch.disabled = false
       }
 
       // Bind mobile card creation event listener
-      const mobilePostBtn = document.getElementById("mobilePostBtn");
+      const mobilePostBtn = document.getElementById("mobilePostBtn")
       if (mobilePostBtn) {
-        mobilePostBtn.replaceWith(mobilePostBtn.cloneNode(true));
+        mobilePostBtn.replaceWith(mobilePostBtn.cloneNode(true))
         document.getElementById("mobilePostBtn").addEventListener("click", async () => {
-          await postMobileData();
-          closeMobilePopup();
-        });
+          await postMobileData()
+          closeMobilePopup()
+        })
       }
     }
 
-    mobilePopupOverlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-    // Adjust popup height dynamically based on content
-    mobilePopupContainer.style.height = "85vh"; // Ensure it fits within viewport
+    mobilePopupOverlay.classList.add("active")
+    document.body.style.overflow = "hidden"
   }
 
   async function postMobileData() {
-    const cardTitleInput = document.getElementById("mobileCardTitle");
-    const cardBodyInput = document.getElementById("mobileCardBody");
-    const cardAuthorInput = document.getElementById("mobileCardAuthor");
-    const aiSwitch = document.getElementById("mobileAiResponseSwitch");
+    const cardTitleInput = document.getElementById("mobileCardTitle")
+    const cardBodyInput = document.getElementById("mobileCardBody")
+    const cardAuthorInput = document.getElementById("mobileCardAuthor")
+    const aiSwitch = document.getElementById("mobileAiResponseSwitch")
 
-    const cardTitle = cardTitleInput.value.trim();
-    const cardBody = cardBodyInput.value.trim();
-    let cardAuthor = cardAuthorInput.value.trim();
-    const isAIEnabled = aiSwitch.checked;
+    const cardTitle = cardTitleInput.value.trim()
+    const cardBody = cardBodyInput.value.trim()
+    let cardAuthor = cardAuthorInput.value.trim()
+    const isAIEnabled = aiSwitch.checked
 
     if (cardTitle.length === 0 || cardBody.length === 0) {
-      updateWebConsole("Error: El título y el contenido son obligatorios.");
-      return;
+      updateWebConsole("Error: El título y el contenido son obligatorios.")
+      return
     }
 
     if (cardAuthor.length === 0) {
-      cardAuthor = "anónimo";
+      cardAuthor = "anónimo"
     }
 
     const cardDataToSend = {
       cardTitle: cardTitle,
       cardBody: cardBody,
       cardAuthor: cardAuthor,
-    };
+    }
 
-    const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`;
-    const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta...";
+    const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
+    const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
 
-    updateWebConsole(statusMessage);
+    updateWebConsole(statusMessage)
 
     const requestOptions = {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(cardDataToSend),
       redirect: "follow",
-    };
+    }
 
     try {
-      const fetchResponse = await fetch(endpoint, requestOptions);
-      let responseData;
+      const fetchResponse = await fetch(endpoint, requestOptions)
+      let responseData
       try {
-        responseData = await fetchResponse.json();
+        responseData = await fetchResponse.json()
       } catch {
-        responseData = await fetchResponse.text();
+        responseData = await fetchResponse.text()
       }
 
       if (!fetchResponse.ok) {
-        const errorMsg = responseData.error || responseData || "Unknown error";
-        updateWebConsole(`Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`);
-        return;
+        const errorMsg = responseData.error || responseData || "Unknown error"
+        updateWebConsole(`Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
+        return
       }
 
       if (isAIEnabled && responseData.aiResponse) {
         updateWebConsole(
           `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`,
-        );
+        )
       } else {
-        updateWebConsole(`Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`);
+        updateWebConsole(`Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
       }
 
       // Clear mobile form fields
-      cardTitleInput.value = "";
-      cardBodyInput.value = "";
-      cardAuthorInput.value = "";
+      cardTitleInput.value = ""
+      cardBodyInput.value = ""
+      cardAuthorInput.value = ""
 
       // Refresh cards display
-      renderCards();
+      renderCards()
     } catch (error) {
-      updateWebConsole(`Error durante la publicación: ${error.message}`);
+      updateWebConsole(`Error durante la publicación: ${error.message}`)
     }
   }
 
   async function postMobileComment() {
     if (!selectedCardId) {
-      updateWebConsole("Error: No hay tarjeta seleccionada para comentar.");
-      return;
+      updateWebConsole("Error: No hay tarjeta seleccionada para comentar.")
+      return
     }
 
-    const commentAuthorInput = document.getElementById("mobileCommentAuthor");
-    const commentBodyInput = document.getElementById("mobileCommentBody");
+    const commentAuthorInput = document.getElementById("mobileCommentAuthor")
+    const commentBodyInput = document.getElementById("mobileCommentBody")
 
-    const commentBody = commentBodyInput.value.trim();
-    let commentAuthor = commentAuthorInput.value.trim();
+    const commentBody = commentBodyInput.value.trim()
+    let commentAuthor = commentAuthorInput.value.trim()
 
     if (commentBody.length === 0) {
-      updateWebConsole("Error: El comentario es obligatorio.");
-      return;
+      updateWebConsole("Error: El comentario es obligatorio.")
+      return
     }
 
     if (commentAuthor.length === 0) {
-      commentAuthor = "anónimo";
+      commentAuthor = "anónimo"
     }
 
     const commentDataToSend = {
       cardId: selectedCardId,
       commentAuthor: commentAuthor,
       commentBody: commentBody,
-    };
+    }
 
     const requestOptions = {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(commentDataToSend),
       redirect: "follow",
-    };
+    }
 
     try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions);
-      let responseData;
+      const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
+      let responseData
       try {
-        responseData = await fetchResponse.json();
+        responseData = await fetchResponse.json()
       } catch {
-        responseData = await fetchResponse.text();
+        responseData = await fetchResponse.text()
       }
 
       if (!fetchResponse.ok) {
-        const errorMsg = responseData.error || responseData || "Unknown error";
-        updateWebConsole(`Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`);
-        return;
+        const errorMsg = responseData.error || responseData || "Unknown error"
+        updateWebConsole(`Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
+        return
       }
 
-      updateWebConsole(`Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`);
+      updateWebConsole(`Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
 
       // Clear mobile comment form
-      commentAuthorInput.value = "";
-      commentBodyInput.value = "";
+      commentAuthorInput.value = ""
+      commentBodyInput.value = ""
 
       // Refresh card comments view
-      await viewCardComments(selectedCardId);
+      await viewCardComments(selectedCardId)
     } catch (error) {
-      updateWebConsole(`Error durante el comentario: ${error.message}`);
+      updateWebConsole(`Error durante el comentario: ${error.message}`)
     }
   }
 
   function updateWebConsole(message) {
-    const desktopWebConsole = document.getElementById("domWebConsole");
-    const mobileWebConsole = document.getElementById("mobileWebConsole");
+    const desktopWebConsole = document.getElementById("domWebConsole")
+    const mobileWebConsole = document.getElementById("mobileWebConsole")
 
-    if (desktopWebConsole) desktopWebConsole.value = message;
-    if (mobileWebConsole) mobileWebConsole.value = message;
+    if (desktopWebConsole) desktopWebConsole.value = message
+    if (mobileWebConsole) mobileWebConsole.value = message
   }
 
   // Close mobile popup
   function closeMobilePopup() {
-    mobilePopupOverlay.classList.remove("active");
-    document.body.style.overflow = "";
+    mobilePopupOverlay.classList.remove("active")
+    document.body.style.overflow = ""
   }
 
-  window.openMobilePopup = openMobilePopup;
-  window.closeMobilePopup = closeMobilePopup;
+  window.openMobilePopup = openMobilePopup
+  window.closeMobilePopup = closeMobilePopup
 
+  // Event listeners for mobile FABs
   if (mobileFabCreate) {
-    mobileFabCreate.addEventListener("click", () => openMobilePopup());
+    mobileFabCreate.addEventListener("click", () => openMobilePopup())
   }
+
   if (mobileFabInfo) {
     mobileFabInfo.addEventListener("click", () => {
-      window.location.href = "/about.html";
-    });
+      window.location.href = "/about.html"
+    })
   }
+
   if (mobilePopupClose) {
-    mobilePopupClose.addEventListener("click", closeMobilePopup);
+    mobilePopupClose.addEventListener("click", closeMobilePopup)
   }
+
   if (mobilePopupOverlay) {
     mobilePopupOverlay.addEventListener("click", (e) => {
       if (e.target === mobilePopupOverlay) {
-        closeMobilePopup();
+        closeMobilePopup()
       }
-    });
+    })
   }
 
+  // Handle window resize
   window.addEventListener("resize", () => {
     if (!isMobile() && mobilePopupOverlay.classList.contains("active")) {
-      closeMobilePopup();
+      closeMobilePopup()
     }
-  });
+  })
 }
 
 // Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
-  renderCards(); // Load with default sorting (newest)
-  initializeMobilePopup(); // Initialize mobile popup functionality
-});
+  renderCards() // Load with default sorting (newest)
+  initializeMobilePopup() // Initialize mobile popup functionality
+})
