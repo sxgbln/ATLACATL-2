@@ -755,6 +755,8 @@ body {
     /* Ensure clean rendering */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    /* Hide SVG icons and use CSS icons instead */
+    font-size: 0;
   }
 
   .mobile-fab:hover {
@@ -770,32 +772,50 @@ body {
     box-shadow: 0 2px 8px rgba(2, 136, 209, 0.3);
   }
 
+  /* Hide SVG icons completely */
   .mobile-fab svg {
-    width: 24px;
-    height: 24px;
-    /* Remove all filters and effects that cause artifacts */
-    filter: none !important;
-    /* Ensure proper icon rendering */
-    fill: white !important;
-    stroke: none !important;
-    display: block !important;
-    flex-shrink: 0;
-    /* Remove any potential overlay effects */
-    background: none !important;
-    border: none !important;
-    outline: none !important;
-    /* Force crisp rendering */
-    shape-rendering: geometricPrecision;
-    -webkit-shape-rendering: geometricPrecision;
-    /* Ensure no text rendering issues */
-    text-rendering: optimizeLegibility;
-    -webkit-text-rendering: optimizeLegibility;
-    /* Force hardware acceleration */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    /* Remove any potential blur */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+    display: none !important;
+  }
+
+  /* CSS-only database icon for create button */
+  .mobile-fab-create::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 16px;
+    background: white;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+      0 4px 0 white,
+      0 8px 0 white;
+  }
+
+  .mobile-fab-create::after {
+    content: "+";
+    position: absolute;
+    color: #0288d1;
+    font-size: 16px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  /* CSS-only info icon for info button */
+  .mobile-fab-info::before {
+    content: "i";
+    position: absolute;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   /* Fixed popup positioning and improved scrolling */
