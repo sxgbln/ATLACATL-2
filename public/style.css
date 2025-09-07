@@ -433,7 +433,7 @@ body {
   font-weight: 500;
 }
 
-/* Result Card - Enhanced 3D Beveled */
+/* Result Card - Enhanced 3D Beveled with consistent height */
 .result-card {
   background: linear-gradient(135deg, #f5f8ff 0%, #e6f0ff 50%, #d6eaff 100%);
   border: 2px solid rgba(21, 101, 192, 0.35);
@@ -451,6 +451,10 @@ body {
   gap: 0.6rem;
   position: relative;
   color: #0d47a1;
+  /* Consistent card height for better visual organization */
+  height: 280px;
+  max-height: 280px;
+  overflow: hidden;
 }
 
 .result-card:hover {
@@ -488,6 +492,14 @@ body {
   line-height: 1.4;
   flex-grow: 1;
   overflow-wrap: break-word;
+  /* Make card body scrollable for long content */
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 120px;
+  padding-right: 0.5rem;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(21, 101, 192, 0.4) transparent;
 }
 
 .result-card-date {
@@ -616,25 +628,29 @@ body {
 
 /* Scrollbar Styling */
 .textarea-style::-webkit-scrollbar,
-.result-grid-display-area::-webkit-scrollbar {
-  width: 10px;
+.result-grid-display-area::-webkit-scrollbar,
+.result-card-body::-webkit-scrollbar {
+  width: 8px;
 }
 
 .textarea-style::-webkit-scrollbar-track,
-.result-grid-display-area::-webkit-scrollbar-track {
+.result-grid-display-area::-webkit-scrollbar-track,
+.result-card-body::-webkit-scrollbar-track {
   background: linear-gradient(135deg, #d6eaff 0%, #b3d9ff 100%);
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .textarea-style::-webkit-scrollbar-thumb,
-.result-grid-display-area::-webkit-scrollbar-thumb {
+.result-grid-display-area::-webkit-scrollbar-thumb,
+.result-card-body::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #0288d1 0%, #4fc3f7 100%);
-  border-radius: 5px;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(21, 101, 192, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 
 .textarea-style::-webkit-scrollbar-thumb:hover,
-.result-grid-display-area::-webkit-scrollbar-thumb:hover {
+.result-grid-display-area::-webkit-scrollbar-thumb:hover,
+.result-card-body::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #01579b 0%, #0288d1 100%);
 }
 
