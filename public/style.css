@@ -695,14 +695,15 @@ body {
   }
 
   .result-grid-display-area {
-    /* Removed height restrictions to allow full content display */
+    /* Make this the scrollable container for cards */
     display: flex !important;
     flex-direction: column !important;
     gap: 1rem !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: auto !important;
-    overflow: visible !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
   }
 
   .result-card {
@@ -745,6 +746,9 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    /* Remove any potential pseudo-elements that might cause overlay */
+    text-decoration: none;
+    text-shadow: none;
   }
 
   .mobile-fab:hover {
@@ -761,12 +765,17 @@ body {
   .mobile-fab svg {
     width: 24px;
     height: 24px;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    /* Remove filter that causes visual artifacts */
+    filter: none;
     /* Ensure proper icon rendering */
-    fill: currentColor;
+    fill: white;
     stroke: none;
     display: block;
     flex-shrink: 0;
+    /* Remove any potential overlay effects */
+    background: none;
+    border: none;
+    outline: none;
   }
 
   /* Fixed popup positioning and improved scrolling */
