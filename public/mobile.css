@@ -81,7 +81,7 @@
     right: 20px !important;
     bottom: 50px !important;
     z-index: 1050 !important;
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     gap: 16px;
     pointer-events: none;
@@ -93,9 +93,9 @@
     border-radius: 50%;
     border: none;
     /* Clean solid background to eliminate artifacts */
-    background: #0288d1;
-    color: white;
-    display: flex;
+    background: #0288d1 !important;
+    color: white !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(2, 136, 209, 0.4);
@@ -117,6 +117,9 @@
     /* Ensure clean rendering */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    /* Ensure visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .mobile-fab:hover {
@@ -136,12 +139,12 @@
   .mobile-fab svg {
     width: 20px;
     height: 20px;
-    fill: white;
-    stroke: none;
-    display: block;
+    fill: white !important;
+    stroke: none !important;
+    display: block !important;
     flex-shrink: 0;
     /* Remove all filters and effects */
-    filter: none;
+    filter: none !important;
     /* Ensure crisp rendering */
     shape-rendering: crispEdges;
     -webkit-shape-rendering: crispEdges;
@@ -149,10 +152,13 @@
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
     /* Ensure proper icon rendering */
-    color: white;
-    background: none;
-    border: none;
-    outline: none;
+    color: white !important;
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    /* Remove any potential overlay effects */
+    text-shadow: none !important;
+    box-shadow: none !important;
   }
 
   /* Fixed popup positioning and improved scrolling */
