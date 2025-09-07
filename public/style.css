@@ -717,7 +717,7 @@ body {
   .mobile-fab-container {
     position: fixed !important;
     right: 20px !important;
-    bottom: 30px !important;
+    bottom: 50px !important;
     z-index: 1050 !important;
     display: flex;
     flex-direction: column;
@@ -749,33 +749,53 @@ body {
     /* Remove any potential pseudo-elements that might cause overlay */
     text-decoration: none;
     text-shadow: none;
+    /* Force hardware acceleration for crisp rendering */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Ensure clean rendering */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .mobile-fab:hover {
     background: #0277bd;
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
+    -webkit-transform: translateY(-2px) translateZ(0);
     box-shadow: 0 6px 16px rgba(2, 136, 209, 0.5);
   }
 
   .mobile-fab:active {
-    transform: scale(0.95);
+    transform: scale(0.95) translateZ(0);
+    -webkit-transform: scale(0.95) translateZ(0);
     box-shadow: 0 2px 8px rgba(2, 136, 209, 0.3);
   }
 
   .mobile-fab svg {
     width: 24px;
     height: 24px;
-    /* Remove filter that causes visual artifacts */
-    filter: none;
+    /* Remove all filters and effects that cause artifacts */
+    filter: none !important;
     /* Ensure proper icon rendering */
-    fill: white;
-    stroke: none;
-    display: block;
+    fill: white !important;
+    stroke: none !important;
+    display: block !important;
     flex-shrink: 0;
     /* Remove any potential overlay effects */
-    background: none;
-    border: none;
-    outline: none;
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    /* Force crisp rendering */
+    shape-rendering: geometricPrecision;
+    -webkit-shape-rendering: geometricPrecision;
+    /* Ensure no text rendering issues */
+    text-rendering: optimizeLegibility;
+    -webkit-text-rendering: optimizeLegibility;
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Remove any potential blur */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 
   /* Fixed popup positioning and improved scrolling */
