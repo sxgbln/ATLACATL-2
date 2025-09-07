@@ -1,0 +1,77 @@
+/* Mobile-only adjustments */
+@media (max-width: 768px) {
+
+    /* Prevent whole page from scrolling; we’ll scroll only the cards area */
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Common app shell containers — keep overflow hidden so inner list scrolls */
+    #app,
+    .app,
+    .app-root,
+    main,
+    .main,
+    .content,
+    .content-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-height: 0;
+        /* critical so the child can shrink and scroll */
+    }
+
+    /* Make the CARDS container itself scrollable (adjust selectors to your markup) */
+    .cards-container,
+    #tarjetas,
+    .tarjetas,
+    .cards,
+    .results-cards {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    /* Fix floating action buttons stacking/overlay on mobile */
+    .fab,
+    .add-button,
+    .db-button,
+    .floating-button {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 1000;
+        /* above cards */
+        pointer-events: auto;
+        transform: translateZ(0);
+        /* avoids compositing artifacts on some GPUs */
+        will-change: transform;
+    }
+
+    /* If you have two separate buttons (add + database), stack them cleanly */
+    .db-button {
+        bottom: 84px;
+    }
+
+    /* 16px gap above the add button */
+    .fab>.icon:not(:first-child) {
+        display: none;
+    }
+
+    /* avoid double-icon overlay */
+
+    /* Ensure the scrollable list doesn't hide behind the FAB */
+    .cards-container,
+    #tarjetas,
+    .tarjetas,
+    .cards,
+    .results-cards {
+        padding-bottom: 88px;
+        /* space for FAB; adjust if your footer differs */
+    }
+}

@@ -640,18 +640,8 @@ body {
 
 /* Mobile Layout Adjustments */
 @media (max-width: 767px) {
-  /* Prevent body scrolling on mobile */
-  body {
-    overflow: hidden;
-    height: 100vh;
-  }
-  
   .container-fluid {
     padding: 0.5rem;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
   }
 
   .header-section {
@@ -661,8 +651,6 @@ body {
   .main-content {
     flex-direction: column;
     gap: 0;
-    flex: 1;
-    overflow: hidden;
   }
 
   /* Hide left column completely on mobile and make cards container take full viewport */
@@ -674,24 +662,20 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    /* Use flex to fill available space */
-    flex: 1;
+    /* Fixed mobile container to be static while allowing inner scrolling */
+    height: calc(100vh - 120px);
     overflow: hidden;
     padding-bottom: 80px;
     position: relative;
-    display: flex;
-    flex-direction: column;
   }
 
   .result-grid-section {
     /* Made this the scrollable container for cards */
-    flex: 1;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    display: flex;
-    flex-direction: column;
   }
 
   .result-grid-display-area {
@@ -729,8 +713,8 @@ body {
     height: 60px;
     border-radius: 50%;
     border: none;
-    /* Clean solid background to eliminate artifacts */
-    background: #0288d1;
+    /* Simplified background to fix visual artifacts */
+    background: linear-gradient(135deg, #0288d1 0%, #0277bd 100%);
     color: white;
     display: flex;
     align-items: center;
@@ -740,12 +724,11 @@ body {
     cursor: pointer;
     position: relative;
     pointer-events: auto;
-    /* Remove border that was causing artifacts */
-    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
   .mobile-fab:hover {
-    background: #0277bd;
+    background: linear-gradient(135deg, #0277bd 0%, #01579b 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(2, 136, 209, 0.5);
   }
