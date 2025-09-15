@@ -1,12 +1,5 @@
-document.getElementById("domPostBtn").addEventListener("click", postData)
-document.getElementById("domRenderButton").addEventListener("click", renderCards)
-document.getElementById("domPostCommentBtn").addEventListener("click", postComment)
-document.getElementById("domCancelCommentBtn").addEventListener("click", cancelComment)
-document.getElementById("domBackToCardsBtn").addEventListener("click", backToCards)
+// ATLACATL - New JavaScript for 4chan-inspired interface
 
-const webConsole = document.getElementById("domWebConsole")
-const resultGrid = document.getElementById("domResultGrid")
-const sortSelect = document.getElementById("domSortSelect")
 const BASE_API_URL = "https://www.atlacatl.net"
 
 // Global state management
@@ -14,292 +7,204 @@ let currentMode = "cards"
 let selectedCardId = null
 let selectedCardData = null
 
-async function postData() {
-  const cardTitleInput = document.getElementById("domCardTitle")
-  const cardBodyInput = document.getElementById("domCardBody")
-  const cardAuthorInput = document.getElementById("domCardAuthor")
-  const aiSwitch = document.getElementById("aiResponseSwitch")
+// DOM elements
+const cardsGrid = document.getElementById("cardsGrid")
+const sortSelect = document.getElementById("sortSelect")
 
-  const cardTitle = cardTitleInput.value.trim()
-  const cardBody = cardBodyInput.value.trim()
-  let cardAuthor = cardAuthorInput.value.trim()
-  const isAIEnabled = aiSwitch.checked
+// Initialize app when DOM loads
+document.addEventListener("DOMContentLoaded", () => {
+  initializeEventListeners()
+  renderCards() // Load with default sorting (newest)
+})
 
-  if (cardTitle.length === 0 || cardBody.length === 0) {
-    webConsole.value = "Error: El título y el contenido son obligatorios."
+// Initialize all event listeners
+function initializeEventListeners() {
+  // Header icon buttons
+  document.getElementById("addMessageBtn").addEventListener("click", openCardGenerator)
+  document.getElementById("searchBtn").addEventListener("click", openSearchModal)
+  document.getElementById("translateBtn").addEventListener("click", openTranslateModal)
+  document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
+  document.getElementById("codeBtn").addEventListener("click", openCodeModal)
+
+  // Modal close buttons
+  document.getElementById("closeModal").addEventListener("click", closeCardGenerator)
+  document.getElementById("closeSearchModal").addEventListener("click", closeSearchModal)
+  document.getElementById("closeTranslateModal").addEventListener("click", closeTranslateModal)
+  document.getElementById("closeCodeModal").addEventListener("click", closeCodeModal)
+
+  // Card form submission
+  document.getElementById("cardForm").addEventListener("submit", handleCardSubmit)
+
+  // Sort dropdown change
+  sortSelect.addEventListener("change", renderCards)
+
+  // Modal overlay clicks
+  document.getElementById("cardGeneratorModal").addEventListener("click", (e) => {
+    if (e.target.id === "cardGeneratorModal") closeCardGenerator()
+  })
+  document.getElementById("searchModal").addEventListener("click", (e) => {
+    if (e.target.id === "searchModal") closeSearchModal()
+  })
+  document.getElementById("translateModal").addEventListener("click", (e) => {
+    if (e.target.id === "translateModal") closeTranslateModal()
+  })
+  document.getElementById("codeModal").addEventListener("click", (e) => {
+    if (e.target.id === "codeModal") closeCodeModal()
+  })
+}
+
+// Modal functions
+function openCardGenerator() {
+  document.getElementById("cardGeneratorModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeCardGenerator() {
+  document.getElementById("cardGeneratorModal").classList.remove("active")
+  document.body.style.overflow = ""
+  // Clear form
+  document.getElementById("cardForm").reset()
+}
+
+function openSearchModal() {
+  document.getElementById("searchModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeSearchModal() {
+  document.getElementById("searchModal").classList.remove("active")
+  document.body.style.overflow = ""
+}
+
+function openTranslateModal() {
+  document.getElementById("translateModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeTranslateModal() {
+  document.getElementById("translateModal").classList.remove("active")
+  document.body.style.overflow = ""
+}
+
+function openCodeModal() {
+  document.getElementById("codeModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeCodeModal() {
+  document.getElementById("codeModal").classList.remove("active")
+  document.body.style.overflow = ""
+}
+
+// Handle card form submission
+async function handleCardSubmit(e) {
+  e.preventDefault()
+  
+  const cardTitle = document.getElementById("cardTitle").value.trim()
+  const cardBody = document.getElementById("cardBody").value.trim()
+  const cardAuthor = document.getElementById("cardAuthor").value.trim() || "anónimo"
+  const isAIEnabled = document.getElementById("aiSwitch").checked
+
+  if (!cardTitle || !cardBody) {
+    alert("El título y el contenido son obligatorios.")
     return
   }
 
-  if (cardAuthor.length === 0) {
-    cardAuthor = "anónimo"
-  }
-
-  const cardDataToSend = {
+  const cardData = {
     cardTitle: cardTitle,
     cardBody: cardBody,
     cardAuthor: cardAuthor,
   }
 
   const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
-  const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
-
-  webConsole.value = statusMessage
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(cardDataToSend),
-    redirect: "follow",
-  }
-
+  
   try {
-    const fetchResponse = await fetch(endpoint, requestOptions)
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cardData),
+    })
+
     let responseData
     try {
-      responseData = await fetchResponse.json() // Parse as JSON if possible
+      responseData = await response.json()
     } catch {
-      responseData = await fetchResponse.text() // Fallback to text if not JSON
+      responseData = await response.text()
     }
 
-    if (!fetchResponse.ok) {
-      // Handle errors like rate limiting (429) or others
+    if (!response.ok) {
       const errorMsg = responseData.error || responseData || "Unknown error"
-      webConsole.value = `Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`
+      alert(`Error: ${errorMsg}`)
       return
     }
 
-    if (isAIEnabled && responseData.aiResponse) {
-      webConsole.value = `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`
-    } else {
-      webConsole.value = `Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
-    }
-
-    // Clear form fields
-    cardTitleInput.value = ""
-    cardBodyInput.value = ""
-    cardAuthorInput.value = ""
-
-    // Refresh cards display
+    // Success - close modal and refresh cards
+    closeCardGenerator()
     renderCards()
-  } catch (error) {
-    webConsole.value = `Error durante la publicación: ${error.message}`
-  }
-}
-
-// Post comment to selected card
-async function postComment() {
-  if (!selectedCardId) {
-    webConsole.value = "Error: No hay tarjeta seleccionada para comentar."
-    return
-  }
-
-  const commentAuthorInput = document.getElementById("domCommentAuthor")
-  const commentBodyInput = document.getElementById("domCommentBody")
-
-  const commentBody = commentBodyInput.value.trim()
-  let commentAuthor = commentAuthorInput.value.trim()
-
-  if (commentBody.length === 0) {
-    webConsole.value = "Error: El comentario es obligatorio."
-    return
-  }
-
-  if (commentAuthor.length === 0) {
-    commentAuthor = "anónimo"
-  }
-
-  const commentDataToSend = {
-    cardId: selectedCardId,
-    commentAuthor: commentAuthor,
-    commentBody: commentBody,
-  }
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(commentDataToSend),
-    redirect: "follow",
-  }
-
-  try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
-    let responseData
-    try {
-      responseData = await fetchResponse.json() // Parse as JSON if possible
-    } catch {
-      responseData = await fetchResponse.text() // Fallback to text if not JSON
-    }
-
-    if (!fetchResponse.ok) {
-      // Handle errors like rate limiting (429) or others
-      const errorMsg = responseData.error || responseData || "Unknown error"
-      webConsole.value = `Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`
-      return
-    }
-
-    webConsole.value = `Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`
-
-    // Clear comment form
-    commentAuthorInput.value = ""
-    commentBodyInput.value = ""
-
-    // Refresh card comments view and scroll to new comment on mobile
-    const isMobile = window.matchMedia("(max-width: 767px)").matches
-    await viewCardComments(selectedCardId)
-    if (isMobile) {
-      const newComment = resultGrid.querySelector(".comment-card:last-child")
-      if (newComment) {
-        newComment.scrollIntoView({ behavior: "smooth", block: "center" })
-      }
+    
+    if (isAIEnabled && responseData.aiResponse) {
+      console.log("AI Response:", responseData.aiResponse)
     }
   } catch (error) {
-    webConsole.value = `Error durante el comentario: ${error.message}`
+    alert(`Error durante la publicación: ${error.message}`)
   }
 }
 
 // Render cards with selected sorting
 async function renderCards() {
   const sortType = sortSelect.value
-  webConsole.value = `Cargando tarjetas ordenadas por: ${getSortDisplayName(sortType)}...`
-  currentMode = "cards"
-  updateUIMode()
-
+  
   try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
-    webConsole.value = `HTTP Status: ${fetchResponse.status}`
-
-    if (!fetchResponse.ok) {
-      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
+    const response = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    const recordsArray = await fetchResponse.json()
-    resultGrid.innerHTML = ""
+    const recordsArray = await response.json()
+    cardsGrid.innerHTML = ""
 
     // Generate card elements
-    recordsArray.forEach((cardElementData) => {
-      const cardDisplayElement = generateCardElement(cardElementData)
-      resultGrid.appendChild(cardDisplayElement)
+    recordsArray.forEach((cardData) => {
+      const cardElement = generateCardElement(cardData)
+      cardsGrid.appendChild(cardElement)
     })
-
-    webConsole.value += `\nTarjetas cargadas y mostradas (${getSortDisplayName(sortType)}).`
   } catch (error) {
-    webConsole.value = `Error cargando tarjetas: ${error.message}`
+    console.error("Error loading cards:", error)
+    cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjetas: ${error.message}</div>`
   }
 }
 
-// Get display name for sort type
-function getSortDisplayName(sortType) {
-  const names = {
-    newest: "Más Recientes",
-    oldest: "Más Antiguas",
-    likes: "Más Populares",
-    comments: "Más Comentadas",
-  }
-  return names[sortType] || "Más Recientes"
-}
-
-// View specific card with comments
-async function viewCardComments(cardId) {
-  webConsole.value = `Cargando tarjeta ${cardId} y comentarios...`
-  currentMode = "comments"
-  selectedCardId = cardId
-  updateUIMode()
-
-  try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
-
-    if (!fetchResponse.ok) {
-      throw new Error(`HTTP error! status: ${fetchResponse.status}`)
-    }
-
-    const data = await fetchResponse.json()
-    selectedCardData = data.card
-    resultGrid.innerHTML = ""
-
-    // Display main card
-    const mainCardElement = generateCardElement(data.card, true)
-    resultGrid.appendChild(mainCardElement)
-
-    // Display comments
-    data.comments.forEach((commentData) => {
-      const commentElement = generateCommentElement(commentData)
-      resultGrid.appendChild(commentElement)
-    })
-
-    webConsole.value = `Tarjeta ${cardId} cargada con ${data.comments.length} comentarios.`
-  } catch (error) {
-    webConsole.value = `Error cargando tarjeta: ${error.message}`
-  }
-}
-
-// Handle like button click with improved feedback
-async function handleLike(cardId) {
-  const likeData = { cardId: cardId }
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(likeData),
-    redirect: "follow",
-  }
-
-  try {
-    const fetchResponse = await fetch(`${BASE_API_URL}/server/like`, requestOptions)
-    let responseData
-    try {
-      responseData = await fetchResponse.json() // Parse as JSON if possible
-    } catch {
-      responseData = await fetchResponse.text() // Fallback to text if not JSON
-    }
-
-    if (!fetchResponse.ok) {
-      // Handle errors like rate limiting (429) or others
-      const errorMsg = responseData.error || responseData || "Unknown error"
-      webConsole.value = `Error en Like: HTTP Status ${fetchResponse.status} - ${errorMsg}`
-      return
-    }
-
-    webConsole.value = `Estado del Like: ${responseData.status} - ${responseData.message}`
-
-    if (responseData.status === "success") {
-      // Refresh current view
-      if (currentMode === "cards") {
-        renderCards()
-      } else {
-        viewCardComments(selectedCardId)
-      }
-    }
-  } catch (error) {
-    webConsole.value = `Error durante el like: ${error.message}`
-  }
-}
-
-function generateCardElement(cardData, isMainCard = false) {
+// Generate card display element
+function generateCardElement(cardData) {
   const cardDiv = document.createElement("div")
-  cardDiv.className = isMainCard ? "result-card main-card" : "result-card"
+  cardDiv.className = "card"
 
+  // Card header with author
   const cardHeader = document.createElement("div")
-  cardHeader.className = "result-card-header"
-  cardHeader.textContent = `Por: ${cardData["card_author"].toString()}`
+  cardHeader.className = "card-header"
+  cardHeader.innerHTML = `<span class="card-author">Por: ${cardData.card_author}</span>`
 
+  // Card title
   const cardTitle = document.createElement("div")
-  cardTitle.className = "result-card-title"
-  cardTitle.textContent = cardData["card_title"].toString()
+  cardTitle.className = "card-title"
+  cardTitle.textContent = cardData.card_title
 
+  // Card body
   const cardBody = document.createElement("div")
-  cardBody.className = "result-card-body"
-
-  const bodyText = cardData["card_body"].toString()
+  cardBody.className = "card-body"
+  
+  const bodyText = cardData.card_body
   if (bodyText.includes("🤖 Respuesta de IA:")) {
     // Split content and AI response for better formatting
     const parts = bodyText.split("---")
     if (parts.length > 1) {
       const userContent = parts[0].trim()
       const aiContent = parts[1].trim()
-
       cardBody.innerHTML = `
-        <div class="user-content">${userContent}</div>
-        <hr style="margin: 8px 0; border-color: #007bff;">
-        <div class="ai-content" style="font-style: italic; color: #007bff;">${aiContent}</div>
+        <div>${userContent}</div>
+        <hr style="margin: 8px 0; border-color: #ccc;">
+        <div style="font-style: italic; color: #666;">${aiContent}</div>
       `
     } else {
       cardBody.textContent = bodyText
@@ -308,71 +213,133 @@ function generateCardElement(cardData, isMainCard = false) {
     cardBody.textContent = bodyText
   }
 
+  // Card footer with date and actions
+  const cardFooter = document.createElement("div")
+  cardFooter.className = "card-footer"
+
   const cardDate = document.createElement("div")
-  cardDate.className = "result-card-date"
-  cardDate.textContent = customFormatDate(cardData["card_date"].toString())
+  cardDate.className = "card-date"
+  cardDate.textContent = formatDate(cardData.card_date)
 
   const cardActions = document.createElement("div")
   cardActions.className = "card-actions"
 
   // Like button
   const likeButton = document.createElement("button")
-  likeButton.textContent = `❤️ Me Gusta (${cardData.like_count || 0})`
-  likeButton.className = "btn btn-sm btn-outline-danger like-button"
-  likeButton.addEventListener("click", () => {
-    handleLike(cardData.id)
-  })
+  likeButton.textContent = `❤️ Likes [${cardData.like_count || 0}]`
+  likeButton.className = "action-btn like-btn"
+  likeButton.addEventListener("click", () => handleLike(cardData.id))
 
-  // Comment button (only in cards mode)
-  if (currentMode === "cards") {
-    const commentButton = document.createElement("button")
-    commentButton.textContent = `💬 Comentarios (${cardData.comment_count || 0})`
-    commentButton.className = "btn btn-sm btn-outline-primary comment-button"
-    commentButton.addEventListener("click", () => {
-      viewCardComments(cardData.id)
-    })
-    cardActions.appendChild(commentButton)
-  }
-
-  // Add comment button (only in comments mode for main card)
-  if (currentMode === "comments" && isMainCard) {
-    const addCommentButton = document.createElement("button")
-    addCommentButton.textContent = "✏️ Agregar Comentario"
-    addCommentButton.className = "btn btn-sm btn-outline-success add-comment-button"
-    addCommentButton.addEventListener("click", () => {
-      switchToCommentMode(cardData)
-    })
-    cardActions.appendChild(addCommentButton)
-  }
+  // Comment button
+  const commentButton = document.createElement("button")
+  commentButton.textContent = `💬 Comentarios [${cardData.comment_count || 0}]`
+  commentButton.className = "action-btn comment-btn"
+  commentButton.addEventListener("click", () => viewCardComments(cardData.id))
 
   cardActions.appendChild(likeButton)
+  cardActions.appendChild(commentButton)
 
-  // Assemble card element
+  cardFooter.appendChild(cardDate)
+  cardFooter.appendChild(cardActions)
+
+  // Assemble card
   cardDiv.appendChild(cardHeader)
   cardDiv.appendChild(cardTitle)
   cardDiv.appendChild(cardBody)
-  cardDiv.appendChild(cardDate)
-  cardDiv.appendChild(cardActions)
+  cardDiv.appendChild(cardFooter)
 
   return cardDiv
+}
+
+// Handle like button click
+async function handleLike(cardId) {
+  try {
+    const response = await fetch(`${BASE_API_URL}/server/like`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cardId: cardId }),
+    })
+
+    let responseData
+    try {
+      responseData = await response.json()
+    } catch {
+      responseData = await response.text()
+    }
+
+    if (!response.ok) {
+      const errorMsg = responseData.error || responseData || "Unknown error"
+      alert(`Error: ${errorMsg}`)
+      return
+    }
+
+    // Refresh current view
+    if (currentMode === "cards") {
+      renderCards()
+    } else {
+      viewCardComments(selectedCardId)
+    }
+  } catch (error) {
+    alert(`Error durante el like: ${error.message}`)
+  }
+}
+
+// View specific card with comments
+async function viewCardComments(cardId) {
+  currentMode = "comments"
+  selectedCardId = cardId
+  
+  try {
+    const response = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    selectedCardData = data.card
+    cardsGrid.innerHTML = ""
+
+    // Display main card
+    const mainCardElement = generateCardElement(data.card)
+    mainCardElement.classList.add("main-card")
+    cardsGrid.appendChild(mainCardElement)
+
+    // Display comments
+    data.comments.forEach((commentData) => {
+      const commentElement = generateCommentElement(commentData)
+      cardsGrid.appendChild(commentElement)
+    })
+
+    // Add back to cards button
+    const backButton = document.createElement("button")
+    backButton.textContent = "← Volver a tarjetas"
+    backButton.className = "action-btn"
+    backButton.style.marginTop = "20px"
+    backButton.addEventListener("click", backToCards)
+    cardsGrid.appendChild(backButton)
+  } catch (error) {
+    console.error("Error loading card:", error)
+    cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjeta: ${error.message}</div>`
+  }
 }
 
 // Generate comment display element
 function generateCommentElement(commentData) {
   const commentDiv = document.createElement("div")
-  commentDiv.className = "result-card comment-card"
+  commentDiv.className = "card comment-card"
 
   const commentHeader = document.createElement("div")
-  commentHeader.className = "result-card-header"
-  commentHeader.textContent = `💬 Comentario por: ${commentData["comment_author"].toString()}`
+  commentHeader.className = "card-header"
+  commentHeader.innerHTML = `<span class="card-author">💬 Comentario por: ${commentData.comment_author}</span>`
 
   const commentBody = document.createElement("div")
-  commentBody.className = "result-card-body"
-  commentBody.textContent = commentData["comment_body"].toString()
+  commentBody.className = "card-body"
+  commentBody.textContent = commentData.comment_body
 
   const commentDate = document.createElement("div")
-  commentDate.className = "result-card-date"
-  commentDate.textContent = customFormatDate(commentData["comment_date"].toString())
+  commentDate.className = "card-date"
+  commentDate.textContent = formatDate(commentData.comment_date)
 
   commentDiv.appendChild(commentHeader)
   commentDiv.appendChild(commentBody)
@@ -381,348 +348,22 @@ function generateCommentElement(commentData) {
   return commentDiv
 }
 
-// Switch UI to comment creation mode
-function switchToCommentMode(cardData) {
-  const isMobile = window.matchMedia("(max-width: 767px)").matches
-
-  if (isMobile) {
-    // Open mobile popup in comment mode
-    window.openMobilePopup(true, cardData)
-  } else {
-    // Desktop comment mode
-    document.getElementById("cardMode").style.display = "none"
-    document.getElementById("commentMode").style.display = "block"
-    document.getElementById("generatorTitle").textContent = "Generador de Comentarios"
-    document.getElementById("selectedCardTitle").textContent = cardData.card_title
-
-    const cardGenerator = document.querySelector(".card-generator-section")
-    if (cardGenerator) {
-      cardGenerator.scrollIntoView({ behavior: "smooth", block: "start" })
-    }
-  }
-}
-
-// Cancel comment creation and return to card mode
-function cancelComment() {
-  document.getElementById("cardMode").style.display = "block"
-  document.getElementById("commentMode").style.display = "none"
-  document.getElementById("generatorTitle").textContent = "Generador de Tarjetas"
-  document.getElementById("domCommentAuthor").value = ""
-  document.getElementById("domCommentBody").value = ""
-}
-
 // Return to cards view from comments view
 function backToCards() {
   currentMode = "cards"
   selectedCardId = null
   selectedCardData = null
-  updateUIMode()
   renderCards()
 }
 
-// Update UI elements based on current mode
-function updateUIMode() {
-  const backButton = document.getElementById("domBackToCardsBtn")
-  const resultTitle = document.getElementById("resultGridTitle")
-
-  if (currentMode === "comments") {
-    backButton.style.display = "inline-block"
-    resultTitle.textContent = "Tarjeta y Comentarios"
-  } else {
-    backButton.style.display = "none"
-    resultTitle.textContent = "Resultados"
-  }
-
-  cancelComment()
-}
-
 // Format date for display
-function customFormatDate(utcDateInput) {
+function formatDate(utcDateInput) {
   try {
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const userLanguage = navigator.language
     const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
-    return `pref: ${userLanguage} date: ${convertedTimeZone}`
+    return `información sobre fecha: ${convertedTimeZone}`
   } catch (error) {
     return `Error formatting date: ${error.message}`
   }
 }
-
-// Mobile popup functionality
-function initializeMobilePopup() {
-  const mobileFabCreate = document.getElementById("mobileFabCreate")
-  const mobileFabInfo = document.getElementById("mobileFabInfo")
-  const mobilePopupOverlay = document.getElementById("mobilePopupOverlay")
-  const mobilePopupClose = document.getElementById("mobilePopupClose")
-  const mobileCardGenerator = document.getElementById("mobileCardGenerator")
-  const mobileWebConsole = document.getElementById("mobileWebConsole")
-
-  // Check if we're on mobile
-  function isMobile() {
-    return window.matchMedia("(max-width: 767px)").matches
-  }
-
-  function openMobilePopup(isCommentMode = false, cardData = null) {
-    if (!isMobile()) return
-
-    const mobilePopupTitle = document.querySelector(".mobile-popup-title")
-    const mobileCardMode = document.getElementById("mobileCardMode")
-    const mobileCommentMode = document.getElementById("mobileCommentMode")
-    const mobileGeneratorTitle = document.getElementById("mobileGeneratorTitle")
-    const mobileSelectedCardTitle = document.getElementById("mobileSelectedCardTitle")
-    const mobileAiSwitch = document.getElementById("mobileAiResponseSwitch")
-    const mobileCommentAiSwitch = document.getElementById("mobileCommentAiSwitch")
-
-    // Sync web console content
-    const desktopWebConsole = document.getElementById("domWebConsole")
-    if (desktopWebConsole && mobileWebConsole) {
-      mobileWebConsole.value = desktopWebConsole.value
-    }
-
-    if (isCommentMode && cardData) {
-      // Comment mode
-      if (mobilePopupTitle) mobilePopupTitle.textContent = "AGREGAR COMENTARIO"
-      if (mobileCardMode) mobileCardMode.style.display = "none"
-      if (mobileCommentMode) mobileCommentMode.style.display = "block"
-      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Comentarios"
-      if (mobileSelectedCardTitle) mobileSelectedCardTitle.textContent = cardData.card_title
-
-      // Disable AI switch for comments
-      if (mobileCommentAiSwitch) {
-        mobileCommentAiSwitch.checked = false
-        mobileCommentAiSwitch.disabled = true
-      }
-
-      // Bind mobile comment event listeners
-      const mobilePostCommentBtn = document.getElementById("mobilePostCommentBtn")
-      const mobileCancelCommentBtn = document.getElementById("mobileCancelCommentBtn")
-
-      if (mobilePostCommentBtn) {
-        mobilePostCommentBtn.replaceWith(mobilePostCommentBtn.cloneNode(true))
-        document.getElementById("mobilePostCommentBtn").addEventListener("click", async () => {
-          await postMobileComment()
-          closeMobilePopup()
-        })
-      }
-      if (mobileCancelCommentBtn) {
-        mobileCancelCommentBtn.replaceWith(mobileCancelCommentBtn.cloneNode(true))
-        document.getElementById("mobileCancelCommentBtn").addEventListener("click", () => {
-          closeMobilePopup()
-          cancelComment()
-        })
-      }
-    } else {
-      // Card creation mode
-      if (mobilePopupTitle) mobilePopupTitle.textContent = "GENERADOR DE TARJETAS"
-      if (mobileCardMode) mobileCardMode.style.display = "block"
-      if (mobileCommentMode) mobileCommentMode.style.display = "none"
-      if (mobileGeneratorTitle) mobileGeneratorTitle.textContent = "Generador de Tarjetas"
-
-      // Enable AI switch for cards
-      if (mobileAiSwitch) {
-        mobileAiSwitch.disabled = false
-      }
-
-      // Bind mobile card creation event listener
-      const mobilePostBtn = document.getElementById("mobilePostBtn")
-      if (mobilePostBtn) {
-        mobilePostBtn.replaceWith(mobilePostBtn.cloneNode(true))
-        document.getElementById("mobilePostBtn").addEventListener("click", async () => {
-          await postMobileData()
-          closeMobilePopup()
-        })
-      }
-    }
-
-    mobilePopupOverlay.classList.add("active")
-    document.body.style.overflow = "hidden"
-  }
-
-  async function postMobileData() {
-    const cardTitleInput = document.getElementById("mobileCardTitle")
-    const cardBodyInput = document.getElementById("mobileCardBody")
-    const cardAuthorInput = document.getElementById("mobileCardAuthor")
-    const aiSwitch = document.getElementById("mobileAiResponseSwitch")
-
-    const cardTitle = cardTitleInput.value.trim()
-    const cardBody = cardBodyInput.value.trim()
-    let cardAuthor = cardAuthorInput.value.trim()
-    const isAIEnabled = aiSwitch.checked
-
-    if (cardTitle.length === 0 || cardBody.length === 0) {
-      updateWebConsole("Error: El título y el contenido son obligatorios.")
-      return
-    }
-
-    if (cardAuthor.length === 0) {
-      cardAuthor = "anónimo"
-    }
-
-    const cardDataToSend = {
-      cardTitle: cardTitle,
-      cardBody: cardBody,
-      cardAuthor: cardAuthor,
-    }
-
-    const endpoint = isAIEnabled ? `${BASE_API_URL}/server/gemini` : `${BASE_API_URL}/`
-    const statusMessage = isAIEnabled ? "Procesando con IA..." : "Publicando tarjeta..."
-
-    updateWebConsole(statusMessage)
-
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(cardDataToSend),
-      redirect: "follow",
-    }
-
-    try {
-      const fetchResponse = await fetch(endpoint, requestOptions)
-      let responseData
-      try {
-        responseData = await fetchResponse.json()
-      } catch {
-        responseData = await fetchResponse.text()
-      }
-
-      if (!fetchResponse.ok) {
-        const errorMsg = responseData.error || responseData || "Unknown error"
-        updateWebConsole(`Error en Publicación: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
-        return
-      }
-
-      if (isAIEnabled && responseData.aiResponse) {
-        updateWebConsole(
-          `✅ Tarjeta con IA publicada exitosamente!\n🤖 IA respondió: ${responseData.aiResponse.substring(0, 100)}${responseData.aiResponse.length > 100 ? "..." : ""}`,
-        )
-      } else {
-        updateWebConsole(`Estado de Publicación: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
-      }
-
-      // Clear mobile form fields
-      cardTitleInput.value = ""
-      cardBodyInput.value = ""
-      cardAuthorInput.value = ""
-
-      // Refresh cards display
-      renderCards()
-    } catch (error) {
-      updateWebConsole(`Error durante la publicación: ${error.message}`)
-    }
-  }
-
-  async function postMobileComment() {
-    if (!selectedCardId) {
-      updateWebConsole("Error: No hay tarjeta seleccionada para comentar.")
-      return
-    }
-
-    const commentAuthorInput = document.getElementById("mobileCommentAuthor")
-    const commentBodyInput = document.getElementById("mobileCommentBody")
-
-    const commentBody = commentBodyInput.value.trim()
-    let commentAuthor = commentAuthorInput.value.trim()
-
-    if (commentBody.length === 0) {
-      updateWebConsole("Error: El comentario es obligatorio.")
-      return
-    }
-
-    if (commentAuthor.length === 0) {
-      commentAuthor = "anónimo"
-    }
-
-    const commentDataToSend = {
-      cardId: selectedCardId,
-      commentAuthor: commentAuthor,
-      commentBody: commentBody,
-    }
-
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(commentDataToSend),
-      redirect: "follow",
-    }
-
-    try {
-      const fetchResponse = await fetch(`${BASE_API_URL}/server/comment`, requestOptions)
-      let responseData
-      try {
-        responseData = await fetchResponse.json()
-      } catch {
-        responseData = await fetchResponse.text()
-      }
-
-      if (!fetchResponse.ok) {
-        const errorMsg = responseData.error || responseData || "Unknown error"
-        updateWebConsole(`Error en Comentario: HTTP Status ${fetchResponse.status} - ${errorMsg}`)
-        return
-      }
-
-      updateWebConsole(`Estado del Comentario: ${fetchResponse.status}\nRespuesta: ${JSON.stringify(responseData)}`)
-
-      // Clear mobile comment form
-      commentAuthorInput.value = ""
-      commentBodyInput.value = ""
-
-      // Refresh card comments view
-      await viewCardComments(selectedCardId)
-    } catch (error) {
-      updateWebConsole(`Error durante el comentario: ${error.message}`)
-    }
-  }
-
-  function updateWebConsole(message) {
-    const desktopWebConsole = document.getElementById("domWebConsole")
-    const mobileWebConsole = document.getElementById("mobileWebConsole")
-
-    if (desktopWebConsole) desktopWebConsole.value = message
-    if (mobileWebConsole) mobileWebConsole.value = message
-  }
-
-  // Close mobile popup
-  function closeMobilePopup() {
-    mobilePopupOverlay.classList.remove("active")
-    document.body.style.overflow = ""
-  }
-
-  window.openMobilePopup = openMobilePopup
-  window.closeMobilePopup = closeMobilePopup
-
-  // Event listeners for mobile FABs
-  if (mobileFabCreate) {
-    mobileFabCreate.addEventListener("click", () => openMobilePopup())
-  }
-
-  if (mobileFabInfo) {
-    mobileFabInfo.addEventListener("click", () => {
-      window.location.href = "/about.html"
-    })
-  }
-
-  if (mobilePopupClose) {
-    mobilePopupClose.addEventListener("click", closeMobilePopup)
-  }
-
-  if (mobilePopupOverlay) {
-    mobilePopupOverlay.addEventListener("click", (e) => {
-      if (e.target === mobilePopupOverlay) {
-        closeMobilePopup()
-      }
-    })
-  }
-
-  // Handle window resize
-  window.addEventListener("resize", () => {
-    if (!isMobile() && mobilePopupOverlay.classList.contains("active")) {
-      closeMobilePopup()
-    }
-  })
-}
-
-// Initialize app when DOM loads
-document.addEventListener("DOMContentLoaded", () => {
-  renderCards() // Load with default sorting (newest)
-  initializeMobilePopup() // Initialize mobile popup functionality
-})

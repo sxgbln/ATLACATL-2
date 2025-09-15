@@ -2,329 +2,160 @@
 <html lang="es">
 
 <head>
-  <link rel="stylesheet" href="mobile-fixes.css">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75J37LM5FR"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-75J37LM5FR');
-  </script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
-  <title>Atlacatl</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,400;1,400&family=Open+Sans:wght@400&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/mobile.css">
-  <link rel="stylesheet" href="/desktop.css">
+  <title>ATLACATL</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css">
+  <link rel="stylesheet" href="desktop.css">
 </head>
 
 <body>
-  <div class="container-fluid p-2">
-    <header class="header-section mb-2">
-      <div class="title-container">
-        <div class="title-strip">
-          <h1 class="title">ATLACATL</h1>
+  <div class="app-container">
+    <!-- Header with title and icons -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="site-title">ATLACATL</h1>
+        <div class="header-icons">
+          <button class="icon-btn" id="addMessageBtn" title="Agregar mensaje">
+            <i class="bi bi-envelope-plus"></i>
+          </button>
+          <button class="icon-btn" id="searchBtn" title="Buscar">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="icon-btn" id="translateBtn" title="Traducir">
+            <i class="bi bi-translate"></i>
+          </button>
+          <button class="icon-btn" id="infoBtn" title="Información">
+            <i class="bi bi-info-circle"></i>
+          </button>
+          <button class="icon-btn" id="codeBtn" title="Consola web">
+            <i class="bi bi-code-slash"></i>
+          </button>
         </div>
       </div>
     </header>
-    <main class="row g-2">
-      <!-- Hide left column completely on mobile since we have popup -->
-      <div class="col-12 col-md-5 left-column d-none d-md-block">
-        <!-- Merged card generator and web console into single container -->
-        <section class="combined-controls-section panel-box h-100">
-          <div class="panel-inner-glow"></div>
 
-          <!-- Card Generator Section -->
-          <div class="card-generator-subsection mb-3">
-            <h2 class="section-title" id="generatorTitle">
-              <span class="title-bracket">›</span>
-              Generador de Tarjetas
-              <span class="title-bracket">‹</span>
-            </h2>
-            <div id="cardMode">
-              <div class="row mb-1">
-                <label for="domCardAuthor" class="col-sm-3 col-form-label label-style">
-                  <span class="label-indicator">▶</span> Autor:
-                </label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control input-style" placeholder="Escribe el Autor de la tarjeta"
-                    id="domCardAuthor">
-                </div>
-              </div>
-              <div class="row mb-1">
-                <label for="domCardTitle" class="col-sm-3 col-form-label label-style">
-                  <span class="label-indicator">▶</span> Título:
-                </label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control input-style" placeholder="Escribe el Título de la tarjeta"
-                    id="domCardTitle">
-                </div>
-              </div>
-              <div class="mb-2">
-                <label for="domCardBody" class="form-label label-style">
-                  <span class="label-indicator">▶</span> Contenido:
-                </label>
-                <textarea class="form-control textarea-style" placeholder="Redacta el contenido de la tarjeta"
-                  id="domCardBody" rows="3"></textarea>
-              </div>
-              <div class="form-check form-switch mb-2 text-center">
-                <input class="form-check-input" type="checkbox" role="switch" id="aiResponseSwitch">
-                <label class="form-check-label label-style" for="aiResponseSwitch">
-                  <span class="label-indicator">▶</span> Activa respuesta de AI
-                </label>
-              </div>
-              <button type="button" class="btn button-style w-100" id="domPostBtn">
-                PUBLICAR TARJETA
-              </button>
-            </div>
-            <div id="commentMode" style="display: none;">
-              <div class="alert alert-info frutiger-alert" role="alert" id="commentingOnCard">
-                <span class="alert-indicator">▶</span> Comentando en: <strong id="selectedCardTitle">Título de
-                  Tarjeta</strong>
-              </div>
-              <div class="row mb-1">
-                <label for="domCommentAuthor" class="col-sm-3 col-form-label label-style">
-                  <span class="label-indicator">▶</span> Autor:
-                </label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control input-style" placeholder="Escribe tu Nombre"
-                    id="domCommentAuthor">
-                </div>
-              </div>
-              <div class="mb-2">
-                <label for="domCommentBody" class="form-label label-style">
-                  <span class="label-indicator">▶</span> Comentario:
-                </label>
-                <textarea class="form-control textarea-style" placeholder="Escribe tu comentario aquí"
-                  id="domCommentBody" rows="3"></textarea>
-              </div>
-              <div class="d-flex gap-1">
-                <button type="button" class="btn button-style flex-fill" id="domPostCommentBtn">
-                  PUBLICAR COMENTARIO
-                </button>
-                <button type="button" class="btn btn-secondary frutiger-secondary-btn"
-                  id="domCancelCommentBtn">CANCELAR</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Web Console Section -->
-          <div class="web-console-subsection">
-            <h2 class="section-title">
-              <span class="title-bracket">›</span>
-              Web Console
-              <span class="title-bracket">‹</span>
-            </h2>
-            <div class="mb-2">
-              <label for="domWebConsole" class="form-label label-style">
-                <span class="label-indicator">▶</span> Live Output:
-              </label>
-              <div class="web-console-container">
-                <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
-                <textarea class="form-control textarea-style web-console" id="domWebConsole" rows="2"
-                  placeholder="Web console output"></textarea>
-              </div>
-            </div>
-          </div>
-        </section>
+    <!-- Main content area -->
+    <main class="main-content">
+      <!-- Filter section -->
+      <div class="filter-section">
+        <div class="filter-content">
+          <span class="filter-label">Mostrando records disponibles</span>
+          <select class="filter-dropdown" id="sortSelect">
+            <option value="newest">Más recientes</option>
+            <option value="oldest">Más antiguas</option>
+            <option value="likes">Más populares</option>
+          </select>
+        </div>
       </div>
-      <!-- Make right column full width on mobile -->
-      <div class="col-12 col-md-7 right-column">
-        <section class="result-grid-section panel-box h-100">
-          <div class="panel-inner-glow"></div>
-          <h2 class="section-title" id="resultGridTitle">
-            <span class="title-bracket">›</span>
-            Resultados
-            <span class="title-bracket">‹</span>
-          </h2>
-          <div class="mb-2 flex-grow-1 d-flex flex-column">
-            <label for="domResultGrid" class="form-label label-style">
-              <span class="label-indicator">▶</span> Tarjetas:
-            </label>
-            <div class="result-grid-display-area flex-grow-1" id="domResultGrid"></div>
+
+      <!-- Desktop layout wrapper -->
+      <div class="content-wrapper">
+        <!-- Cards container -->
+        <div class="cards-container">
+          <div class="cards-grid" id="cardsGrid">
+            <!-- Cards will be dynamically inserted here -->
           </div>
-          <div class="button-group-style">
-            <div class="row align-items-center">
-              <div class="col-12 col-md-8 mb-2 mb-md-0">
-                <select class="form-select frutiger-select" id="domSortSelect">
-                  <option value="newest">Más Recientes</option>
-                  <option value="oldest">Más Antiguas</option>
-                  <option value="likes">Más Populares</option>
-                  <option value="comments">Más Comentadas</option>
-                </select>
-              </div>
-              <div class="col-12 col-md-4">
-                <button type="button" class="btn button-style w-100" id="domRenderButton">
-                  MOSTRAR
-                </button>
-              </div>
-            </div>
-            <div class="mt-1">
-              <button type="button" class="btn btn-secondary frutiger-secondary-btn" id="domBackToCardsBtn"
-                style="display: none;">
-                VOLVER A TARJETAS
-              </button>
-            </div>
+        </div>
+
+        <!-- Ad placeholder section (sidebar on desktop) -->
+        <div class="ad-section">
+          <div class="ad-placeholder">
+            <!-- Ad placeholder content -->
           </div>
-        </section>
+        </div>
       </div>
     </main>
 
-    <!-- Improved positioning for better viewport fit -->
-    <div class="mobile-fab-container d-md-none">
-      <button type="button" class="mobile-fab mobile-fab-create" id="mobileFabCreate">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database-fill-add" viewBox="0 0 16 16">
-          <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0M8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1"/>
-          <path d="M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12 12 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.55 4.55 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-1.3-1.905"/>
-        </svg>
-      </button>
-      <button type="button" class="mobile-fab mobile-fab-info" id="mobileFabInfo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Fixed popup positioning and scrolling issues -->
-    <div class="mobile-popup-overlay d-md-none" id="mobilePopupOverlay">
-      <div class="mobile-popup-container">
-        <div class="mobile-popup-header">
-          <h3 class="mobile-popup-title">GENERADOR DE TARJETAS</h3>
-          <button type="button" class="mobile-popup-close" id="mobilePopupClose">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x"
-              viewBox="0 0 16 16">
-              <path
-                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-            </svg>
+    <!-- Card Generator Modal -->
+    <div class="modal-overlay" id="cardGeneratorModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Creador de tarjetas</h2>
+          <button class="modal-close" id="closeModal">
+            <i class="bi bi-x"></i>
           </button>
         </div>
-        <div class="mobile-popup-content">
-          <!-- Simplified popup content structure -->
-          <div class="mobile-popup-form">
-            <!-- Card Generator Section -->
-            <div class="card-generator-subsection mb-3">
-              <h2 class="section-title" id="mobileGeneratorTitle">
-                <span class="title-bracket">›</span>
-                Generador de Tarjetas
-                <span class="title-bracket">‹</span>
-              </h2>
-              <div id="mobileCardMode">
-                <div class="row mb-1">
-                  <label for="mobileCardAuthor" class="col-sm-3 col-form-label label-style">
-                    <span class="label-indicator">▶</span> Autor:
-                  </label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control input-style" placeholder="Escribe el Autor de la tarjeta"
-                      id="mobileCardAuthor">
-                  </div>
-                </div>
-                <div class="row mb-1">
-                  <label for="mobileCardTitle" class="col-sm-3 col-form-label label-style">
-                    <span class="label-indicator">▶</span> Título:
-                  </label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control input-style" placeholder="Escribe el Título de la tarjeta"
-                      id="mobileCardTitle">
-                  </div>
-                </div>
-                <div class="mb-2">
-                  <label for="mobileCardBody" class="form-label label-style">
-                    <span class="label-indicator">▶</span> Contenido:
-                  </label>
-                  <textarea class="form-control textarea-style" placeholder="Redacta el contenido de la tarjeta"
-                    id="mobileCardBody" rows="3"></textarea>
-                </div>
-                <div class="form-check form-switch mb-2 text-center">
-                  <input class="form-check-input" type="checkbox" role="switch" id="mobileAiResponseSwitch">
-                  <label class="form-check-label label-style" for="mobileAiResponseSwitch">
-                    <span class="label-indicator">▶</span> Activa respuesta de AI
-                  </label>
-                </div>
-                <button type="button" class="btn button-style w-100" id="mobilePostBtn">
-                  PUBLICAR TARJETA
-                </button>
-              </div>
-              <div id="mobileCommentMode" style="display: none;">
-                <div class="alert alert-info frutiger-alert" role="alert" id="mobileCommentingOnCard">
-                  <span class="alert-indicator">▶</span> Comentando en: <strong id="mobileSelectedCardTitle">Título de
-                    Tarjeta</strong>
-                </div>
-                <div class="row mb-1">
-                  <label for="mobileCommentAuthor" class="col-sm-3 col-form-label label-style">
-                    <span class="label-indicator">▶</span> Autor:
-                  </label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control input-style" placeholder="Escribe tu Nombre"
-                      id="mobileCommentAuthor">
-                  </div>
-                </div>
-                <div class="mb-2">
-                  <label for="mobileCommentBody" class="form-label label-style">
-                    <span class="label-indicator">▶</span> Comentario:
-                  </label>
-                  <textarea class="form-control textarea-style" placeholder="Escribe tu comentario aquí"
-                    id="mobileCommentBody" rows="3"></textarea>
-                </div>
-                <div class="form-check form-switch mb-2 text-center">
-                  <input class="form-check-input" type="checkbox" role="switch" id="mobileCommentAiSwitch" disabled>
-                  <label class="form-check-label label-style text-muted" for="mobileCommentAiSwitch">
-                    <span class="label-indicator">▶</span> Activa respuesta de AI (No disponible para comentarios)
-                  </label>
-                </div>
-                <div class="d-flex gap-1">
-                  <button type="button" class="btn button-style flex-fill" id="mobilePostCommentBtn">
-                    PUBLICAR COMENTARIO
-                  </button>
-                  <button type="button" class="btn btn-secondary frutiger-secondary-btn"
-                    id="mobileCancelCommentBtn">CANCELAR</button>
-                </div>
-              </div>
+        <div class="modal-body">
+          <form class="card-form" id="cardForm">
+            <div class="form-group">
+              <input type="text" class="form-input" id="cardAuthor" placeholder="Autor" required>
             </div>
+            <div class="form-group">
+              <input type="text" class="form-input" id="cardTitle" placeholder="Título" required>
+            </div>
+            <div class="form-group">
+              <textarea class="form-textarea" id="cardBody" placeholder="Cuerpo" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+              <label class="switch-label">
+                <input type="checkbox" class="switch-input" id="aiSwitch">
+                <span class="switch-text">Switch para activar AI</span>
+              </label>
+            </div>
+            <button type="submit" class="submit-btn">Publicar record</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
-            <!-- Web Console Section -->
-            <div class="web-console-subsection">
-              <h2 class="section-title">
-                <span class="title-bracket">›</span>
-                Web Console
-                <span class="title-bracket">‹</span>
-              </h2>
-              <div class="mb-2">
-                <label for="mobileWebConsole" class="form-label label-style">
-                  <span class="label-indicator">▶</span> Live Output:
-                </label>
-                <div class="web-console-container">
-                  <div class="web-console-header">ATLACATL WEB CONSOLE ™</div>
-                  <textarea class="form-control textarea-style web-console" id="mobileWebConsole" rows="2"
-                    placeholder="Web console output" readonly></textarea>
-                </div>
-              </div>
-            </div>
+    <!-- Search Modal -->
+    <div class="modal-overlay" id="searchModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Buscar</h2>
+          <button class="modal-close" id="closeSearchModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="search-placeholder">
+            <p>Funcionalidad de búsqueda - Próximamente</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Hide footer on mobile to save space -->
-    <footer class="footer-section mt-2 d-none d-md-block">
-      <div class="footer-glow-effect"></div>
-      <div class="text-center">
-        <a href="/about.html" class="about-button">Acerca de</a>
+    <!-- Translate Modal -->
+    <div class="modal-overlay" id="translateModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Traducir</h2>
+          <button class="modal-close" id="closeTranslateModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="translate-placeholder">
+            <p>Funcionalidad de traducción - Próximamente</p>
+          </div>
+        </div>
       </div>
-    </footer>
+    </div>
+
+    <!-- Code Console Modal -->
+    <div class="modal-overlay" id="codeModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">ATLACATL Web Console</h2>
+          <button class="modal-close" id="closeCodeModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="console-placeholder">
+            <p>Consola web ATLACATL - Próximamente</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <script src="/dom.js"></script>
-  <!-- Default Statcounter code for Atlacatl https://www.atlacatl.net/ -->
+
+  <script src="dom.js"></script>
+  <!-- StatCounter code for Atlacatl -->
   <script type="text/javascript">
     var sc_project = 13162079;
     var sc_invisible = 1;
@@ -332,13 +163,11 @@
   </script>
   <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
   <noscript>
-    <div class="statcounter"><a title="Web Analytics Made Easy -
-  Statcounter" href="https://statcounter.com/" target="_blank"><img class="statcounter"
+    <div class="statcounter"><a title="Web Analytics Made Easy - Statcounter" href="https://statcounter.com/" target="_blank"><img class="statcounter"
           src="https://c.statcounter.com/13162079/0/1375cf5d/1/" alt="Web Analytics Made Easy - Statcounter"
           referrerPolicy="no-referrer-when-downgrade"></a></div>
   </noscript>
-  <!-- End of Statcounter Code -->
-  <a href="https://statcounter.com/p13162079/?guest=1">Atlacatl</a>
+  <!-- End of StatCounter Code -->
 </body>
 
 </html>

@@ -1,61 +1,136 @@
-/* Desktop-specific styles for ATLACATL */
+/* ATLACATL - Desktop Styles */
 
-/* Desktop Optimizations */
-@media (min-width: 768px) {
-  .combined-controls-section {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 450px;
+@media (min-width: 769px) {
+  /* Desktop layout with sidebar */
+  .content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
   }
-
-  .result-grid-section {
-    min-height: 450px;
+  
+  /* Cards container for desktop */
+  .cards-container {
+    grid-column: 1;
+  }
+  
+  /* Desktop cards grid - two columns */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  /* Desktop card styles */
+  .card {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 17px;
+  }
+  
+  .card-body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  /* Ad section in sidebar */
+  .ad-section {
+    grid-column: 2;
+    padding: 25px;
+  }
+  
+  .ad-placeholder {
+    padding: 50px 30px;
+    font-size: 14px;
+  }
+  
+  /* Desktop modal adjustments */
+  .modal-content {
+    max-width: 600px;
+  }
+  
+  .modal-header {
+    padding: 20px 25px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+  }
+  
+  .modal-body {
+    padding: 25px;
+  }
+  
+  .card-form {
+    gap: 20px;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .submit-btn {
+    padding: 15px 25px;
+    font-size: 15px;
   }
 }
 
-/* Large Desktop */
+/* Large desktop screens */
 @media (min-width: 1200px) {
-  .result-grid-display-area {
-    height: 100%;
-    min-height: 350px;
-    max-height: 450px;
-    grid-template-columns: repeat(2, minmax(250px, 1fr));
+  .content-wrapper {
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+  }
+  
+  .cards-grid {
+    gap: 25px;
+  }
+  
+  .card {
+    padding: 25px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+  }
+  
+  .card-body {
+    font-size: 16px;
+  }
+  
+  .ad-section {
+    padding: 30px;
+  }
+  
+  .ad-placeholder {
+    padding: 60px 40px;
   }
 }
 
-/* Desktop FAB buttons - hidden on desktop */
-.mobile-fab-container {
-  display: none;
-}
-
-/* Desktop-specific button styling */
-@media (min-width: 768px) {
-  .button-style {
-    background: linear-gradient(135deg, #0288d1 0%, #4fc3f7 50%, #0288d1 100%) !important;
-    border: 2px solid rgba(21, 101, 192, 0.4) !important;
-    color: #ffffff !important;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.8rem;
-    padding: 0.6rem 1.2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(21, 101, 192, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(21, 101, 192, 0.2);
-    border-radius: 8px;
-    position: relative;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+/* Extra large screens */
+@media (min-width: 1400px) {
+  .content-wrapper {
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
   }
-
-  .button-style:hover {
-    background: linear-gradient(135deg, #01579b 0%, #0288d1 50%, #01579b 100%) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(21, 101, 192, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(21, 101, 192, 0.2);
-    color: #ffffff !important;
+  
+  .cards-grid {
+    gap: 30px;
   }
-
-  .button-style:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(21, 101, 192, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .card {
+    padding: 30px;
+  }
+  
+  .ad-section {
+    padding: 40px;
+  }
+  
+  .ad-placeholder {
+    padding: 80px 50px;
   }
 }
