@@ -24,9 +24,9 @@
   }
   
   .icon-btn {
-    padding: 7px 9px;
-    font-size: 15px;
-    min-width: 38px;
+    padding: 8px 10px;
+    font-size: 16px;
+    min-width: 40px;
     text-align: center;
   }
   
@@ -67,7 +67,7 @@
   /* Mobile card styles */
   .card {
     padding: 12px;
-    min-height: 180px;
+    height: 200px;
   }
   
   .card-title {
@@ -159,9 +159,9 @@
   }
   
   .icon-btn {
-    padding: 6px 7px;
-    font-size: 13px;
-    min-width: 34px;
+    padding: 7px 8px;
+    font-size: 14px;
+    min-width: 36px;
   }
   
   .filter-section {
@@ -174,7 +174,7 @@
   
   .card {
     padding: 10px;
-    min-height: 160px;
+    height: 180px;
   }
   
   .card-title {

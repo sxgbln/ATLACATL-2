@@ -189,8 +189,21 @@ async function renderCards(reset = true) {
       cardsGrid.appendChild(cardElement)
     })
     
+    // Add loading indicator if there are more cards
+    if (recordsArray.length >= 15) {
+      const loadingDiv = document.createElement("div")
+      loadingDiv.className = "loading-indicator"
+      loadingDiv.innerHTML = `
+        <div style="text-align: center; padding: 20px; color: #666; font-style: italic;">
+          <div style="margin-bottom: 10px;">⏳</div>
+          <div>Cargando más tarjetas...</div>
+        </div>
+      `
+      cardsGrid.appendChild(loadingDiv)
+    }
+    
     currentPage++
-    hasMoreCards = recordsArray.length >= 10 // Assuming 10 cards per page
+    hasMoreCards = recordsArray.length >= 15 // Load 15 cards per page
   } catch (error) {
     console.error("Error loading cards:", error)
     if (reset) {
@@ -439,7 +452,7 @@ function formatDate(utcDateInput) {
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const userLanguage = navigator.language
     const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
-    return `pref: (${userLanguage}/${localTimeZone}), información sobre fecha: ${convertedTimeZone}`
+    return `📅 pref: (${userLanguage}/${localTimeZone}), date: ${convertedTimeZone}`
   } catch (error) {
     return `Error formatting date: ${error.message}`
   }
@@ -469,8 +482,13 @@ function scrollToTop() {
 // Setup infinite scroll
 function setupInfiniteScroll() {
   window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
       if (hasMoreCards && !isLoading && currentMode === "cards") {
+        // Remove existing loading indicator
+        const existingLoading = document.querySelector(".loading-indicator")
+        if (existingLoading) {
+          existingLoading.remove()
+        }
         renderCards(false) // Load more cards without resetting
       }
     }

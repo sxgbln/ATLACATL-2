@@ -24,7 +24,7 @@
   /* Desktop card styles */
   .card {
     padding: 20px;
-    min-height: 220px;
+    height: 240px;
   }
   
   .card-title {
@@ -40,6 +40,7 @@
   .ad-section {
     grid-column: 2;
     padding: 25px;
+    height: 500px;
   }
   
   .ad-placeholder {
@@ -93,7 +94,7 @@
   
   .card {
     padding: 25px;
-    min-height: 240px;
+    height: 260px;
   }
   
   .card-title {
@@ -106,6 +107,7 @@
   
   .ad-section {
     padding: 30px;
+    height: 600px;
   }
   
   .ad-placeholder {
@@ -126,11 +128,12 @@
   
   .card {
     padding: 30px;
-    min-height: 260px;
+    height: 280px;
   }
   
   .ad-section {
     padding: 40px;
+    height: 700px;
   }
   
   .ad-placeholder {
