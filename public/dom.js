@@ -6,6 +6,9 @@ const BASE_API_URL = "https://www.atlacatl.net"
 let currentMode = "cards"
 let selectedCardId = null
 let selectedCardData = null
+let currentPage = 1
+let isLoading = false
+let hasMoreCards = true
 
 // DOM elements
 const cardsGrid = document.getElementById("cardsGrid")
@@ -15,6 +18,8 @@ const sortSelect = document.getElementById("sortSelect")
 document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
   renderCards() // Load with default sorting (newest)
+  setupScrollToTop()
+  setupInfiniteScroll()
 })
 
 // Initialize all event listeners
@@ -25,6 +30,9 @@ function initializeEventListeners() {
   document.getElementById("translateBtn").addEventListener("click", openTranslateModal)
   document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
   document.getElementById("codeBtn").addEventListener("click", openCodeModal)
+  
+  // Highlight add cards icon
+  document.getElementById("addMessageBtn").classList.add("highlighted")
 
   // Modal close buttons
   document.getElementById("closeModal").addEventListener("click", closeCardGenerator)
@@ -36,7 +44,7 @@ function initializeEventListeners() {
   document.getElementById("cardForm").addEventListener("submit", handleCardSubmit)
 
   // Sort dropdown change
-  sortSelect.addEventListener("change", renderCards)
+  sortSelect.addEventListener("change", () => renderCards(true))
 
   // Modal overlay clicks
   document.getElementById("cardGeneratorModal").addEventListener("click", (e) => {
@@ -51,6 +59,9 @@ function initializeEventListeners() {
   document.getElementById("codeModal").addEventListener("click", (e) => {
     if (e.target.id === "codeModal") closeCodeModal()
   })
+  
+  // Scroll to top button
+  document.getElementById("scrollToTopBtn").addEventListener("click", scrollToTop)
 }
 
 // Modal functions
@@ -140,7 +151,7 @@ async function handleCardSubmit(e) {
 
     // Success - close modal and refresh cards
     closeCardGenerator()
-    renderCards()
+    renderCards(true)
     
     if (isAIEnabled && responseData.aiResponse) {
       console.log("AI Response:", responseData.aiResponse)
@@ -151,7 +162,10 @@ async function handleCardSubmit(e) {
 }
 
 // Render cards with selected sorting
-async function renderCards() {
+async function renderCards(reset = true) {
+  if (isLoading) return
+  
+  isLoading = true
   const sortType = sortSelect.value
   
   try {
@@ -162,16 +176,28 @@ async function renderCards() {
     }
 
     const recordsArray = await response.json()
-    cardsGrid.innerHTML = ""
+    
+    if (reset) {
+      cardsGrid.innerHTML = ""
+      currentPage = 1
+      hasMoreCards = true
+    }
 
     // Generate card elements
     recordsArray.forEach((cardData) => {
       const cardElement = generateCardElement(cardData)
       cardsGrid.appendChild(cardElement)
     })
+    
+    currentPage++
+    hasMoreCards = recordsArray.length >= 10 // Assuming 10 cards per page
   } catch (error) {
     console.error("Error loading cards:", error)
-    cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjetas: ${error.message}</div>`
+    if (reset) {
+      cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjetas: ${error.message}</div>`
+    }
+  } finally {
+    isLoading = false
   }
 }
 
@@ -275,7 +301,7 @@ async function handleLike(cardId) {
 
     // Refresh current view
     if (currentMode === "cards") {
-      renderCards()
+      renderCards(true)
     } else {
       viewCardComments(selectedCardId)
     }
@@ -311,11 +337,62 @@ async function viewCardComments(cardId) {
       cardsGrid.appendChild(commentElement)
     })
 
+    // Add comment form
+    const commentForm = document.createElement("div")
+    commentForm.className = "comment-form"
+    commentForm.innerHTML = `
+      <h4>Agregar comentario</h4>
+      <form id="commentForm">
+        <div class="form-group">
+          <input type="text" class="form-input" id="commentAuthor" placeholder="Autor (opcional)" value="anónimo">
+        </div>
+        <div class="form-group">
+          <textarea class="form-textarea" id="commentBody" placeholder="Escribe tu comentario..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Publicar comentario</button>
+      </form>
+    `
+    cardsGrid.appendChild(commentForm)
+    
+    // Handle comment form submission
+    document.getElementById("commentForm").addEventListener("submit", async (e) => {
+      e.preventDefault()
+      const commentAuthor = document.getElementById("commentAuthor").value.trim() || "anónimo"
+      const commentBody = document.getElementById("commentBody").value.trim()
+      
+      if (!commentBody) {
+        alert("El contenido del comentario es obligatorio.")
+        return
+      }
+      
+      try {
+        const response = await fetch(`${BASE_API_URL}/server/comment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            cardId: cardId,
+            commentAuthor: commentAuthor,
+            commentBody: commentBody
+          })
+        })
+        
+        if (!response.ok) {
+          const errorData = await response.json()
+          alert(`Error: ${errorData.error || "Error al agregar comentario"}`)
+          return
+        }
+        
+        // Refresh comments view
+        viewCardComments(cardId)
+      } catch (error) {
+        alert(`Error durante el comentario: ${error.message}`)
+      }
+    })
+
     // Add back to cards button
     const backButton = document.createElement("button")
     backButton.textContent = "← Volver a tarjetas"
-    backButton.className = "action-btn"
-    backButton.style.marginTop = "20px"
+    backButton.className = "back-to-cards-btn"
     backButton.addEventListener("click", backToCards)
     cardsGrid.appendChild(backButton)
   } catch (error) {
@@ -353,7 +430,7 @@ function backToCards() {
   currentMode = "cards"
   selectedCardId = null
   selectedCardData = null
-  renderCards()
+  renderCards(true)
 }
 
 // Format date for display
@@ -362,8 +439,71 @@ function formatDate(utcDateInput) {
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const userLanguage = navigator.language
     const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
-    return `información sobre fecha: ${convertedTimeZone}`
+    return `pref: (${userLanguage}/${localTimeZone}), información sobre fecha: ${convertedTimeZone}`
   } catch (error) {
     return `Error formatting date: ${error.message}`
+  }
+}
+
+// Setup scroll to top functionality
+function setupScrollToTop() {
+  const scrollToTopBtn = document.getElementById("scrollToTopBtn")
+  
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopBtn.classList.add("visible")
+    } else {
+      scrollToTopBtn.classList.remove("visible")
+    }
+  })
+}
+
+// Scroll to top function
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  })
+}
+
+// Setup infinite scroll
+function setupInfiniteScroll() {
+  window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+      if (hasMoreCards && !isLoading && currentMode === "cards") {
+        renderCards(false) // Load more cards without resetting
+      }
+    }
+  })
+}
+
+// Handle add comment
+async function handleAddComment(cardId) {
+  const commentAuthor = prompt("Autor del comentario (opcional):") || "anónimo"
+  const commentBody = prompt("Contenido del comentario:")
+  
+  if (!commentBody) return
+  
+  try {
+    const response = await fetch(`${BASE_API_URL}/server/comment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cardId: cardId,
+        commentAuthor: commentAuthor,
+        commentBody: commentBody
+      })
+    })
+    
+    if (!response.ok) {
+      const errorData = await response.json()
+      alert(`Error: ${errorData.error || "Error al agregar comentario"}`)
+      return
+    }
+    
+    // Refresh comments view
+    viewCardComments(cardId)
+  } catch (error) {
+    alert(`Error durante el comentario: ${error.message}`)
   }
 }

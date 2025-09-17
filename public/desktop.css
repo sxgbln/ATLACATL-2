@@ -24,6 +24,7 @@
   /* Desktop card styles */
   .card {
     padding: 20px;
+    min-height: 220px;
   }
   
   .card-title {
@@ -92,6 +93,7 @@
   
   .card {
     padding: 25px;
+    min-height: 240px;
   }
   
   .card-title {
@@ -124,6 +126,7 @@
   
   .card {
     padding: 30px;
+    min-height: 260px;
   }
   
   .ad-section {
