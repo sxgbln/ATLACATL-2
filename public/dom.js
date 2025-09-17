@@ -39,12 +39,27 @@ function initializeEventListeners() {
   document.getElementById("closeSearchModal").addEventListener("click", closeSearchModal)
   document.getElementById("closeTranslateModal").addEventListener("click", closeTranslateModal)
   document.getElementById("closeCodeModal").addEventListener("click", closeCodeModal)
+  document.getElementById("closeMobileSortModal").addEventListener("click", closeMobileSortModal)
 
   // Card form submission
   document.getElementById("cardForm").addEventListener("submit", handleCardSubmit)
 
   // Sort dropdown change
   sortSelect.addEventListener("change", () => renderCards(true))
+  
+  // Mobile sort options
+  document.querySelectorAll(".sort-option").forEach(option => {
+    option.addEventListener("click", () => {
+      const value = option.dataset.value
+      sortSelect.value = value
+      renderCards(true)
+      closeMobileSortModal()
+      
+      // Update active state
+      document.querySelectorAll(".sort-option").forEach(opt => opt.classList.remove("active"))
+      option.classList.add("active")
+    })
+  })
 
   // Modal overlay clicks
   document.getElementById("cardGeneratorModal").addEventListener("click", (e) => {
@@ -59,9 +74,15 @@ function initializeEventListeners() {
   document.getElementById("codeModal").addEventListener("click", (e) => {
     if (e.target.id === "codeModal") closeCodeModal()
   })
+  document.getElementById("mobileSortModal").addEventListener("click", (e) => {
+    if (e.target.id === "mobileSortModal") closeMobileSortModal()
+  })
   
   // Scroll to top button
   document.getElementById("scrollToTopBtn").addEventListener("click", scrollToTop)
+  
+  // Mobile sort button
+  document.getElementById("mobileSortBtn").addEventListener("click", openMobileSortModal)
 }
 
 // Modal functions
@@ -104,6 +125,16 @@ function openCodeModal() {
 
 function closeCodeModal() {
   document.getElementById("codeModal").classList.remove("active")
+  document.body.style.overflow = ""
+}
+
+function openMobileSortModal() {
+  document.getElementById("mobileSortModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeMobileSortModal() {
+  document.getElementById("mobileSortModal").classList.remove("active")
   document.body.style.overflow = ""
 }
 
@@ -190,7 +221,7 @@ async function renderCards(reset = true) {
     })
     
     // Add loading indicator if there are more cards
-    if (recordsArray.length >= 15) {
+    if (recordsArray.length >= 20) {
       const loadingDiv = document.createElement("div")
       loadingDiv.className = "loading-indicator"
       loadingDiv.innerHTML = `
@@ -203,7 +234,7 @@ async function renderCards(reset = true) {
     }
     
     currentPage++
-    hasMoreCards = recordsArray.length >= 15 // Load 15 cards per page
+    hasMoreCards = recordsArray.length >= 20 // Load 20 cards per page
   } catch (error) {
     console.error("Error loading cards:", error)
     if (reset) {
@@ -461,12 +492,15 @@ function formatDate(utcDateInput) {
 // Setup scroll to top functionality
 function setupScrollToTop() {
   const scrollToTopBtn = document.getElementById("scrollToTopBtn")
+  const mobileSortBtn = document.getElementById("mobileSortBtn")
   
   window.addEventListener("scroll", () => {
     if (window.pageYOffset > 300) {
       scrollToTopBtn.classList.add("visible")
+      mobileSortBtn.classList.add("visible")
     } else {
       scrollToTopBtn.classList.remove("visible")
+      mobileSortBtn.classList.remove("visible")
     }
   })
 }

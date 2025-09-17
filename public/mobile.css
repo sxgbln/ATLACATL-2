@@ -35,21 +35,9 @@
     padding: 10px;
   }
   
-  /* Mobile filter section */
-  .filter-section {
-    padding: 8px 12px;
-    margin-bottom: 15px;
-  }
-  
-  .filter-content {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-  }
-  
-  .filter-dropdown {
-    width: 100%;
-    max-width: 200px;
+  /* Hide desktop ad section on mobile */
+  .ad-section {
+    display: none;
   }
   
   /* Mobile cards container */
@@ -67,7 +55,7 @@
   /* Mobile card styles */
   .card {
     padding: 12px;
-    height: 200px;
+    height: 250px;
   }
   
   .card-title {
@@ -129,14 +117,9 @@
     font-size: 13px;
   }
   
-  /* Mobile ad section */
-  .ad-section {
-    padding: 15px;
-  }
-  
-  .ad-placeholder {
-    padding: 30px 20px;
-    font-size: 13px;
+  /* Mobile sort button */
+  .mobile-sort-btn {
+    display: block;
   }
 }
 
@@ -174,7 +157,7 @@
   
   .card {
     padding: 10px;
-    height: 180px;
+    height: 220px;
   }
   
   .card-title {

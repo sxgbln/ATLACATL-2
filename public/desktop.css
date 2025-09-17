@@ -39,7 +39,6 @@
   /* Ad section in sidebar */
   .ad-section {
     grid-column: 2;
-    padding: 25px;
     height: 500px;
   }
   
@@ -106,7 +105,6 @@
   }
   
   .ad-section {
-    padding: 30px;
     height: 600px;
   }
   
@@ -132,7 +130,6 @@
   }
   
   .ad-section {
-    padding: 40px;
     height: 700px;
   }
   

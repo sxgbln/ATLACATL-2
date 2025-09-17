@@ -40,18 +40,6 @@
 
     <!-- Main content area -->
     <main class="main-content">
-      <!-- Filter section -->
-      <div class="filter-section">
-        <div class="filter-content">
-          <span class="filter-label">Mostrando records disponibles</span>
-          <select class="filter-dropdown" id="sortSelect">
-            <option value="newest">Más recientes</option>
-            <option value="oldest">Más antiguas</option>
-            <option value="likes">Más populares</option>
-          </select>
-        </div>
-      </div>
-
       <!-- Desktop layout wrapper -->
       <div class="content-wrapper">
         <!-- Cards container -->
@@ -63,6 +51,14 @@
 
         <!-- Ad placeholder section (sidebar on desktop) -->
         <div class="ad-section">
+          <div class="ad-header">
+            <h3>Ordenar por</h3>
+            <select class="filter-dropdown" id="sortSelect">
+              <option value="newest">Más recientes</option>
+              <option value="oldest">Más antiguas</option>
+              <option value="likes">Más populares</option>
+            </select>
+          </div>
           <div class="ad-placeholder">
             <!-- Ad placeholder content -->
           </div>
@@ -153,10 +149,34 @@
       </div>
     </div>
 
+    <!-- Mobile sort button -->
+    <button class="mobile-sort-btn" id="mobileSortBtn" title="Ordenar">
+      <i class="bi bi-funnel"></i>
+    </button>
+    
     <!-- Scroll to top button -->
     <button class="scroll-to-top" id="scrollToTopBtn" title="Volver arriba">
       <i class="bi bi-arrow-up"></i>
     </button>
+    
+    <!-- Mobile sort modal -->
+    <div class="modal-overlay" id="mobileSortModal">
+      <div class="modal-content mobile-sort-modal">
+        <div class="modal-header">
+          <h2 class="modal-title">Ordenar tarjetas</h2>
+          <button class="modal-close" id="closeMobileSortModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="sort-options">
+            <button class="sort-option" data-value="newest">Más recientes</button>
+            <button class="sort-option" data-value="oldest">Más antiguas</button>
+            <button class="sort-option" data-value="likes">Más populares</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="dom.js"></script>
