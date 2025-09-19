@@ -1,79 +1,115 @@
 /* ATLACATL - Desktop Styles */
 
 @media (min-width: 769px) {
-  /* Desktop layout with sidebar */
+  /* Desktop layout with three columns */
   .content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 240px 1fr 300px; /* Left sidebar, main content, right sidebar */
     gap: 20px;
     align-items: start;
   }
-  
+
+  /* Left Sidebar */
+  .left-sidebar {
+    grid-column: 1;
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar-header {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+  }
+
+  .sidebar-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+  }
+
+  .sidebar-placeholder {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-style: italic;
+  }
+
   /* Cards container for desktop */
   .cards-container {
-    grid-column: 1;
+    grid-column: 2;
   }
-  
+
   /* Desktop cards grid - two columns */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  
+
   /* Desktop card styles */
   .card {
     padding: 20px;
     height: 240px;
   }
-  
+
   .card-title {
     font-size: 17px;
   }
-  
+
   .card-body {
     font-size: 15px;
     line-height: 1.5;
   }
-  
-  /* Ad section in sidebar */
-  .ad-section {
-    grid-column: 2;
-    height: 500px;
+
+  /* Right Sidebar (previously ad-section) */
+  .right-sidebar {
+    grid-column: 3;
+    position: sticky;
+    top: 80px;
   }
-  
+
   .ad-placeholder {
     padding: 50px 30px;
     font-size: 14px;
+    height: 500px;
   }
-  
+
   /* Desktop modal adjustments */
   .modal-content {
     max-width: 600px;
   }
-  
+
   .modal-header {
     padding: 20px 25px;
   }
-  
+
   .modal-title {
     font-size: 20px;
   }
-  
+
   .modal-body {
     padding: 25px;
   }
-  
+
   .card-form {
     gap: 20px;
   }
-  
+
   .form-input,
   .form-textarea {
     padding: 12px;
     font-size: 15px;
   }
-  
+
   .submit-btn {
     padding: 15px 25px;
     font-size: 15px;
@@ -83,57 +119,51 @@
 /* Large desktop screens */
 @media (min-width: 1200px) {
   .content-wrapper {
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 280px 1fr 350px;
     gap: 30px;
   }
-  
+
   .cards-grid {
     gap: 25px;
   }
-  
+
   .card {
     padding: 25px;
     height: 260px;
   }
-  
+
   .card-title {
     font-size: 18px;
   }
-  
+
   .card-body {
     font-size: 16px;
   }
-  
-  .ad-section {
-    height: 600px;
-  }
-  
+
   .ad-placeholder {
     padding: 60px 40px;
+    height: 600px;
   }
 }
 
 /* Extra large screens */
 @media (min-width: 1400px) {
   .content-wrapper {
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 320px 1fr 400px;
     gap: 40px;
   }
-  
+
   .cards-grid {
     gap: 30px;
   }
-  
+
   .card {
     padding: 30px;
     height: 280px;
   }
-  
-  .ad-section {
-    height: 700px;
-  }
-  
+
   .ad-placeholder {
     padding: 80px 50px;
+    height: 700px;
   }
 }
