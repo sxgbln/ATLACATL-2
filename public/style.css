@@ -33,7 +33,7 @@ body {
 }
 
 .header-content {
-  max-width: 1300px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
@@ -42,10 +42,11 @@ body {
 }
 
 .site-title {
-  font-size: 28px;
+  font-family: 'Brush Script MT', 'Brush Script Std', cursive;
+  color: #000;
+  font-size: 30px;
   font-weight: 700;
-  color: #1877f2;
-  font-style: normal;
+  margin: 0;
 }
 
 .header-icons {
@@ -82,22 +83,14 @@ body {
 .main-content {
   flex: 1;
   width: 100%;
-  display: flex;
-  justify-content: center; /* center the white board */
-  padding: 20px 0;
+  padding: 12px 24px;
 }
 
 /* Content wrapper for desktop layout */
 .content-wrapper {
-  /* the centered white board that holds the three-column layout on desktop */
-  background: #fff;
-  width: 980px; /* matches mockup center column width */
-  padding: 18px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 6px 18px rgba(0,0,0,0.06);
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  /* full-width container - layout defined on desktop via CSS grid */
+  width: 100%;
+  display: block;
 }
 
 /* Right Sidebar Header */
