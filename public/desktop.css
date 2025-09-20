@@ -16,6 +16,8 @@
     background-color: #e2e2e2; /* grey column */
     padding: 18px 12px;
     min-height: 100vh;
+    position: relative;
+    overflow: hidden; /* static */
   }
 
   .sidebar-header {
@@ -48,6 +50,10 @@
   /* Cards container for desktop */
   .cards-container {
     grid-column: 2;
+    /* make only the center column scrollable */
+    max-height: calc(100vh - 100px);
+    overflow: auto;
+    padding-right: 6px;
   }
 
   /* Desktop cards grid - two columns */
@@ -60,9 +66,10 @@
 
   /* Desktop card styles */
   .card {
-    padding: 16px;
-    min-height: 200px;
+    padding: 12px;
+    min-height: 160px;
     box-sizing: border-box;
+    border-radius: 2px; /* subtle */
   }
 
   .card-title {
