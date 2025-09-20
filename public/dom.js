@@ -250,82 +250,51 @@ function generateCardElement(cardData) {
   const cardDiv = document.createElement("div");
   cardDiv.className = "card";
 
-  // Avatar
-  const cardAvatar = document.createElement("div");
-  cardAvatar.className = "card-avatar";
-  const avatarPlaceholder = document.createElement("div");
-  avatarPlaceholder.className = "avatar-placeholder";
-  avatarPlaceholder.textContent = "👤";
-  cardAvatar.appendChild(avatarPlaceholder);
-
-  // Main content
-  const cardMain = document.createElement("div");
-  cardMain.className = "card-main";
-
-  // Card header with author and date
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
-  cardHeader.innerHTML = `<span class="card-author">Por: ${cardData.card_author}</span>
-                          <span class="card-date">${formatDate(cardData.card_date)}</span>`;
+  cardHeader.innerHTML = `Por: <span class="card-author">${cardData.card_author}</span>`;
 
-  // Card title
   const cardTitle = document.createElement("div");
   cardTitle.className = "card-title";
   cardTitle.textContent = cardData.card_title;
 
-  // Card body
   const cardBody = document.createElement("div");
   cardBody.className = "card-body";
-  
-  const bodyText = cardData.card_body;
-  if (bodyText.includes("🤖 Respuesta de IA:")) {
-    const [userText, ...aiResponseParts] = bodyText.split("🤖 Respuesta de IA:");
-    const aiResponse = aiResponseParts.join("🤖 Respuesta de IA:");
-    
-    const userParagraph = document.createElement("p");
-    userParagraph.textContent = userText.trim();
-    
-    const aiParagraph = document.createElement("p");
-    aiParagraph.innerHTML = `<strong>🤖 Respuesta de IA:</strong> ${aiResponse.trim()}`;
-    
-    cardBody.appendChild(userParagraph);
-    cardBody.appendChild(aiParagraph);
-  } else {
-    cardBody.textContent = bodyText;
-  }
+  cardBody.textContent = cardData.card_body;
 
-  // Card footer with actions
   const cardFooter = document.createElement("div");
   cardFooter.className = "card-footer";
+
+  const cardInfo = document.createElement("div");
+  cardInfo.className = "card-info";
+  cardInfo.innerHTML = `
+    <span>pref: (en-US/America/El_Salvador)</span>
+    <span>date: ${formatDate(cardData.card_date)}</span>
+  `;
 
   const cardActions = document.createElement("div");
   cardActions.className = "card-actions";
 
-  // Like button
   const likeButton = document.createElement("button");
-  likeButton.innerHTML = `<i class="bi bi-heart"></i> Likes [${cardData.like_count || 0}]`;
   likeButton.className = "action-btn like-btn";
+  likeButton.innerHTML = `❤️ <span>Likes [${cardData.like_count || 0}]</span>`;
   likeButton.addEventListener("click", () => handleLike(cardData.id));
 
-  // Comment button
   const commentButton = document.createElement("button");
-  commentButton.innerHTML = `<i class="bi bi-chat-square-text"></i> Comentarios [${cardData.comment_count || 0}]`;
   commentButton.className = "action-btn comment-btn";
+  commentButton.innerHTML = `💬 <span>Comentarios [${cardData.comment_count || 0}]</span>`;
   commentButton.addEventListener("click", () => viewCardComments(cardData.id));
 
   cardActions.appendChild(likeButton);
   cardActions.appendChild(commentButton);
 
+  cardFooter.appendChild(cardInfo);
   cardFooter.appendChild(cardActions);
 
-  // Assemble card
-  cardMain.appendChild(cardHeader);
-  cardMain.appendChild(cardTitle);
-  cardMain.appendChild(cardBody);
-  cardMain.appendChild(cardFooter);
-
-  cardDiv.appendChild(cardAvatar);
-  cardDiv.appendChild(cardMain);
+  cardDiv.appendChild(cardHeader);
+  cardDiv.appendChild(cardTitle);
+  cardDiv.appendChild(cardBody);
+  cardDiv.appendChild(cardFooter);
 
   return cardDiv;
 }
