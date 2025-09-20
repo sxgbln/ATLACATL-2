@@ -247,78 +247,87 @@ async function renderCards(reset = true) {
 
 // Generate card display element
 function generateCardElement(cardData) {
-  const cardDiv = document.createElement("div")
-  cardDiv.className = "card"
+  const cardDiv = document.createElement("div");
+  cardDiv.className = "card";
 
-  // Card header with author
-  const cardHeader = document.createElement("div")
-  cardHeader.className = "card-header"
-  cardHeader.innerHTML = `<span class="card-author">Por: ${cardData.card_author}</span>`
+  // Avatar
+  const cardAvatar = document.createElement("div");
+  cardAvatar.className = "card-avatar";
+  const avatarPlaceholder = document.createElement("div");
+  avatarPlaceholder.className = "avatar-placeholder";
+  avatarPlaceholder.textContent = "👤";
+  cardAvatar.appendChild(avatarPlaceholder);
+
+  // Main content
+  const cardMain = document.createElement("div");
+  cardMain.className = "card-main";
+
+  // Card header with author and date
+  const cardHeader = document.createElement("div");
+  cardHeader.className = "card-header";
+  cardHeader.innerHTML = `<span class="card-author">Por: ${cardData.card_author}</span>
+                          <span class="card-date">${formatDate(cardData.card_date)}</span>`;
 
   // Card title
-  const cardTitle = document.createElement("div")
-  cardTitle.className = "card-title"
-  cardTitle.textContent = cardData.card_title
+  const cardTitle = document.createElement("div");
+  cardTitle.className = "card-title";
+  cardTitle.textContent = cardData.card_title;
 
   // Card body
-  const cardBody = document.createElement("div")
-  cardBody.className = "card-body"
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body";
   
-  const bodyText = cardData.card_body
+  const bodyText = cardData.card_body;
   if (bodyText.includes("🤖 Respuesta de IA:")) {
-    // Split content and AI response for better formatting
-    const parts = bodyText.split("---")
-    if (parts.length > 1) {
-      const userContent = parts[0].trim()
-      const aiContent = parts[1].trim()
-      cardBody.innerHTML = `
-        <div>${userContent}</div>
-        <hr style="margin: 8px 0; border-color: #ccc;">
-        <div style="font-style: italic; color: #666;">${aiContent}</div>
-      `
-    } else {
-      cardBody.textContent = bodyText
-    }
+    const [userText, ...aiResponseParts] = bodyText.split("🤖 Respuesta de IA:");
+    const aiResponse = aiResponseParts.join("🤖 Respuesta de IA:");
+    
+    const userParagraph = document.createElement("p");
+    userParagraph.textContent = userText.trim();
+    
+    const aiParagraph = document.createElement("p");
+    aiParagraph.innerHTML = `<strong>🤖 Respuesta de IA:</strong> ${aiResponse.trim()}`;
+    
+    cardBody.appendChild(userParagraph);
+    cardBody.appendChild(aiParagraph);
   } else {
-    cardBody.textContent = bodyText
+    cardBody.textContent = bodyText;
   }
 
-  // Card footer with date and actions
-  const cardFooter = document.createElement("div")
-  cardFooter.className = "card-footer"
+  // Card footer with actions
+  const cardFooter = document.createElement("div");
+  cardFooter.className = "card-footer";
 
-  const cardDate = document.createElement("div")
-  cardDate.className = "card-date"
-  cardDate.textContent = formatDate(cardData.card_date)
-
-  const cardActions = document.createElement("div")
-  cardActions.className = "card-actions"
+  const cardActions = document.createElement("div");
+  cardActions.className = "card-actions";
 
   // Like button
-  const likeButton = document.createElement("button")
-  likeButton.textContent = `❤️ Likes [${cardData.like_count || 0}]`
-  likeButton.className = "action-btn like-btn"
-  likeButton.addEventListener("click", () => handleLike(cardData.id))
+  const likeButton = document.createElement("button");
+  likeButton.innerHTML = `<i class="bi bi-heart"></i> Likes [${cardData.like_count || 0}]`;
+  likeButton.className = "action-btn like-btn";
+  likeButton.addEventListener("click", () => handleLike(cardData.id));
 
   // Comment button
-  const commentButton = document.createElement("button")
-  commentButton.textContent = `💬 Comentarios [${cardData.comment_count || 0}]`
-  commentButton.className = "action-btn comment-btn"
-  commentButton.addEventListener("click", () => viewCardComments(cardData.id))
+  const commentButton = document.createElement("button");
+  commentButton.innerHTML = `<i class="bi bi-chat-square-text"></i> Comentarios [${cardData.comment_count || 0}]`;
+  commentButton.className = "action-btn comment-btn";
+  commentButton.addEventListener("click", () => viewCardComments(cardData.id));
 
-  cardActions.appendChild(likeButton)
-  cardActions.appendChild(commentButton)
+  cardActions.appendChild(likeButton);
+  cardActions.appendChild(commentButton);
 
-  cardFooter.appendChild(cardDate)
-  cardFooter.appendChild(cardActions)
+  cardFooter.appendChild(cardActions);
 
   // Assemble card
-  cardDiv.appendChild(cardHeader)
-  cardDiv.appendChild(cardTitle)
-  cardDiv.appendChild(cardBody)
-  cardDiv.appendChild(cardFooter)
+  cardMain.appendChild(cardHeader);
+  cardMain.appendChild(cardTitle);
+  cardMain.appendChild(cardBody);
+  cardMain.appendChild(cardFooter);
 
-  return cardDiv
+  cardDiv.appendChild(cardAvatar);
+  cardDiv.appendChild(cardMain);
+
+  return cardDiv;
 }
 
 // Handle like button click

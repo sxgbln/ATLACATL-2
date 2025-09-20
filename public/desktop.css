@@ -1,207 +1,101 @@
 /* ATLACATL - Desktop Styles */
 
 @media (min-width: 769px) {
-  /* Desktop layout with three columns inside the centered board */
   .content-wrapper {
     display: grid;
-    grid-template-columns: minmax(250px, 30%) minmax(400px, 40%) minmax(250px, 30%);
-    gap: 16px;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 24px;
     align-items: start;
     width: 100%;
-    max-width: 1920px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 24px;
   }
 
-  /* Left Sidebar */
+  .left-sidebar, .right-sidebar {
+    position: sticky;
+    top: 88px;
+  }
+
   .left-sidebar {
     grid-column: 1;
-    background-color: #f8f9fa;
-    padding: 20px 16px;
-    min-height: calc(100vh - 80px);
-    position: sticky;
-    top: 80px;
-    overflow: hidden;
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-  }
-
-  .sidebar-header {
-    background-color: transparent;
-    border: none;
-    padding: 0 0 16px 0;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
   }
 
   .sidebar-header h3 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #586069;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   .sidebar-placeholder {
-    background-color: transparent;
-    border: 3px dashed rgba(0,0,0,0.18);
-    border-radius: 4px;
-    height: 360px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    font-style: italic;
-    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    height: auto;
+    min-height: 200px;
+    padding: 16px;
   }
 
-  /* Cards container for desktop */
   .cards-container {
     grid-column: 2;
-    max-height: calc(100vh - 80px);
-    overflow: auto;
-    padding: 0 12px 16px 0;
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f5f5f5;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
   }
 
-  .cards-container::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .cards-container::-webkit-scrollbar-track {
-    background: #f5f5f5;
-    border-radius: 4px;
-  }
-
-  .cards-container::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 4px;
-    border: 2px solid #f5f5f5;
-  }
-
-  /* Desktop cards grid - two columns */
   .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-    align-items: start;
-    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
-  /* Desktop card styles */
-  .card {
-    padding: 12px;
-    min-height: 160px;
-    box-sizing: border-box;
-    border-radius: 2px; /* subtle */
-  }
-
-  .card-title {
-    font-size: 17px;
-  }
-
-  .card-body {
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  /* Right Sidebar (previously ad-section) */
   .right-sidebar {
     grid-column: 3;
-    background-color: #e2e2e2; /* grey column */
-    padding: 18px 12px;
-    min-height: 100vh;
+  }
+
+  .ad-header {
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
+  .ad-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #586069;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .filter-dropdown {
+    border: 1px solid #d1d5da;
+    padding: 8px 12px;
+    background-color: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
   }
 
   .ad-placeholder {
-    padding: 20px;
-    font-size: 14px;
-    height: 420px;
-    background-color: transparent;
-    border: 3px dashed rgba(0,0,0,0.18);
-  }
-
-  /* Desktop modal adjustments */
-  .modal-content {
-    max-width: 600px;
-  }
-
-  .modal-header {
-    padding: 20px 25px;
-  }
-
-  .modal-title {
-    font-size: 20px;
-  }
-
-  .modal-body {
-    padding: 25px;
-  }
-
-  .card-form {
-    gap: 20px;
-  }
-
-  .form-input,
-  .form-textarea {
-    padding: 12px;
-    font-size: 15px;
-  }
-
-  .submit-btn {
-    padding: 15px 25px;
-    font-size: 15px;
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    height: auto;
+    min-height: 300px;
+    padding: 16px;
   }
 }
 
-/* Large desktop screens */
 @media (min-width: 1200px) {
   .content-wrapper {
-    grid-template-columns: 280px 1fr 350px;
-    gap: 30px;
-  }
-
-  .cards-grid {
-    gap: 25px;
-  }
-
-  .card {
-    padding: 25px;
-    height: 260px;
-  }
-
-  .card-title {
-    font-size: 18px;
-  }
-
-  .card-body {
-    font-size: 16px;
-  }
-
-  .ad-placeholder {
-    padding: 60px 40px;
-    height: 600px;
+    grid-template-columns: 300px 1fr 300px;
   }
 }
 
-/* Extra large screens */
 @media (min-width: 1400px) {
   .content-wrapper {
-    grid-template-columns: 320px 1fr 400px;
-    gap: 40px;
-  }
-
-  .cards-grid {
-    gap: 30px;
-  }
-
-  .card {
-    padding: 30px;
-    height: 280px;
-  }
-
-  .ad-placeholder {
-    padding: 80px 50px;
-    height: 700px;
+    grid-template-columns: 320px 1fr 320px;
   }
 }
