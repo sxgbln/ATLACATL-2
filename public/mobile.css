@@ -1,48 +1,327 @@
-/* ATLACATL - Mobile Styles */
+/* ATLACATL - Mobile Styles - 4chan Layout */
 
 @media (max-width: 768px) {
-  .header {
+  .page-container {
+    border-left: none;
+    border-right: none;
+  }
+
+  .header-container {
     padding: 8px 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .site-title {
     font-size: 20px;
-    margin-bottom: 8px;
+    margin: 0;
   }
 
-  .header-icons {
+  .header-actions {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .header-icon-button {
+    padding: 6px 8px;
+    font-size: 14px;
+    min-width: 36px;
+  }
+
+  .content-wrapper {
+    padding: 8px;
+  }
+
+  .three-column-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Hide sidebars on mobile, show them at bottom */
+  .left-sidebar-card,
+  .right-sidebar-card {
+    order: 2;
     position: static;
-    border: none;
-    padding: 4px 0;
-    width: 100%;
-    justify-content: flex-start;
-    gap: 8px;
   }
 
-  .main-content {
-    padding: 10px;
-  }
-
-  .left-sidebar, .right-sidebar {
-    display: none;
+  .middle-feed {
+    order: 1;
   }
 
   .cards-grid {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 12px;
+  }
+
+  /* Mobile sidebar styling */
+  .left-sidebar-card,
+  .right-sidebar-card {
+    margin-top: 12px;
+  }
+
+  .left-sidebar-placeholder,
+  .right-sidebar-empty-space {
+    min-height: 150px;
+  }
+
+  /* Mobile modal adjustments */
+  .modal-content {
+    width: 95%;
+    max-width: 400px;
+    margin: 10px;
+    max-height: calc(100vh - 20px);
+  }
+
+  .modal-header {
+    padding: 10px 12px;
+  }
+
+  .modal-body {
+    padding: 12px;
+  }
+
+  .modal-title {
+    font-size: 14px;
+  }
+
+  /* Mobile form adjustments */
+  .form-input,
+  .form-textarea {
+    font-size: 16px;
+    /* Prevent zoom on iOS */
+    padding: 10px 12px;
+  }
+
+  .form-textarea {
+    min-height: 80px;
+  }
+
+  .submit-btn {
+    padding: 12px 16px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  /* Mobile card adjustments */
+  .card {
+    padding: 10px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .card-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .action-btn {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* Mobile buttons visibility */
+  .mobile-sort-btn,
+  .scroll-to-top {
+    display: block;
+  }
+
+  .mobile-sort-btn {
+    bottom: 70px;
+    right: 16px;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .scroll-to-top {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  /* Comment form mobile adjustments */
+  .comment-form {
+    padding: 10px;
+  }
+
+  .comment-form .form-input,
+  .comment-form .form-textarea {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .comment-form .form-textarea {
+    min-height: 80px;
+  }
+
+  .comment-form .submit-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  /* Comment card mobile adjustments */
+  .comment-card {
+    margin-left: 10px;
+  }
+
+  .back-to-cards-btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+    margin-top: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .header-icons {
-    flex-wrap: wrap;
-    gap: 5px;
+  .header-container {
+    padding: 6px 8px;
   }
 
-  .icon-btn {
-    flex-grow: 1;
+  .site-title {
+    font-size: 18px;
+  }
+
+  .header-actions {
+    gap: 3px;
+  }
+
+  .header-icon-button {
+    padding: 4px 6px;
+    font-size: 12px;
+    min-width: 32px;
+  }
+
+  .content-wrapper {
+    padding: 6px;
+  }
+
+  .card {
+    padding: 8px;
+  }
+
+  .card-title {
+    font-size: 13px;
+  }
+
+  .card-body {
+    font-size: 12px;
+  }
+
+  .modal-content {
+    width: 98%;
+    margin: 5px;
+  }
+
+  .modal-header {
+    padding: 8px 10px;
+  }
+
+  .modal-body {
+    padding: 10px;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 8px 10px;
+  }
+
+  .mobile-sort-btn,
+  .scroll-to-top {
+    right: 12px;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .mobile-sort-btn {
+    bottom: 60px;
+  }
+
+  .scroll-to-top {
+    bottom: 12px;
+  }
+
+  /* Ultra-small screen adjustments */
+  .left-sidebar-title,
+  .right-sidebar-title {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .left-sidebar-placeholder,
+  .right-sidebar-empty-space {
+    min-height: 100px;
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .sort-label {
+    font-size: 11px;
+  }
+
+  .sort-select {
+    font-size: 11px;
+    padding: 4px;
+  }
+}
+
+/* Landscape phone adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+
+  .left-sidebar-placeholder,
+  .right-sidebar-empty-space {
+    min-height: 120px;
+  }
+
+  .modal-content {
+    max-height: calc(100vh - 40px);
+  }
+}
+
+/* Touch-specific adjustments */
+@media (hover: none) and (pointer: coarse) {
+
+  .header-icon-button,
+  .action-btn,
+  .submit-btn {
+    min-height: 44px;
+    /* iOS touch target guidelines */
+  }
+
+  .header-icon-button {
+    padding: 8px 10px;
+  }
+
+  .action-btn {
+    padding: 8px 10px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .card:hover,
+  .header-icon-button:hover,
+  .action-btn:hover,
+  .submit-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Focus states for accessibility */
+  .header-icon-button:focus,
+  .action-btn:focus,
+  .submit-btn:focus {
+    outline: 2px solid #2c5aa0;
+    outline-offset: 2px;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus,
+  .sort-select:focus {
+    outline: 2px solid #2c5aa0;
+    outline-offset: 1px;
   }
 }

@@ -1,64 +1,194 @@
-/* ATLACATL - Desktop Styles */
+/* ATLACATL - Desktop Styles - 4chan Layout */
 
 @media (min-width: 769px) {
   .content-wrapper {
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
-    gap: 16px;
-    padding: 0;
-  }
-
-  .left-sidebar, .right-sidebar {
-    background: transparent;
-    border: 2px dashed #ccc;
+    grid-template-columns: 1fr;
+    gap: 0;
     padding: 12px;
   }
 
-  .sidebar-header h3, .ad-header h3 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  .three-column-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr 220px;
+    gap: 12px;
   }
 
-  .sidebar-placeholder, .ad-placeholder {
-    border: 2px dashed #ccc;
-    height: 200px;
+  /* Left Sidebar */
+  .left-sidebar {
+    background: transparent;
+  }
+
+  .left-sidebar-card {
+    background: #f8fbff;
+    border: 1px solid #4a90e2;
+    padding: 10px;
+    border-radius: 2px;
+    position: sticky;
+    top: 80px;
+  }
+
+  .left-sidebar-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #fff;
+    text-align: center;
+    background: #2c5aa0;
+    padding: 6px;
+    border: 1px solid #1a3d6b;
+    border-radius: 2px;
+  }
+
+  .left-sidebar-placeholder {
+    border: 2px dashed #bbb;
+    background: #fff;
+    min-height: 300px;
+    padding: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 2px;
   }
 
-  .cards-container {
+  /* Cards Container */
+  .middle-feed {
     grid-column: 2;
+    background: transparent;
   }
 
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
   }
 
+  /* Right Sidebar */
   .right-sidebar {
     grid-column: 3;
+    background: transparent;
   }
 
-  .filter-dropdown {
+  .right-sidebar-card {
+    background: #f8fbff;
+    border: 1px solid #4a90e2;
+    padding: 10px;
+    border-radius: 2px;
+    position: sticky;
+    top: 80px;
+  }
+
+  .right-sidebar-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #fff;
+    text-align: center;
+    background: #2c5aa0;
+    padding: 6px;
+    border: 1px solid #1a3d6b;
+    border-radius: 2px;
+  }
+
+  .sort-control-wrapper {
+    margin-bottom: 12px;
+  }
+
+  .sort-label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    color: #2c5aa0;
+  }
+
+  .sort-select {
     width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    padding: 6px;
+    border: 1px solid #4a90e2;
+    background: #fff;
+    font-size: 12px;
+    border-radius: 2px;
+  }
+
+  .right-sidebar-empty-space {
+    border: 2px dashed #bbb;
+    background: #f9f9f9;
+    min-height: 250px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 2px;
+  }
+
+  /* Enhanced desktop card layout */
+  .card {
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    background: #f0f8ff;
+    border-color: #2c5aa0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(44, 90, 160, 0.1);
+  }
+
+  /* Desktop modal positioning */
+  .modal-content {
+    max-width: 600px;
+  }
+
+  /* Desktop header adjustments */
+  .header-container {
+    padding: 10px 16px;
+  }
+
+  .header-icon-button {
+    padding: 10px 14px;
+    font-size: 18px;
+  }
+
+  .site-title {
+    font-size: 26px;
   }
 }
 
 @media (min-width: 1200px) {
-  .content-wrapper {
-    grid-template-columns: 300px 1fr 300px;
+  .three-column-grid {
+    grid-template-columns: 250px 1fr 250px;
+    gap: 16px;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .left-sidebar-placeholder,
+  .right-sidebar-empty-space {
+    min-height: 350px;
   }
 }
 
 @media (min-width: 1400px) {
-  .content-wrapper {
-    grid-template-columns: 320px 1fr 320px;
+  .three-column-grid {
+    grid-template-columns: 280px 1fr 280px;
+    gap: 20px;
+  }
+
+  .page-container {
+    max-width: 1400px;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 18px;
   }
 }
