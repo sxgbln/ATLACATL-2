@@ -17,7 +17,11 @@ const sortSelect = document.getElementById("sortSelect")
 // Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
-  renderCards() // Load with default sorting (newest)
+  // Set default sort to newest
+  if (sortSelect) {
+    sortSelect.value = "newest"
+  }
+  renderCards(true) // Load with default sorting (newest)
 })
 
 // Initialize all event listeners
@@ -173,7 +177,8 @@ async function renderCards(reset = true) {
   if (isLoading) return
 
   isLoading = true
-  const sortType = sortSelect.value
+  // Default to "newest" if sortSelect isn't available yet
+  const sortType = sortSelect ? sortSelect.value : "newest"
 
   try {
     const response = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)

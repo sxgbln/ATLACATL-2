@@ -61,12 +61,17 @@
   .middle-feed {
     grid-column: 2;
     background: transparent;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
   }
 
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 12px;
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 8px;
   }
 
   /* Right Sidebar */
