@@ -6,12 +6,15 @@
     grid-template-columns: 1fr;
     gap: 0;
     padding: 12px;
+    height: calc(100vh - 80px);
+    overflow: hidden;
   }
 
   .three-column-grid {
     display: grid;
     grid-template-columns: 200px 1fr 220px;
     gap: 12px;
+    height: 100%;
   }
 
   /* Left Sidebar */

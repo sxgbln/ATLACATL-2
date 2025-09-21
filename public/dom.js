@@ -18,8 +18,6 @@ const sortSelect = document.getElementById("sortSelect")
 document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
   renderCards() // Load with default sorting (newest)
-  setupScrollToTop()
-  setupInfiniteScroll()
 })
 
 // Initialize all event listeners
@@ -31,6 +29,9 @@ function initializeEventListeners() {
   document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
   document.getElementById("codeBtn").addEventListener("click", openCodeModal)
 
+  // Make ATLACATL branding clickable for scroll to top
+  document.querySelector(".site-title").addEventListener("click", scrollToTop)
+
   // Highlight add cards icon
   document.getElementById("addMessageBtn").classList.add("highlighted")
 
@@ -39,27 +40,12 @@ function initializeEventListeners() {
   document.getElementById("closeSearchModal").addEventListener("click", closeSearchModal)
   document.getElementById("closeTranslateModal").addEventListener("click", closeTranslateModal)
   document.getElementById("closeCodeModal").addEventListener("click", closeCodeModal)
-  document.getElementById("closeMobileSortModal").addEventListener("click", closeMobileSortModal)
 
   // Card form submission
   document.getElementById("cardForm").addEventListener("submit", handleCardSubmit)
 
   // Sort dropdown change
   sortSelect.addEventListener("change", () => renderCards(true))
-
-  // Mobile sort options
-  document.querySelectorAll(".sort-option").forEach(option => {
-    option.addEventListener("click", () => {
-      const value = option.dataset.value
-      sortSelect.value = value
-      renderCards(true)
-      closeMobileSortModal()
-
-      // Update active state
-      document.querySelectorAll(".sort-option").forEach(opt => opt.classList.remove("active"))
-      option.classList.add("active")
-    })
-  })
 
   // Modal overlay clicks
   document.getElementById("cardGeneratorModal").addEventListener("click", (e) => {
@@ -125,16 +111,6 @@ function openCodeModal() {
 
 function closeCodeModal() {
   document.getElementById("codeModal").classList.remove("active")
-  document.body.style.overflow = ""
-}
-
-function openMobileSortModal() {
-  document.getElementById("mobileSortModal").classList.add("active")
-  document.body.style.overflow = "hidden"
-}
-
-function closeMobileSortModal() {
-  document.getElementById("mobileSortModal").classList.remove("active")
   document.body.style.overflow = ""
 }
 
@@ -274,7 +250,6 @@ function generateCardElement(cardData) {
   const cardInfo = document.createElement("div");
   cardInfo.className = "card-info";
   cardInfo.innerHTML = `
-    <span>pref: (en-US/America/El_Salvador)</span>
     <span>date: ${formatDate(cardData.card_date)}</span>
   `;
 
@@ -461,13 +436,13 @@ function backToCards() {
   renderCards(true)
 }
 
-// Format date for display
+// Format date for display - FIXED to avoid duplication
 function formatDate(utcDateInput) {
   try {
     const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const userLanguage = navigator.language
     const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
-    return `📅 pref: (${userLanguage}/${localTimeZone}), date: ${convertedTimeZone}`
+    return `pref: ${userLanguage}/${localTimeZone.split('/').slice(0, 2).join('/')}, ${convertedTimeZone}`
   } catch (error) {
     return `Error formatting date: ${error.message}`
   }

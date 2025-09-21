@@ -24,18 +24,21 @@
   }
 
   .header-icon-button {
-    padding: 6px 8px;
-    font-size: 14px;
-    min-width: 36px;
+    padding: 8px;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
   }
 
   .content-wrapper {
     padding: 8px;
+    height: calc(100vh - 80px);
   }
 
   .three-column-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+    height: 100%;
   }
 
   /* Hide sidebars on mobile, show them at bottom */
@@ -43,15 +46,24 @@
   .right-sidebar-card {
     order: 2;
     position: static;
+    display: none;
   }
 
   .middle-feed {
     order: 1;
+    height: 100%;
   }
 
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  /* Fixed height cards on mobile */
+  .card {
+    height: 180px;
   }
 
   /* Mobile sidebar styling */
@@ -124,25 +136,7 @@
     font-size: 12px;
   }
 
-  /* Mobile buttons visibility */
-  .mobile-sort-btn,
-  .scroll-to-top {
-    display: block;
-  }
-
-  .mobile-sort-btn {
-    bottom: 70px;
-    right: 16px;
-    padding: 10px;
-    font-size: 16px;
-  }
-
-  .scroll-to-top {
-    bottom: 16px;
-    right: 16px;
-    padding: 10px;
-    font-size: 16px;
-  }
+  /* Mobile buttons - REMOVED - Using ATLACATL branding for scroll */
 
   /* Comment form mobile adjustments */
   .comment-form {
@@ -192,58 +186,21 @@
   }
 
   .header-icon-button {
-    padding: 4px 6px;
-    font-size: 12px;
-    min-width: 32px;
-  }
-
-  .content-wrapper {
     padding: 6px;
-  }
-
-  .card {
-    padding: 8px;
-  }
-
-  .card-title {
-    font-size: 13px;
-  }
-
-  .card-body {
-    font-size: 12px;
-  }
-
-  .modal-content {
-    width: 98%;
-    margin: 5px;
-  }
-
-  .modal-header {
-    padding: 8px 10px;
-  }
-
-  .modal-body {
-    padding: 10px;
-  }
-
-  .form-input,
-  .form-textarea {
-    padding: 8px 10px;
-  }
-
-  .mobile-sort-btn,
-  .scroll-to-top {
-    right: 12px;
-    padding: 8px;
     font-size: 14px;
+    width: 36px;
+    height: 36px;
   }
 
-  .mobile-sort-btn {
-    bottom: 60px;
+  .site-title {
+    font-size: 18px;
   }
 
-  .scroll-to-top {
-    bottom: 12px;
+  /* Ultra-small mobile buttons - REMOVED overlays */
+
+  /* Card height for ultra-small screens */
+  .card {
+    height: 160px;
   }
 
   /* Ultra-small screen adjustments */

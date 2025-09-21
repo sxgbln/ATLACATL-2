@@ -14,6 +14,7 @@ body {
   color: #111;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .page-container {
@@ -22,7 +23,7 @@ body {
   background: #f8fbff;
   border-left: 1px solid #4a90e2;
   border-right: 1px solid #4a90e2;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -44,7 +45,7 @@ body {
 }
 
 .site-title {
-  font-family: 'Kanit', sans-serif;
+  font-family: 'Liberation Sans', Arial, sans-serif;
   font-weight: 700;
   font-style: italic;
   font-size: 24px;
@@ -52,6 +53,13 @@ body {
   letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   margin: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.site-title:hover {
+  transform: scale(1.05);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .header-actions {
@@ -62,7 +70,7 @@ body {
 .header-icon-button {
   background: #fff;
   border: 1px solid #4a90e2;
-  padding: 8px 12px;
+  padding: 8px;
   cursor: pointer;
   font-size: 16px;
   color: #2c5aa0;
@@ -71,6 +79,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
 .header-icon-button:hover {
@@ -89,12 +99,14 @@ body {
 .content-wrapper {
   flex: 1;
   padding: 12px;
+  overflow: hidden;
 }
 
 .three-column-grid {
   display: grid;
   grid-template-columns: 200px 1fr 220px;
   gap: 12px;
+  height: 100%;
 }
 
 /* Left Sidebar */
@@ -131,13 +143,18 @@ body {
 /* Middle Feed */
 .middle-feed {
   background: transparent;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 12px;
-  margin-bottom: 12px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 8px;
 }
 
 /* Card Styles - 4chan inspired */
@@ -148,6 +165,9 @@ body {
   font-size: 13px;
   border-radius: 2px;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
 }
 
 .card:hover {
@@ -181,6 +201,12 @@ body {
   margin-bottom: 8px;
   color: #333;
   line-height: 1.3;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .card-footer {
@@ -469,183 +495,23 @@ body {
   font-size: 14px;
 }
 
-/* Mobile sort and scroll buttons */
-.mobile-sort-btn,
-.scroll-to-top {
-  position: fixed;
-  right: 20px;
-  background-color: #2c5aa0;
-  border: 1px solid #1a3d6b;
-  padding: 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  font-size: 18px;
-  color: #fff;
-  z-index: 1000;
-  display: none;
-  box-shadow: 0 4px 8px rgba(44, 90, 160, 0.3);
+/* Mobile sort and scroll buttons - REMOVED */
+
+/* Scrollbar styling - Only for cards grid */
+.cards-grid::-webkit-scrollbar {
+  width: 8px;
 }
 
-.mobile-sort-btn {
-  bottom: 80px;
-}
-
-.scroll-to-top {
-  bottom: 20px;
-}
-
-.mobile-sort-btn:hover,
-.scroll-to-top:hover {
-  background-color: #1a3d6b;
-  transform: translateY(-2px);
-}
-
-.mobile-sort-btn.visible,
-.scroll-to-top.visible {
-  display: block;
-}
-
-/* Mobile sort modal */
-.mobile-sort-modal {
-  max-width: 300px;
-}
-
-.sort-options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sort-option {
-  background: #fff;
-  border: 1px solid #4a90e2;
-  padding: 10px 12px;
-  cursor: pointer;
-  border-radius: 2px;
-  font-size: 14px;
-  color: #2c5aa0;
-  transition: all 0.2s ease;
-  text-align: left;
-}
-
-.sort-option:hover {
-  background-color: #e6f0ff;
-}
-
-.sort-option.active {
-  background-color: #2c5aa0;
-  color: #fff;
-  border-color: #1a3d6b;
-}
-
-/* Comment form styles */
-.comment-form {
-  background-color: #f0f8ff;
-  border: 1px solid #4a90e2;
-  border-radius: 2px;
-  padding: 12px;
-  margin-top: 12px;
-}
-
-.comment-form h4 {
-  color: #2c5aa0;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.comment-form .form-group {
-  margin-bottom: 8px;
-}
-
-.comment-form .form-input,
-.comment-form .form-textarea {
-  width: 100%;
-  font-size: 12px;
-  padding: 6px 8px;
-}
-
-.comment-form .form-textarea {
-  min-height: 60px;
-}
-
-.comment-form .submit-btn {
-  padding: 6px 12px;
-  font-size: 12px;
-}
-
-/* Comment card styles */
-.comment-card {
-  background-color: #f0f8ff;
-  border-left: 3px solid #4a90e2;
-  margin-left: 20px;
-  margin-top: 8px;
-}
-
-.comment-card .card-header {
-  color: #2c5aa0;
-}
-
-/* Main card in comments view */
-.main-card {
-  border: 2px solid #2c5aa0;
-  background-color: #fff;
-}
-
-/* Back to cards button */
-.back-to-cards-btn {
-  background-color: #4a90e2;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 12px;
-  transition: all 0.2s ease;
-  width: fit-content;
-}
-
-.back-to-cards-btn:hover {
-  background-color: #2c5aa0;
-  transform: translateY(-1px);
-}
-
-/* Error and loading messages */
-.error-message {
-  background-color: #ffebee;
-  border: 1px solid #f44336;
-  color: #d32f2f;
-  padding: 12px;
-  border-radius: 2px;
-  text-align: center;
-  margin: 12px 0;
-}
-
-.loading-indicator {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  font-style: italic;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
+.cards-grid::-webkit-scrollbar-track {
   background: #f8fbff;
 }
 
-::-webkit-scrollbar-thumb {
+.cards-grid::-webkit-scrollbar-thumb {
   background: #4a90e2;
-  border: 1px solid #2c5aa0;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.cards-grid::-webkit-scrollbar-thumb:hover {
   background: #2c5aa0;
 }
 
