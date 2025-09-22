@@ -32,6 +32,22 @@ function initializeEventListeners() {
   document.getElementById("translateBtn").addEventListener("click", openTranslateModal)
   document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
   document.getElementById("codeBtn").addEventListener("click", openCodeModal)
+  
+  // Mobile filter button
+  const mobileFilterBtn = document.getElementById("mobileFilterBtn")
+  if (mobileFilterBtn) {
+    // Only show on mobile
+    if (window.innerWidth <= 768) {
+      mobileFilterBtn.style.display = "flex"
+    }
+    mobileFilterBtn.addEventListener("click", () => {
+      document.querySelector(".right-sidebar-card").style.display = "block"
+    })
+    // Hide/show based on screen size
+    window.addEventListener("resize", () => {
+      mobileFilterBtn.style.display = window.innerWidth <= 768 ? "flex" : "none"
+    })
+  }
 
   // Make ATLACATL branding clickable for scroll to top
   document.querySelector(".site-title").addEventListener("click", scrollToTop)
@@ -231,14 +247,11 @@ function generateCardElement(cardData) {
   const cardDiv = document.createElement("div");
   cardDiv.className = "card";
 
-  // Create 4chan-style post number
-  const postNumber = `No.${1000 + Math.floor(Math.random() * 9000)}`;
-
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
   cardHeader.innerHTML = `
     <span>Por: <span class="card-author">${cardData.card_author}</span></span>
-    <span style="color: #2c5aa0; font-size: 11px; font-weight: normal;">${postNumber}</span>
+    <span style="color: #2c5aa0; font-size: 11px; font-weight: normal;">${formatDate(cardData.card_date)}</span>
   `;
 
   const cardTitle = document.createElement("div");
@@ -471,10 +484,13 @@ function setupScrollToTop() {
 
 // Scroll to top function
 function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  })
+  const cardsGrid = document.querySelector('.cards-grid')
+  if (cardsGrid) {
+    cardsGrid.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 }
 
 // Setup infinite scroll
