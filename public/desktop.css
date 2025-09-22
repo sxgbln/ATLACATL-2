@@ -1,193 +1,159 @@
-/* ATLACATL - Desktop Enhanced Styles */
+/* ATLACATL - Desktop Enhanced Styles with 4chan aesthetic */
 
+/* Desktop styles with 4chan color palette and no redundant filters */
 @media (min-width: 769px) {
   .content-wrapper {
-    padding: 32px;
+    padding: 8px;
   }
 
   .three-column-grid {
-    grid-template-columns: 300px 1fr 300px;
-    gap: 32px;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 8px;
+  }
+
+  /* Hide mobile filter button on desktop */
+  .mobile-filter-btn {
+    display: none;
   }
 
   /* Enhanced sidebar positioning */
   .sidebar-card {
     position: sticky;
-    top: 100px;
+    top: 60px;
   }
 
   /* Enhanced desktop card layout */
   .cards-grid {
-    gap: 20px;
+    gap: 8px;
   }
 
   .card {
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease;
+    border-radius: 0;
   }
 
   .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background: var(--surface-hover);
+    transform: none;
+    /* Remove fancy transforms for 4chan style */
+    box-shadow: none;
   }
 
   /* Desktop modal positioning */
   .modal-content {
-    max-width: 700px;
+    max-width: 500px;
+    border-radius: 0;
   }
 
   .code-modal .modal-content {
-    max-width: 900px;
+    max-width: 600px;
   }
 
   /* Desktop header adjustments */
   .header-container {
-    padding: 16px 32px;
+    padding: 8px 16px;
   }
 
   .header-icon-button {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+    width: 32px;
+    height: 28px;
+    font-size: 14px;
   }
 
   .site-title {
-    font-size: 28px;
+    font-size: 20px;
   }
 
-  /* Enhanced hover effects */
+  /* Remove fancy hover effects for 4chan style */
   .sidebar-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: none;
+    box-shadow: none;
   }
 
-  .filter-tag:hover {
-    transform: translateY(-1px);
-  }
-
-  /* Desktop-specific animations */
+  /* Desktop-specific simple animations */
   .card {
-    animation: slideInUp 0.3s ease-out;
+    animation: none;
+    /* Remove fancy animations */
   }
 
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
+  /* Remove redundant filter options - only show in right sidebar */
+  .feed-actions .sort-toggle {
+    display: none;
+    /* Hide the redundant sort toggle in feed header */
+  }
+}
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+@media (min-width: 1000px) {
+  .three-column-grid {
+    grid-template-columns: 220px 1fr 220px;
+    gap: 12px;
+  }
+
+  .content-wrapper {
+    padding: 12px;
+  }
+
+  .cards-grid {
+    gap: 8px;
+  }
+
+  .sidebar-content {
+    padding: 8px;
   }
 }
 
 @media (min-width: 1200px) {
   .three-column-grid {
-    grid-template-columns: 320px 1fr 320px;
-    gap: 40px;
-  }
-
-  .content-wrapper {
-    padding: 40px;
-  }
-
-  .cards-grid {
-    gap: 24px;
-  }
-
-  .sidebar-content {
-    padding: 24px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .three-column-grid {
-    grid-template-columns: 350px 1fr 350px;
-    gap: 48px;
+    grid-template-columns: 240px 1fr 240px;
+    gap: 16px;
   }
 
   .header-container {
-    padding: 20px 40px;
+    padding: 8px 20px;
   }
 
   .content-wrapper {
-    padding: 48px;
+    padding: 16px;
   }
 
   .card {
-    padding: 24px;
+    padding: 8px;
   }
 
   .card-title {
-    font-size: 18px;
+    font-size: 13px;
   }
 
   .card-body {
-    font-size: 15px;
-    max-height: 140px;
-    -webkit-line-clamp: 6;
+    font-size: 12px;
+    max-height: 100px;
+    -webkit-line-clamp: 4;
   }
 }
 
-/* Desktop-only features */
+/* Remove fancy desktop features for cleaner 4chan style */
 @media (min-width: 769px) {
 
-  /* Keyboard shortcuts hint */
-  .header-icon-button[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface-elevated);
-    color: var(--foreground);
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    font-size: 11px;
-    white-space: nowrap;
-    z-index: 1000;
-    border: 1px solid var(--border);
-  }
-
-  /* Enhanced scrollbar for desktop */
+  /* Simple scrollbar for desktop */
   .cards-grid::-webkit-scrollbar {
-    width: 8px;
+    width: 12px;
   }
 
   .cards-grid::-webkit-scrollbar-track {
-    background: var(--surface);
-    border-radius: 4px;
+    background: var(--surface-elevated);
   }
 
   .cards-grid::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 4px;
-    border: 2px solid var(--surface);
+    border-radius: 0;
   }
 
   .cards-grid::-webkit-scrollbar-thumb:hover {
     background: var(--border-hover);
   }
 
-  /* Desktop context menu styles */
-  .card {
-    position: relative;
-  }
-
+  /* Remove fancy card effects */
   .card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--primary-hover));
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .card:hover::before {
-    opacity: 1;
+    display: none;
   }
 }

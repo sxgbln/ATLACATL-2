@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile.css">
   <link rel="stylesheet" href="desktop.css">
@@ -52,21 +55,12 @@
         <aside class="left-sidebar">
           <div class="sidebar-card">
             <div class="sidebar-header">
-              <i class="bi bi-info-circle"></i>
-              <h3>Información</h3>
+              Página común
             </div>
             <div class="sidebar-content">
-              <div class="info-item">
-                <span class="info-label">Posts activos</span>
-                <span class="info-value" id="activePosts">-</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Usuarios online</span>
-                <span class="info-value">42</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Total posts</span>
-                <span class="info-value">1,337</span>
+              <!-- Placeholder container for future AdSense integration -->
+              <div class="ad-placeholder">
+                Contenido adicional aquí
               </div>
             </div>
           </div>
@@ -86,28 +80,39 @@
           <div class="cards-grid" id="cardsGrid">
             <!-- Cards will be dynamically inserted here -->
           </div>
+          <!-- Load more button instead of automatic loading -->
+          <button class="load-more-btn" id="loadMoreBtn" style="display: none;">
+            Cargar más
+          </button>
         </section>
 
         <!-- Right Sidebar -->
         <aside class="right-sidebar">
           <div class="sidebar-card">
             <div class="sidebar-header">
-              <i class="bi bi-sliders"></i>
-              <h3>Filtros</h3>
+              Mostrar según parámetros
             </div>
             <div class="sidebar-content">
+              <!-- Single filter dropdown, no redundancy -->
               <div class="sort-control-wrapper">
-                <label for="sortSelect" class="sort-label">Ordenar por:</label>
+                <label for="sortSelect" class="sort-label">Ordenar:</label>
                 <select class="sort-select" id="sortSelect">
-                  <option value="newest">Más recientes</option>
-                  <option value="oldest">Más antiguos</option>
+                  <option value="newest">Más nuevas</option>
+                  <option value="oldest">Más antiguas</option>
                   <option value="likes">Más populares</option>
                 </select>
               </div>
-              <div class="filter-tags">
-                <span class="filter-tag active">Todos</span>
-                <span class="filter-tag">Populares</span>
-                <span class="filter-tag">Sin respuesta</span>
+            </div>
+          </div>
+
+          <!-- AdSense placeholder container -->
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              Publicidad
+            </div>
+            <div class="sidebar-content">
+              <div class="ad-placeholder">
+                Espacio para AdSense
               </div>
             </div>
           </div>
@@ -118,12 +123,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-container">
-        <p class="footer-text">© 2025 Atlacatl Softworks</p>
-        <div class="footer-links">
-          <a href="#" class="footer-link">Términos</a>
-          <a href="#" class="footer-link">Privacidad</a>
-          <a href="#" class="footer-link">Contacto</a>
-        </div>
+        <p class="footer-text">© 2025 Atlacatl Softworks.</p>
       </div>
     </footer>
 

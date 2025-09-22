@@ -13,6 +13,13 @@ let hasMoreCards = true
 // DOM elements
 const cardsGrid = document.getElementById("cardsGrid")
 const sortSelect = document.getElementById("sortSelect")
+const loadMoreBtn = document.getElementById("loadMoreBtn")
+
+// Function to update active posts count
+function updateActivePostsCount() {
+  // Placeholder for updating active posts count
+  console.log("Updating active posts count...")
+}
 
 // Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
@@ -345,12 +352,12 @@ async function renderCards(reset = true) {
   isLoading = true
   const sortType = sortSelect.value
 
-  // Show loading state
+  // Show loading state only on initial load
   if (reset) {
     cardsGrid.innerHTML = `
       <div class="loading-indicator">
-        <div style="text-align: center; padding: 40px 20px; color: var(--foreground-subtle);">
-          <div style="margin-bottom: 16px; font-size: 24px;">⏳</div>
+        <div style="text-align: center; padding: 20px; color: var(--foreground-subtle);">
+          <div style="margin-bottom: 10px;">⏳</div>
           <div>Cargando posts...</div>
         </div>
       </div>
@@ -372,41 +379,32 @@ async function renderCards(reset = true) {
       hasMoreCards = true
     }
 
-    // Generate card elements with staggered animation
+    // Generate card elements with proper date display
     recordsArray.forEach((cardData, index) => {
       setTimeout(() => {
         const cardElement = generateCardElement(cardData)
         cardsGrid.appendChild(cardElement)
-      }, index * 50) // Stagger by 50ms
+      }, index * 30) // Reduced stagger for faster loading
     })
 
-    // Add loading indicator if there are more cards
     if (recordsArray.length >= 20) {
-      const loadingDiv = document.createElement("div")
-      loadingDiv.className = "loading-indicator"
-      loadingDiv.innerHTML = `
-        <div style="text-align: center; padding: 20px; color: var(--foreground-subtle); font-style: italic;">
-          <div style="margin-bottom: 10px;">⏳</div>
-          <div>Cargando más posts...</div>
-        </div>
-      `
-      cardsGrid.appendChild(loadingDiv)
+      if (loadMoreBtn) {
+        loadMoreBtn.style.display = "block"
+        loadMoreBtn.onclick = () => loadMoreCards()
+      }
     }
 
     currentPage++
-    hasMoreCards = recordsArray.length >= 20 // Load 20 cards per page
-
-    // Update active posts count
-    updateActivePostsCount(recordsArray.length)
+    hasMoreCards = recordsArray.length >= 20
   } catch (error) {
     console.error("Error loading cards:", error)
     if (reset) {
       cardsGrid.innerHTML = `
         <div class="error-message">
-          <div style="text-align: center; padding: 40px 20px;">
-            <div style="margin-bottom: 16px; font-size: 24px;">⚠️</div>
+          <div style="text-align: center; padding: 20px;">
+            <div style="margin-bottom: 10px;">⚠️</div>
             <div>Error cargando posts: ${error.message}</div>
-            <button onclick="renderCards(true)" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+            <button onclick="renderCards(true)" style="margin-top: 10px; padding: 6px 12px; background: var(--primary); color: var(--primary-foreground); border: 1px solid var(--primary); border-radius: 0; cursor: pointer; font-size: 11px;">
               Reintentar
             </button>
           </div>
@@ -418,20 +416,25 @@ async function renderCards(reset = true) {
   }
 }
 
-// Update active posts count in sidebar
-function updateActivePostsCount(count = null) {
-  const activePostsElement = document.getElementById("activePosts")
-  if (activePostsElement) {
-    if (count !== null) {
-      activePostsElement.textContent = count
-    } else {
-      // Fetch current count
-      activePostsElement.textContent = document.querySelectorAll(".card:not(.comment-card)").length
+async function loadMoreCards() {
+  if (isLoading || !hasMoreCards) return
+
+  if (loadMoreBtn) {
+    loadMoreBtn.textContent = "Cargando..."
+    loadMoreBtn.disabled = true
+  }
+
+  await renderCards(false)
+
+  if (loadMoreBtn) {
+    loadMoreBtn.textContent = "Cargar más"
+    loadMoreBtn.disabled = false
+    if (!hasMoreCards) {
+      loadMoreBtn.style.display = "none"
     }
   }
 }
 
-// Generate card display element - Enhanced modern design
 function generateCardElement(cardData) {
   const cardDiv = document.createElement("div")
   cardDiv.className = "card"
@@ -439,13 +442,20 @@ function generateCardElement(cardData) {
 
   const cardHeader = document.createElement("div")
   cardHeader.className = "card-header"
-  cardHeader.innerHTML = `
-    <div>
-      <span class="card-author">${cardData.card_author}</span>
-      <span style="color: var(--foreground-subtle); margin-left: 8px;">•</span>
-      <span style="color: var(--foreground-subtle); margin-left: 8px; font-size: 12px;">${formatDate(cardData.card_date)}</span>
-    </div>
+
+  const cardMeta = document.createElement("div")
+  cardMeta.className = "card-meta"
+  cardMeta.innerHTML = `
+    <span>Por: <span class="card-author">${cardData.card_author}</span></span>
+    <span class="card-date">${formatDate(cardData.card_date)}</span>
   `
+
+  const cardId = document.createElement("div")
+  cardId.className = "card-id"
+  cardId.textContent = `No.${cardData.id}`
+
+  cardHeader.appendChild(cardMeta)
+  cardHeader.appendChild(cardId)
 
   const cardTitle = document.createElement("div")
   cardTitle.className = "card-title"
@@ -457,12 +467,6 @@ function generateCardElement(cardData) {
 
   const cardFooter = document.createElement("div")
   cardFooter.className = "card-footer"
-
-  const cardInfo = document.createElement("div")
-  cardInfo.className = "card-info"
-  cardInfo.innerHTML = `
-    <span class="card-date">#${cardData.id}</span>
-  `
 
   const cardActions = document.createElement("div")
   cardActions.className = "card-actions"
@@ -491,8 +495,6 @@ function generateCardElement(cardData) {
 
   cardActions.appendChild(likeButton)
   cardActions.appendChild(commentButton)
-
-  cardFooter.appendChild(cardInfo)
   cardFooter.appendChild(cardActions)
 
   cardDiv.appendChild(cardHeader)
@@ -503,11 +505,6 @@ function generateCardElement(cardData) {
   // Add click handler for full card
   cardDiv.addEventListener("click", () => {
     viewCardComments(cardData.id)
-  })
-
-  // Add hover effect enhancement
-  cardDiv.addEventListener("mouseenter", () => {
-    cardDiv.style.cursor = "pointer"
   })
 
   return cardDiv
