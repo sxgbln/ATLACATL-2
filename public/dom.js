@@ -1,4 +1,4 @@
-// ATLACATL - New JavaScript for 4chan-inspired interface
+// ATLACATL - Enhanced JavaScript for Modern Forum Interface
 
 const BASE_API_URL = "https://www.atlacatl.net"
 
@@ -18,6 +18,7 @@ const sortSelect = document.getElementById("sortSelect")
 document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
   renderCards() // Load with default sorting (newest)
+  updateActivePostsCount()
 })
 
 // Initialize all event listeners
@@ -26,7 +27,7 @@ function initializeEventListeners() {
   document.getElementById("addMessageBtn").addEventListener("click", openCardGenerator)
   document.getElementById("searchBtn").addEventListener("click", openSearchModal)
   document.getElementById("translateBtn").addEventListener("click", openTranslateModal)
-  document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
+  document.getElementById("infoBtn").addEventListener("click", () => (window.location.href = "/about.html"))
   document.getElementById("codeBtn").addEventListener("click", openCodeModal)
 
   // Make ATLACATL branding clickable for scroll to top
@@ -60,21 +61,97 @@ function initializeEventListeners() {
   document.getElementById("codeModal").addEventListener("click", (e) => {
     if (e.target.id === "codeModal") closeCodeModal()
   })
-  document.getElementById("mobileSortModal").addEventListener("click", (e) => {
-    if (e.target.id === "mobileSortModal") closeMobileSortModal()
+  document.getElementById("mobileFilterModal").addEventListener("click", (e) => {
+    if (e.target.id === "mobileFilterModal") closeMobileFilterModal()
   })
 
-  // Scroll to top button
-  document.getElementById("scrollToTopBtn").addEventListener("click", scrollToTop)
+  // Mobile filter button and modal
+  const mobileFilterBtn = document.getElementById("mobileFilterBtn")
+  const closeMobileFilterBtn = document.getElementById("closeMobileFilterModal")
 
-  // Mobile sort button
-  document.getElementById("mobileSortBtn").addEventListener("click", openMobileSortModal)
+  if (mobileFilterBtn) {
+    mobileFilterBtn.addEventListener("click", openMobileFilterModal)
+  }
+
+  if (closeMobileFilterBtn) {
+    closeMobileFilterBtn.addEventListener("click", closeMobileFilterModal)
+  }
+
+  // Mobile filter options
+  document.querySelectorAll(".filter-option").forEach((option) => {
+    option.addEventListener("click", (e) => {
+      const value = e.currentTarget.dataset.value
+      sortSelect.value = value
+
+      // Update active state
+      document.querySelectorAll(".filter-option").forEach((opt) => opt.classList.remove("active"))
+      e.currentTarget.classList.add("active")
+
+      // Apply filter and close modal
+      renderCards(true)
+      closeMobileFilterModal()
+    })
+  })
+
+  // Sort toggle for mobile
+  const sortToggle = document.getElementById("sortToggle")
+  if (sortToggle) {
+    sortToggle.addEventListener("click", openMobileFilterModal)
+  }
+
+  // Filter tags functionality
+  document.querySelectorAll(".filter-tag").forEach((tag) => {
+    tag.addEventListener("click", (e) => {
+      document.querySelectorAll(".filter-tag").forEach((t) => t.classList.remove("active"))
+      e.currentTarget.classList.add("active")
+      // Add filter logic here if needed
+    })
+  })
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", handleKeyboardShortcuts)
+}
+
+// Keyboard shortcuts
+function handleKeyboardShortcuts(e) {
+  // Only trigger if not typing in an input
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return
+
+  switch (e.key) {
+    case "n":
+    case "N":
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        openCardGenerator()
+      }
+      break
+    case "/":
+      e.preventDefault()
+      openSearchModal()
+      break
+    case "Escape":
+      closeAllModals()
+      break
+  }
+}
+
+// Close all modals
+function closeAllModals() {
+  closeCardGenerator()
+  closeSearchModal()
+  closeTranslateModal()
+  closeCodeModal()
+  closeMobileFilterModal()
 }
 
 // Modal functions
 function openCardGenerator() {
   document.getElementById("cardGeneratorModal").classList.add("active")
   document.body.style.overflow = "hidden"
+  // Focus on first input
+  setTimeout(() => {
+    document.getElementById("cardAuthor").focus()
+  }, 100)
 }
 
 function closeCardGenerator() {
@@ -87,6 +164,11 @@ function closeCardGenerator() {
 function openSearchModal() {
   document.getElementById("searchModal").classList.add("active")
   document.body.style.overflow = "hidden"
+  // Focus on search input if it exists
+  setTimeout(() => {
+    const searchInput = document.querySelector(".search-input")
+    if (searchInput) searchInput.focus()
+  }, 100)
 }
 
 function closeSearchModal() {
@@ -107,6 +189,8 @@ function closeTranslateModal() {
 function openCodeModal() {
   document.getElementById("codeModal").classList.add("active")
   document.body.style.overflow = "hidden"
+  // Start console cursor animation
+  startConsoleCursor()
 }
 
 function closeCodeModal() {
@@ -130,14 +214,12 @@ function closeMobileFilterModal() {
   }
 }
 
-function openMobileFilterModal() {
-  document.getElementById("mobileFilterModal").classList.add("active")
-  document.body.style.overflow = "hidden"
-}
-
-function closeMobileFilterModal() {
-  document.getElementById("mobileFilterModal").classList.remove("active")
-  document.body.style.overflow = ""
+// Console cursor animation
+function startConsoleCursor() {
+  const cursor = document.querySelector(".console-cursor")
+  if (cursor) {
+    cursor.style.animation = "blink 1s infinite"
+  }
 }
 
 // Handle card form submission
@@ -150,9 +232,15 @@ async function handleCardSubmit(e) {
   const isAIEnabled = document.getElementById("aiSwitch").checked
 
   if (!cardTitle || !cardBody) {
-    alert("El título y el contenido son obligatorios.")
+    showNotification("El título y el contenido son obligatorios.", "error")
     return
   }
+
+  // Show loading state
+  const submitBtn = document.querySelector(".btn-primary")
+  const originalText = submitBtn.textContent
+  submitBtn.textContent = "Publicando..."
+  submitBtn.disabled = true
 
   const cardData = {
     cardTitle: cardTitle,
@@ -178,20 +266,76 @@ async function handleCardSubmit(e) {
 
     if (!response.ok) {
       const errorMsg = responseData.error || responseData || "Unknown error"
-      alert(`Error: ${errorMsg}`)
+      showNotification(`Error: ${errorMsg}`, "error")
       return
     }
 
     // Success - close modal and refresh cards
     closeCardGenerator()
     renderCards(true)
+    showNotification("Post publicado exitosamente", "success")
+    updateActivePostsCount()
 
     if (isAIEnabled && responseData.aiResponse) {
       console.log("AI Response:", responseData.aiResponse)
     }
   } catch (error) {
-    alert(`Error durante la publicación: ${error.message}`)
+    showNotification(`Error durante la publicación: ${error.message}`, "error")
+  } finally {
+    // Reset button state
+    submitBtn.textContent = originalText
+    submitBtn.disabled = false
   }
+}
+
+// Show notification
+function showNotification(message, type = "info") {
+  // Create notification element
+  const notification = document.createElement("div")
+  notification.className = `notification notification-${type}`
+  notification.textContent = message
+
+  // Add styles
+  Object.assign(notification.style, {
+    position: "fixed",
+    top: "20px",
+    right: "20px",
+    padding: "12px 20px",
+    borderRadius: "8px",
+    color: "white",
+    fontWeight: "500",
+    zIndex: "1001",
+    transform: "translateX(100%)",
+    transition: "transform 0.3s ease",
+    maxWidth: "300px",
+  })
+
+  // Set background color based on type
+  switch (type) {
+    case "success":
+      notification.style.background = "#10b981"
+      break
+    case "error":
+      notification.style.background = "#ef4444"
+      break
+    default:
+      notification.style.background = "#3b82f6"
+  }
+
+  document.body.appendChild(notification)
+
+  // Animate in
+  setTimeout(() => {
+    notification.style.transform = "translateX(0)"
+  }, 100)
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.transform = "translateX(100%)"
+    setTimeout(() => {
+      document.body.removeChild(notification)
+    }, 300)
+  }, 3000)
 }
 
 // Render cards with selected sorting
@@ -200,6 +344,18 @@ async function renderCards(reset = true) {
 
   isLoading = true
   const sortType = sortSelect.value
+
+  // Show loading state
+  if (reset) {
+    cardsGrid.innerHTML = `
+      <div class="loading-indicator">
+        <div style="text-align: center; padding: 40px 20px; color: var(--foreground-subtle);">
+          <div style="margin-bottom: 16px; font-size: 24px;">⏳</div>
+          <div>Cargando posts...</div>
+        </div>
+      </div>
+    `
+  }
 
   try {
     const response = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
@@ -216,10 +372,12 @@ async function renderCards(reset = true) {
       hasMoreCards = true
     }
 
-    // Generate card elements
-    recordsArray.forEach((cardData) => {
-      const cardElement = generateCardElement(cardData)
-      cardsGrid.appendChild(cardElement)
+    // Generate card elements with staggered animation
+    recordsArray.forEach((cardData, index) => {
+      setTimeout(() => {
+        const cardElement = generateCardElement(cardData)
+        cardsGrid.appendChild(cardElement)
+      }, index * 50) // Stagger by 50ms
     })
 
     // Add loading indicator if there are more cards
@@ -227,9 +385,9 @@ async function renderCards(reset = true) {
       const loadingDiv = document.createElement("div")
       loadingDiv.className = "loading-indicator"
       loadingDiv.innerHTML = `
-        <div style="text-align: center; padding: 20px; color: #666; font-style: italic;">
+        <div style="text-align: center; padding: 20px; color: var(--foreground-subtle); font-style: italic;">
           <div style="margin-bottom: 10px;">⏳</div>
-          <div>Cargando más tarjetas...</div>
+          <div>Cargando más posts...</div>
         </div>
       `
       cardsGrid.appendChild(loadingDiv)
@@ -237,65 +395,122 @@ async function renderCards(reset = true) {
 
     currentPage++
     hasMoreCards = recordsArray.length >= 20 // Load 20 cards per page
+
+    // Update active posts count
+    updateActivePostsCount(recordsArray.length)
   } catch (error) {
     console.error("Error loading cards:", error)
     if (reset) {
-      cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjetas: ${error.message}</div>`
+      cardsGrid.innerHTML = `
+        <div class="error-message">
+          <div style="text-align: center; padding: 40px 20px;">
+            <div style="margin-bottom: 16px; font-size: 24px;">⚠️</div>
+            <div>Error cargando posts: ${error.message}</div>
+            <button onclick="renderCards(true)" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+              Reintentar
+            </button>
+          </div>
+        </div>
+      `
     }
   } finally {
     isLoading = false
   }
 }
 
-// Generate card display element - UPDATED FOR 4CHAN STYLE WITHOUT POST NUMBERS
+// Update active posts count in sidebar
+function updateActivePostsCount(count = null) {
+  const activePostsElement = document.getElementById("activePosts")
+  if (activePostsElement) {
+    if (count !== null) {
+      activePostsElement.textContent = count
+    } else {
+      // Fetch current count
+      activePostsElement.textContent = document.querySelectorAll(".card:not(.comment-card)").length
+    }
+  }
+}
+
+// Generate card display element - Enhanced modern design
 function generateCardElement(cardData) {
-  const cardDiv = document.createElement("div");
-  cardDiv.className = "card";
+  const cardDiv = document.createElement("div")
+  cardDiv.className = "card"
+  cardDiv.setAttribute("data-card-id", cardData.id)
 
-  const cardHeader = document.createElement("div");
-  cardHeader.className = "card-header";
-  cardHeader.innerHTML = `<span>Por: <span class="card-author">${cardData.card_author}</span></span>`;
+  const cardHeader = document.createElement("div")
+  cardHeader.className = "card-header"
+  cardHeader.innerHTML = `
+    <div>
+      <span class="card-author">${cardData.card_author}</span>
+      <span style="color: var(--foreground-subtle); margin-left: 8px;">•</span>
+      <span style="color: var(--foreground-subtle); margin-left: 8px; font-size: 12px;">${formatDate(cardData.card_date)}</span>
+    </div>
+  `
 
-  const cardTitle = document.createElement("div");
-  cardTitle.className = "card-title";
-  cardTitle.textContent = cardData.card_title;
+  const cardTitle = document.createElement("div")
+  cardTitle.className = "card-title"
+  cardTitle.textContent = cardData.card_title
 
-  const cardBody = document.createElement("div");
-  cardBody.className = "card-body";
-  cardBody.textContent = cardData.card_body;
+  const cardBody = document.createElement("div")
+  cardBody.className = "card-body"
+  cardBody.textContent = cardData.card_body
 
-  const cardFooter = document.createElement("div");
-  cardFooter.className = "card-footer";
+  const cardFooter = document.createElement("div")
+  cardFooter.className = "card-footer"
 
-  const cardInfo = document.createElement("div");
-  cardInfo.className = "card-info";
-  cardInfo.innerHTML = `<span>date: ${formatDate(cardData.card_date)}</span>`;
+  const cardInfo = document.createElement("div")
+  cardInfo.className = "card-info"
+  cardInfo.innerHTML = `
+    <span class="card-date">#${cardData.id}</span>
+  `
 
-  const cardActions = document.createElement("div");
-  cardActions.className = "card-actions";
+  const cardActions = document.createElement("div")
+  cardActions.className = "card-actions"
 
-  const likeButton = document.createElement("button");
-  likeButton.className = "action-btn like-btn";
-  likeButton.innerHTML = `<span style="color: #c33; font-size: 16px;">♥</span> <span>Likes [${cardData.like_count || 0}]</span>`;
-  likeButton.addEventListener("click", () => handleLike(cardData.id));
+  const likeButton = document.createElement("button")
+  likeButton.className = "action-btn like-btn"
+  likeButton.innerHTML = `
+    <i class="bi bi-heart"></i>
+    <span>${cardData.like_count || 0}</span>
+  `
+  likeButton.addEventListener("click", (e) => {
+    e.stopPropagation()
+    handleLike(cardData.id)
+  })
 
-  const commentButton = document.createElement("button");
-  commentButton.className = "action-btn comment-btn";
-  commentButton.innerHTML = `<span style="color: #2c5aa0; font-size: 16px;">💬</span> <span>Comentarios [${cardData.comment_count || 0}]</span>`;
-  commentButton.addEventListener("click", () => viewCardComments(cardData.id));
+  const commentButton = document.createElement("button")
+  commentButton.className = "action-btn comment-btn"
+  commentButton.innerHTML = `
+    <i class="bi bi-chat"></i>
+    <span>${cardData.comment_count || 0}</span>
+  `
+  commentButton.addEventListener("click", (e) => {
+    e.stopPropagation()
+    viewCardComments(cardData.id)
+  })
 
-  cardActions.appendChild(likeButton);
-  cardActions.appendChild(commentButton);
+  cardActions.appendChild(likeButton)
+  cardActions.appendChild(commentButton)
 
-  cardFooter.appendChild(cardInfo);
-  cardFooter.appendChild(cardActions);
+  cardFooter.appendChild(cardInfo)
+  cardFooter.appendChild(cardActions)
 
-  cardDiv.appendChild(cardHeader);
-  cardDiv.appendChild(cardTitle);
-  cardDiv.appendChild(cardBody);
-  cardDiv.appendChild(cardFooter);
+  cardDiv.appendChild(cardHeader)
+  cardDiv.appendChild(cardTitle)
+  cardDiv.appendChild(cardBody)
+  cardDiv.appendChild(cardFooter)
 
-  return cardDiv;
+  // Add click handler for full card
+  cardDiv.addEventListener("click", () => {
+    viewCardComments(cardData.id)
+  })
+
+  // Add hover effect enhancement
+  cardDiv.addEventListener("mouseenter", () => {
+    cardDiv.style.cursor = "pointer"
+  })
+
+  return cardDiv
 }
 
 // Handle like button click
@@ -316,9 +531,12 @@ async function handleLike(cardId) {
 
     if (!response.ok) {
       const errorMsg = responseData.error || responseData || "Unknown error"
-      alert(`Error: ${errorMsg}`)
+      showNotification(`Error: ${errorMsg}`, "error")
       return
     }
+
+    // Show success feedback
+    showNotification("¡Like agregado!", "success")
 
     // Refresh current view
     if (currentMode === "cards") {
@@ -327,7 +545,7 @@ async function handleLike(cardId) {
       viewCardComments(selectedCardId)
     }
   } catch (error) {
-    alert(`Error durante el like: ${error.message}`)
+    showNotification(`Error durante el like: ${error.message}`, "error")
   }
 }
 
@@ -335,6 +553,16 @@ async function handleLike(cardId) {
 async function viewCardComments(cardId) {
   currentMode = "comments"
   selectedCardId = cardId
+
+  // Show loading state
+  cardsGrid.innerHTML = `
+    <div class="loading-indicator">
+      <div style="text-align: center; padding: 40px 20px; color: var(--foreground-subtle);">
+        <div style="margin-bottom: 16px; font-size: 24px;">⏳</div>
+        <div>Cargando comentarios...</div>
+      </div>
+    </div>
+  `
 
   try {
     const response = await fetch(`${BASE_API_URL}/server/card/${cardId}`)
@@ -352,25 +580,35 @@ async function viewCardComments(cardId) {
     mainCardElement.classList.add("main-card")
     cardsGrid.appendChild(mainCardElement)
 
-    // Display comments
-    data.comments.forEach((commentData) => {
-      const commentElement = generateCommentElement(commentData)
-      cardsGrid.appendChild(commentElement)
+    // Display comments with animation
+    data.comments.forEach((commentData, index) => {
+      setTimeout(
+        () => {
+          const commentElement = generateCommentElement(commentData)
+          cardsGrid.appendChild(commentElement)
+        },
+        (index + 1) * 100,
+      )
     })
 
     // Add comment form
     const commentForm = document.createElement("div")
     commentForm.className = "comment-form"
     commentForm.innerHTML = `
-      <h4>Agregar comentario</h4>
+      <h4><i class="bi bi-chat-plus"></i> Agregar comentario</h4>
       <form id="commentForm">
         <div class="form-group">
-          <input type="text" class="form-input" id="commentAuthor" placeholder="Autor (opcional)" value="anónimo">
+          <label class="form-label">Autor</label>
+          <input type="text" class="form-input" id="commentAuthor" placeholder="Tu nombre (opcional)" value="anónimo">
         </div>
         <div class="form-group">
+          <label class="form-label">Comentario</label>
           <textarea class="form-textarea" id="commentBody" placeholder="Escribe tu comentario..." required></textarea>
         </div>
-        <button type="submit" class="submit-btn">Publicar comentario</button>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="backToCards()">Cancelar</button>
+          <button type="submit" class="btn-primary">Publicar comentario</button>
+        </div>
       </form>
     `
     cardsGrid.appendChild(commentForm)
@@ -382,9 +620,15 @@ async function viewCardComments(cardId) {
       const commentBody = document.getElementById("commentBody").value.trim()
 
       if (!commentBody) {
-        alert("El contenido del comentario es obligatorio.")
+        showNotification("El contenido del comentario es obligatorio.", "error")
         return
       }
+
+      // Show loading state
+      const submitBtn = e.target.querySelector(".btn-primary")
+      const originalText = submitBtn.textContent
+      submitBtn.textContent = "Publicando..."
+      submitBtn.disabled = true
 
       try {
         const response = await fetch(`${BASE_API_URL}/server/comment`, {
@@ -393,55 +637,73 @@ async function viewCardComments(cardId) {
           body: JSON.stringify({
             cardId: cardId,
             commentAuthor: commentAuthor,
-            commentBody: commentBody
-          })
+            commentBody: commentBody,
+          }),
         })
 
         if (!response.ok) {
           const errorData = await response.json()
-          alert(`Error: ${errorData.error || "Error al agregar comentario"}`)
+          showNotification(`Error: ${errorData.error || "Error al agregar comentario"}`, "error")
           return
         }
+
+        // Success feedback
+        showNotification("Comentario publicado exitosamente", "success")
 
         // Refresh comments view
         viewCardComments(cardId)
       } catch (error) {
-        alert(`Error durante el comentario: ${error.message}`)
+        showNotification(`Error durante el comentario: ${error.message}`, "error")
+      } finally {
+        submitBtn.textContent = originalText
+        submitBtn.disabled = false
       }
     })
 
     // Add back to cards button
     const backButton = document.createElement("button")
-    backButton.textContent = "← Volver a tarjetas"
+    backButton.innerHTML = `<i class="bi bi-arrow-left"></i> Volver a posts`
     backButton.className = "back-to-cards-btn"
     backButton.addEventListener("click", backToCards)
     cardsGrid.appendChild(backButton)
   } catch (error) {
     console.error("Error loading card:", error)
-    cardsGrid.innerHTML = `<div class="error-message">Error cargando tarjeta: ${error.message}</div>`
+    cardsGrid.innerHTML = `
+      <div class="error-message">
+        <div style="text-align: center; padding: 40px 20px;">
+          <div style="margin-bottom: 16px; font-size: 24px;">⚠️</div>
+          <div>Error cargando post: ${error.message}</div>
+          <button onclick="backToCards()" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Volver a posts
+          </button>
+        </div>
+      </div>
+    `
   }
 }
 
-// Generate comment display element - UPDATED FOR 4CHAN STYLE
+// Generate comment display element - Enhanced design
 function generateCommentElement(commentData) {
   const commentDiv = document.createElement("div")
   commentDiv.className = "card comment-card"
 
   const commentHeader = document.createElement("div")
   commentHeader.className = "card-header"
-  commentHeader.innerHTML = `<span class="card-author" style="color: #2c5aa0;">💬 Comentario por: ${commentData.comment_author}</span>`
+  commentHeader.innerHTML = `
+    <div>
+      <i class="bi bi-chat" style="color: var(--primary); margin-right: 6px;"></i>
+      <span class="card-author">${commentData.comment_author}</span>
+      <span style="color: var(--foreground-subtle); margin-left: 8px;">•</span>
+      <span style="color: var(--foreground-subtle); margin-left: 8px; font-size: 12px;">${formatDate(commentData.comment_date)}</span>
+    </div>
+  `
 
   const commentBody = document.createElement("div")
   commentBody.className = "card-body"
   commentBody.textContent = commentData.comment_body
 
-  const commentDate = document.createElement("div")
-  commentDate.className = "card-date"
-  commentDate.innerHTML = `<span style="font-size: 11px; color: #666;">${formatDate(commentData.comment_date)}</span>`
-
   commentDiv.appendChild(commentHeader)
   commentDiv.appendChild(commentBody)
-  commentDiv.appendChild(commentDate)
 
   return commentDiv
 }
@@ -454,39 +716,35 @@ function backToCards() {
   renderCards(true)
 }
 
-// Format date for display - FIXED to avoid duplication
+// Format date for display - Enhanced formatting
 function formatDate(utcDateInput) {
   try {
-    const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    const userLanguage = navigator.language
-    const convertedTimeZone = new Date(utcDateInput).toLocaleString(userLanguage, { timeZone: localTimeZone })
-    return `pref: ${userLanguage}/${localTimeZone.split('/').slice(0, 2).join('/')}, ${convertedTimeZone}`
+    const date = new Date(utcDateInput)
+    const now = new Date()
+    const diffMs = now - date
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
+
+    if (diffMins < 1) return "ahora"
+    if (diffMins < 60) return `${diffMins}m`
+    if (diffHours < 24) return `${diffHours}h`
+    if (diffDays < 7) return `${diffDays}d`
+
+    return date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+    })
   } catch (error) {
-    return `Error formatting date: ${error.message}`
+    return "fecha inválida"
   }
-}
-
-// Setup scroll to top functionality
-function setupScrollToTop() {
-  const scrollToTopBtn = document.getElementById("scrollToTopBtn")
-  const mobileSortBtn = document.getElementById("mobileSortBtn")
-
-  window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 300) {
-      scrollToTopBtn.classList.add("visible")
-      mobileSortBtn.classList.add("visible")
-    } else {
-      scrollToTopBtn.classList.remove("visible")
-      mobileSortBtn.classList.remove("visible")
-    }
-  })
 }
 
 // Scroll to top function
 function scrollToTop() {
   window.scrollTo({
     top: 0,
-    behavior: "smooth"
+    behavior: "smooth",
   })
 }
 
@@ -506,33 +764,40 @@ function setupInfiniteScroll() {
   })
 }
 
-// Handle add comment
-async function handleAddComment(cardId) {
-  const commentAuthor = prompt("Autor del comentario (opcional):") || "anónimo"
-  const commentBody = prompt("Contenido del comentario:")
+// Initialize infinite scroll
+setupInfiniteScroll()
 
-  if (!commentBody) return
-
-  try {
-    const response = await fetch(`${BASE_API_URL}/server/comment`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cardId: cardId,
-        commentAuthor: commentAuthor,
-        commentBody: commentBody
-      })
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json()
-      alert(`Error: ${errorData.error || "Error al agregar comentario"}`)
-      return
+// Add some utility functions for enhanced UX
+function debounce(func, wait) {
+  let timeout
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout)
+      func(...args)
     }
-
-    // Refresh comments view
-    viewCardComments(cardId)
-  } catch (error) {
-    alert(`Error durante el comentario: ${error.message}`)
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
   }
 }
+
+// Enhanced search functionality (placeholder)
+function initializeSearch() {
+  const searchInput = document.querySelector(".search-input")
+  if (searchInput) {
+    searchInput.addEventListener(
+      "input",
+      debounce((e) => {
+        const query = e.target.value.trim()
+        if (query.length > 2) {
+          // Implement search functionality here
+          console.log("Searching for:", query)
+        }
+      }, 300),
+    )
+  }
+}
+
+// Initialize search when search modal opens
+document.getElementById("searchBtn").addEventListener("click", () => {
+  setTimeout(initializeSearch, 100)
+})

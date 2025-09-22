@@ -9,12 +9,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Liberation+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile.css">
   <link rel="stylesheet" href="desktop.css">
@@ -22,15 +18,16 @@
 
 <body>
   <div class="page-container">
-    <!-- Header with Salvadoran 4chan styling -->
+    <!-- Header with modern dark styling -->
     <header class="sticky-header">
       <div class="header-container">
         <div class="header-branding">
           <h1 class="site-title">ATLACATL</h1>
+          <span class="site-subtitle">Forum</span>
         </div>
         <nav class="header-actions">
-          <button class="header-icon-button" id="addMessageBtn" title="Agregar mensaje">
-            <i class="bi bi-envelope-plus"></i>
+          <button class="header-icon-button" id="addMessageBtn" title="Crear post">
+            <i class="bi bi-plus-lg"></i>
           </button>
           <button class="header-icon-button" id="searchBtn" title="Buscar">
             <i class="bi bi-search"></i>
@@ -41,8 +38,8 @@
           <button class="header-icon-button" id="infoBtn" title="Información">
             <i class="bi bi-info-circle"></i>
           </button>
-          <button class="header-icon-button" id="codeBtn" title="Consola web">
-            <i class="bi bi-code-slash"></i>
+          <button class="header-icon-button" id="codeBtn" title="Consola">
+            <i class="bi bi-terminal"></i>
           </button>
         </nav>
       </div>
@@ -53,16 +50,39 @@
       <section class="three-column-grid">
         <!-- Left Sidebar -->
         <aside class="left-sidebar">
-          <div class="left-sidebar-card">
-            <h2 class="left-sidebar-title">Página universal</h2>
-            <div class="left-sidebar-placeholder">
-              <p>Contenido adicional aquí</p>
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              <i class="bi bi-info-circle"></i>
+              <h3>Información</h3>
+            </div>
+            <div class="sidebar-content">
+              <div class="info-item">
+                <span class="info-label">Posts activos</span>
+                <span class="info-value" id="activePosts">-</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Usuarios online</span>
+                <span class="info-value">42</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Total posts</span>
+                <span class="info-value">1,337</span>
+              </div>
             </div>
           </div>
         </aside>
 
         <!-- Cards container -->
         <section class="middle-feed">
+          <div class="feed-header">
+            <h2 class="feed-title">Posts recientes</h2>
+            <div class="feed-actions">
+              <button class="sort-toggle" id="sortToggle">
+                <i class="bi bi-funnel"></i>
+                <span>Ordenar</span>
+              </button>
+            </div>
+          </div>
           <div class="cards-grid" id="cardsGrid">
             <!-- Cards will be dynamically inserted here -->
           </div>
@@ -70,17 +90,26 @@
 
         <!-- Right Sidebar -->
         <aside class="right-sidebar">
-          <div class="right-sidebar-card">
-            <h2 class="right-sidebar-title">Ordenar por</h2>
-            <div class="sort-control-wrapper">
-              <label for="sortSelect" class="sort-label">Ordenar:</label>
-              <select class="sort-select" id="sortSelect">
-                <option value="newest">Más recientes</option>
-                <option value="oldest">Más antiguas</option>
-                <option value="likes">Más populares</option>
-              </select>
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              <i class="bi bi-sliders"></i>
+              <h3>Filtros</h3>
             </div>
-            <div class="right-sidebar-empty-space"></div>
+            <div class="sidebar-content">
+              <div class="sort-control-wrapper">
+                <label for="sortSelect" class="sort-label">Ordenar por:</label>
+                <select class="sort-select" id="sortSelect">
+                  <option value="newest">Más recientes</option>
+                  <option value="oldest">Más antiguos</option>
+                  <option value="likes">Más populares</option>
+                </select>
+              </div>
+              <div class="filter-tags">
+                <span class="filter-tag active">Todos</span>
+                <span class="filter-tag">Populares</span>
+                <span class="filter-tag">Sin respuesta</span>
+              </div>
+            </div>
           </div>
         </aside>
       </section>
@@ -89,7 +118,12 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-container">
-        <p class="footer-text">© 2025 Atlacatl Softworks.</p>
+        <p class="footer-text">© 2025 Atlacatl Softworks</p>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Términos</a>
+          <a href="#" class="footer-link">Privacidad</a>
+          <a href="#" class="footer-link">Contacto</a>
+        </div>
       </div>
     </footer>
 
@@ -97,7 +131,10 @@
     <div class="modal-overlay" id="cardGeneratorModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title">Creador de tarjetas</h2>
+          <div class="modal-title-section">
+            <i class="bi bi-plus-circle"></i>
+            <h2 class="modal-title">Crear nuevo post</h2>
+          </div>
           <button class="modal-close" id="closeModal">
             <i class="bi bi-x"></i>
           </button>
@@ -105,21 +142,29 @@
         <div class="modal-body">
           <form class="card-form" id="cardForm">
             <div class="form-group">
-              <input type="text" class="form-input" id="cardAuthor" placeholder="Autor" required>
+              <label class="form-label">Autor</label>
+              <input type="text" class="form-input" id="cardAuthor" placeholder="Tu nombre (opcional)">
             </div>
             <div class="form-group">
-              <input type="text" class="form-input" id="cardTitle" placeholder="Título" required>
+              <label class="form-label">Título</label>
+              <input type="text" class="form-input" id="cardTitle" placeholder="Título del post" required>
             </div>
             <div class="form-group">
-              <textarea class="form-textarea" id="cardBody" placeholder="Cuerpo" rows="4" required></textarea>
+              <label class="form-label">Contenido</label>
+              <textarea class="form-textarea" id="cardBody" placeholder="Escribe tu mensaje..." rows="6"
+                required></textarea>
             </div>
             <div class="form-group">
-              <label class="switch-label">
+              <label class="switch-container">
                 <input type="checkbox" class="switch-input" id="aiSwitch">
-                <span class="switch-text">Switch para activar AI</span>
+                <span class="switch-slider"></span>
+                <span class="switch-text">Mejorar con AI</span>
               </label>
             </div>
-            <button type="submit" class="submit-btn">Publicar record</button>
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" onclick="closeCardGenerator()">Cancelar</button>
+              <button type="submit" class="btn-primary">Publicar post</button>
+            </div>
           </form>
         </div>
       </div>
@@ -129,14 +174,24 @@
     <div class="modal-overlay" id="searchModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title">Buscar</h2>
+          <div class="modal-title-section">
+            <i class="bi bi-search"></i>
+            <h2 class="modal-title">Buscar posts</h2>
+          </div>
           <button class="modal-close" id="closeSearchModal">
             <i class="bi bi-x"></i>
           </button>
         </div>
         <div class="modal-body">
-          <div class="search-placeholder">
-            <p>Funcionalidad de búsqueda - Próximamente</p>
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="bi bi-search"></i>
+              <input type="text" class="search-input" placeholder="Buscar en posts...">
+            </div>
+            <div class="search-placeholder">
+              <i class="bi bi-search" style="font-size: 48px; opacity: 0.3;"></i>
+              <p>Funcionalidad de búsqueda próximamente</p>
+            </div>
           </div>
         </div>
       </div>
@@ -146,14 +201,18 @@
     <div class="modal-overlay" id="translateModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title">Traducir</h2>
+          <div class="modal-title-section">
+            <i class="bi bi-translate"></i>
+            <h2 class="modal-title">Traducir</h2>
+          </div>
           <button class="modal-close" id="closeTranslateModal">
             <i class="bi bi-x"></i>
           </button>
         </div>
         <div class="modal-body">
           <div class="translate-placeholder">
-            <p>Funcionalidad de traducción - Próximamente</p>
+            <i class="bi bi-translate" style="font-size: 48px; opacity: 0.3;"></i>
+            <p>Funcionalidad de traducción próximamente</p>
           </div>
         </div>
       </div>
@@ -161,16 +220,25 @@
 
     <!-- Code Console Modal -->
     <div class="modal-overlay" id="codeModal">
-      <div class="modal-content">
+      <div class="modal-content code-modal">
         <div class="modal-header">
-          <h2 class="modal-title">ATLACATL Web Console</h2>
+          <div class="modal-title-section">
+            <i class="bi bi-terminal"></i>
+            <h2 class="modal-title">ATLACATL Console</h2>
+          </div>
           <button class="modal-close" id="closeCodeModal">
             <i class="bi bi-x"></i>
           </button>
         </div>
         <div class="modal-body">
-          <div class="console-placeholder">
-            <p>Consola web ATLACATL - Próximamente</p>
+          <div class="console-container">
+            <div class="console-header">
+              <span class="console-prompt">atlacatl@forum:~$</span>
+            </div>
+            <div class="console-content">
+              <p>Consola web ATLACATL - Próximamente</p>
+              <p class="console-cursor">_</p>
+            </div>
           </div>
         </div>
       </div>
@@ -185,16 +253,28 @@
     <div class="modal-overlay" id="mobileFilterModal">
       <div class="modal-content mobile-filter-modal">
         <div class="modal-header">
-          <h2 class="modal-title">Filtrar tarjetas</h2>
+          <div class="modal-title-section">
+            <i class="bi bi-funnel"></i>
+            <h2 class="modal-title">Filtrar posts</h2>
+          </div>
           <button class="modal-close" id="closeMobileFilterModal">
             <i class="bi bi-x"></i>
           </button>
         </div>
         <div class="modal-body">
           <div class="filter-options">
-            <button class="filter-option active" data-value="newest">Más recientes</button>
-            <button class="filter-option" data-value="oldest">Más antiguas</button>
-            <button class="filter-option" data-value="likes">Más populares</button>
+            <button class="filter-option active" data-value="newest">
+              <i class="bi bi-clock"></i>
+              <span>Más recientes</span>
+            </button>
+            <button class="filter-option" data-value="oldest">
+              <i class="bi bi-clock-history"></i>
+              <span>Más antiguos</span>
+            </button>
+            <button class="filter-option" data-value="likes">
+              <i class="bi bi-heart"></i>
+              <span>Más populares</span>
+            </button>
           </div>
         </div>
       </div>
