@@ -17,11 +17,7 @@ const sortSelect = document.getElementById("sortSelect")
 // Initialize app when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
-  // Set default sort to newest
-  if (sortSelect) {
-    sortSelect.value = "newest"
-  }
-  renderCards(true) // Load with default sorting (newest)
+  renderCards() // Load with default sorting (newest)
 })
 
 // Initialize all event listeners
@@ -32,22 +28,6 @@ function initializeEventListeners() {
   document.getElementById("translateBtn").addEventListener("click", openTranslateModal)
   document.getElementById("infoBtn").addEventListener("click", () => window.location.href = "/about.html")
   document.getElementById("codeBtn").addEventListener("click", openCodeModal)
-  
-  // Mobile filter button
-  const mobileFilterBtn = document.getElementById("mobileFilterBtn")
-  if (mobileFilterBtn) {
-    // Only show on mobile
-    if (window.innerWidth <= 768) {
-      mobileFilterBtn.style.display = "flex"
-    }
-    mobileFilterBtn.addEventListener("click", () => {
-      document.querySelector(".right-sidebar-card").style.display = "block"
-    })
-    // Hide/show based on screen size
-    window.addEventListener("resize", () => {
-      mobileFilterBtn.style.display = window.innerWidth <= 768 ? "flex" : "none"
-    })
-  }
 
   // Make ATLACATL branding clickable for scroll to top
   document.querySelector(".site-title").addEventListener("click", scrollToTop)
@@ -134,6 +114,32 @@ function closeCodeModal() {
   document.body.style.overflow = ""
 }
 
+function openMobileFilterModal() {
+  const mobileFilterModal = document.getElementById("mobileFilterModal")
+  if (mobileFilterModal) {
+    mobileFilterModal.classList.add("active")
+    document.body.style.overflow = "hidden"
+  }
+}
+
+function closeMobileFilterModal() {
+  const mobileFilterModal = document.getElementById("mobileFilterModal")
+  if (mobileFilterModal) {
+    mobileFilterModal.classList.remove("active")
+    document.body.style.overflow = ""
+  }
+}
+
+function openMobileFilterModal() {
+  document.getElementById("mobileFilterModal").classList.add("active")
+  document.body.style.overflow = "hidden"
+}
+
+function closeMobileFilterModal() {
+  document.getElementById("mobileFilterModal").classList.remove("active")
+  document.body.style.overflow = ""
+}
+
 // Handle card form submission
 async function handleCardSubmit(e) {
   e.preventDefault()
@@ -193,8 +199,7 @@ async function renderCards(reset = true) {
   if (isLoading) return
 
   isLoading = true
-  // Default to "newest" if sortSelect isn't available yet
-  const sortType = sortSelect ? sortSelect.value : "newest"
+  const sortType = sortSelect.value
 
   try {
     const response = await fetch(`${BASE_API_URL}/server/get/sorted/${sortType}`)
@@ -242,17 +247,14 @@ async function renderCards(reset = true) {
   }
 }
 
-// Generate card display element - UPDATED FOR 4CHAN STYLE
+// Generate card display element - UPDATED FOR 4CHAN STYLE WITHOUT POST NUMBERS
 function generateCardElement(cardData) {
   const cardDiv = document.createElement("div");
   cardDiv.className = "card";
 
   const cardHeader = document.createElement("div");
   cardHeader.className = "card-header";
-  cardHeader.innerHTML = `
-    <span>Por: <span class="card-author">${cardData.card_author}</span></span>
-    <span style="color: #2c5aa0; font-size: 11px; font-weight: normal;">${formatDate(cardData.card_date)}</span>
-  `;
+  cardHeader.innerHTML = `<span>Por: <span class="card-author">${cardData.card_author}</span></span>`;
 
   const cardTitle = document.createElement("div");
   cardTitle.className = "card-title";
@@ -267,21 +269,19 @@ function generateCardElement(cardData) {
 
   const cardInfo = document.createElement("div");
   cardInfo.className = "card-info";
-  cardInfo.innerHTML = `
-    <span>date: ${formatDate(cardData.card_date)}</span>
-  `;
+  cardInfo.innerHTML = `<span>date: ${formatDate(cardData.card_date)}</span>`;
 
   const cardActions = document.createElement("div");
   cardActions.className = "card-actions";
 
   const likeButton = document.createElement("button");
   likeButton.className = "action-btn like-btn";
-  likeButton.innerHTML = `<span style="color: #c33;">♥</span> <span>Likes [${cardData.like_count || 0}]</span>`;
+  likeButton.innerHTML = `<span style="color: #c33; font-size: 16px;">♥</span> <span>Likes [${cardData.like_count || 0}]</span>`;
   likeButton.addEventListener("click", () => handleLike(cardData.id));
 
   const commentButton = document.createElement("button");
   commentButton.className = "action-btn comment-btn";
-  commentButton.innerHTML = `<span style="color: #2c5aa0;">💬</span> <span>Comentarios [${cardData.comment_count || 0}]</span>`;
+  commentButton.innerHTML = `<span style="color: #2c5aa0; font-size: 16px;">💬</span> <span>Comentarios [${cardData.comment_count || 0}]</span>`;
   commentButton.addEventListener("click", () => viewCardComments(cardData.id));
 
   cardActions.appendChild(likeButton);
@@ -484,13 +484,10 @@ function setupScrollToTop() {
 
 // Scroll to top function
 function scrollToTop() {
-  const cardsGrid = document.querySelector('.cards-grid')
-  if (cardsGrid) {
-    cardsGrid.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  })
 }
 
 // Setup infinite scroll

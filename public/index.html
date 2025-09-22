@@ -44,9 +44,6 @@
           <button class="header-icon-button" id="codeBtn" title="Consola web">
             <i class="bi bi-code-slash"></i>
           </button>
-          <button class="header-icon-button" id="filterBtn" title="Filtrar">
-            <i class="bi bi-funnel"></i>
-          </button>
         </nav>
       </div>
     </header>
@@ -66,10 +63,8 @@
 
         <!-- Cards container -->
         <section class="middle-feed">
-          <div class="cards-container">
-            <div class="cards-grid" id="cardsGrid">
-              <!-- Cards will be dynamically inserted here -->
-            </div>
+          <div class="cards-grid" id="cardsGrid">
+            <!-- Cards will be dynamically inserted here -->
           </div>
         </section>
 
@@ -182,10 +177,28 @@
     </div>
 
     <!-- Mobile filter button -->
-    <button class="mobile-filter-btn" id="mobileFilterBtn" style="display: none;">
+    <button class="mobile-filter-btn" id="mobileFilterBtn" title="Filtrar">
       <i class="bi bi-funnel"></i>
     </button>
 
+    <!-- Mobile filter modal -->
+    <div class="modal-overlay" id="mobileFilterModal">
+      <div class="modal-content mobile-filter-modal">
+        <div class="modal-header">
+          <h2 class="modal-title">Filtrar tarjetas</h2>
+          <button class="modal-close" id="closeMobileFilterModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="filter-options">
+            <button class="filter-option active" data-value="newest">Más recientes</button>
+            <button class="filter-option" data-value="oldest">Más antiguas</button>
+            <button class="filter-option" data-value="likes">Más populares</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="dom.js"></script>

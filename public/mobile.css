@@ -4,6 +4,7 @@
   .page-container {
     border-left: none;
     border-right: none;
+    height: 100vh;
   }
 
   .header-container {
@@ -32,32 +33,23 @@
 
   .content-wrapper {
     padding: 8px;
-    height: calc(100vh - 80px);
+    flex: 1;
+    overflow: hidden;
   }
 
   .three-column-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 0;
     height: 100%;
   }
 
-  /* Hide sidebars on mobile, show them at bottom */
-  .left-sidebar-card,
-  .right-sidebar-card {
-    order: 2;
-    position: static;
+  /* Hide sidebars on mobile */
+  .left-sidebar,
+  .right-sidebar {
     display: none;
   }
 
   .middle-feed {
-    order: 1;
-    height: calc(100vh - 120px);
-    padding: 8px;
-  }
-
-  .cards-container {
-    background: #fff;
-    border-radius: 4px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -66,13 +58,19 @@
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-    height: 100%;
+    flex: 1;
     overflow-y: auto;
+    padding: 4px;
   }
 
   /* Fixed height cards on mobile */
   .card {
-    height: 180px;
+    height: 200px;
+  }
+
+  /* Show mobile filter button */
+  .mobile-filter-btn {
+    display: block;
   }
 
   /* Mobile sidebar styling */
