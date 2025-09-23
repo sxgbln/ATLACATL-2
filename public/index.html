@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link
     href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
     rel="stylesheet">
@@ -26,7 +24,6 @@
       <div class="header-container">
         <div class="header-branding">
           <h1 class="site-title">ATLACATL</h1>
-          <span class="site-subtitle">Forum</span>
         </div>
         <nav class="header-actions">
           <button class="header-icon-button" id="addMessageBtn" title="Crear post">
@@ -50,74 +47,72 @@
 
     <!-- Main content area -->
     <main class="content-wrapper">
-      <section class="three-column-grid">
-        <!-- Left Sidebar -->
-        <aside class="left-sidebar">
-          <div class="sidebar-card">
-            <div class="sidebar-header">
-              Página común
-            </div>
-            <div class="sidebar-content">
-              <!-- Placeholder container for future AdSense integration -->
-              <div class="ad-placeholder">
-                Contenido adicional aquí
+      <div class="dashboard-container">
+        <section class="three-column-grid">
+          <!-- Left Sidebar -->
+          <aside class="left-sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-header">
+                Página común
+              </div>
+              <div class="sidebar-content">
+                <!-- Placeholder container for future AdSense integration -->
+                <div class="ad-placeholder">
+                  Pondremos publicidad patriotica aqui
+                </div>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
 
-        <!-- Cards container -->
-        <section class="middle-feed">
-          <div class="feed-header">
-            <h2 class="feed-title">Posts recientes</h2>
-            <div class="feed-actions">
-              <button class="sort-toggle" id="sortToggle">
-                <i class="bi bi-funnel"></i>
-                <span>Ordenar</span>
-              </button>
+          <!-- Cards container -->
+          <section class="middle-feed">
+            <div class="feed-header">
+              <h2 class="feed-title">Posts recientes</h2>
             </div>
-          </div>
-          <div class="cards-grid" id="cardsGrid">
-            <!-- Cards will be dynamically inserted here -->
-          </div>
-          <!-- Load more button instead of automatic loading -->
-          <button class="load-more-btn" id="loadMoreBtn" style="display: none;">
-            Cargar más
-          </button>
+            <div class="cards-container">
+              <div class="cards-grid" id="cardsGrid">
+                <!-- Cards will be dynamically inserted here -->
+              </div>
+            </div>
+            <!-- Load more button instead of automatic loading -->
+            <button class="load-more-btn" id="loadMoreBtn" style="display: none;">
+              Cargar más
+            </button>
+          </section>
+
+          <!-- Right Sidebar -->
+          <aside class="right-sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-header">
+                Mostrar según parámetros
+              </div>
+              <div class="sidebar-content">
+                <!-- Single filter dropdown, no redundancy -->
+                <div class="sort-control-wrapper">
+                  <label for="sortSelect" class="sort-label">Ordenar:</label>
+                  <select class="sort-select" id="sortSelect">
+                    <option value="newest">Más nuevas</option>
+                    <option value="oldest">Más antiguas</option>
+                    <option value="likes">Más populares</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- AdSense placeholder container -->
+            <div class="sidebar-card">
+              <div class="sidebar-header">
+                Publicidad
+              </div>
+              <div class="sidebar-content">
+                <div class="ad-placeholder">
+                  Pondremos publicidad patriotica aqui
+                </div>
+              </div>
+            </div>
+          </aside>
         </section>
-
-        <!-- Right Sidebar -->
-        <aside class="right-sidebar">
-          <div class="sidebar-card">
-            <div class="sidebar-header">
-              Mostrar según parámetros
-            </div>
-            <div class="sidebar-content">
-              <!-- Single filter dropdown, no redundancy -->
-              <div class="sort-control-wrapper">
-                <label for="sortSelect" class="sort-label">Ordenar:</label>
-                <select class="sort-select" id="sortSelect">
-                  <option value="newest">Más nuevas</option>
-                  <option value="oldest">Más antiguas</option>
-                  <option value="likes">Más populares</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- AdSense placeholder container -->
-          <div class="sidebar-card">
-            <div class="sidebar-header">
-              Publicidad
-            </div>
-            <div class="sidebar-content">
-              <div class="ad-placeholder">
-                Espacio para AdSense
-              </div>
-            </div>
-          </div>
-        </aside>
-      </section>
+      </div>
     </main>
 
     <!-- Footer -->

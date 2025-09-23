@@ -3,7 +3,14 @@
 /* Desktop styles with 4chan color palette and no redundant filters */
 @media (min-width: 769px) {
   .content-wrapper {
+    padding: 0;
+  }
+
+  /* Enhanced dashboard container for desktop */
+  .dashboard-container {
+    margin: 8px;
     padding: 8px;
+    border: 2px solid var(--border);
   }
 
   .three-column-grid {
@@ -22,14 +29,23 @@
     top: 60px;
   }
 
-  /* Enhanced desktop card layout */
+  /* Enhanced desktop cards container with proper visual containment */
+  .cards-container {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 8px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
   .cards-grid {
-    gap: 8px;
+    gap: 0;
   }
 
   .card {
     transition: background-color 0.2s ease;
     border-radius: 0;
+    min-height: 120px;
   }
 
   .card:hover {
@@ -77,7 +93,8 @@
   }
 
   /* Remove redundant filter options - only show in right sidebar */
-  .feed-actions .sort-toggle {
+  .feed-actions,
+  .sort-toggle {
     display: none;
     /* Hide the redundant sort toggle in feed header */
   }
@@ -89,12 +106,13 @@
     gap: 12px;
   }
 
-  .content-wrapper {
+  .dashboard-container {
+    margin: 12px;
     padding: 12px;
   }
 
   .cards-grid {
-    gap: 8px;
+    gap: 0;
   }
 
   .sidebar-content {
@@ -112,12 +130,14 @@
     padding: 8px 20px;
   }
 
-  .content-wrapper {
+  .dashboard-container {
+    margin: 16px;
     padding: 16px;
   }
 
   .card {
-    padding: 8px;
+    padding: 12px 8px;
+    min-height: 130px;
   }
 
   .card-title {
@@ -126,7 +146,7 @@
 
   .card-body {
     font-size: 12px;
-    max-height: 100px;
+    max-height: 70px;
     -webkit-line-clamp: 4;
   }
 }
@@ -135,20 +155,20 @@
 @media (min-width: 769px) {
 
   /* Simple scrollbar for desktop */
-  .cards-grid::-webkit-scrollbar {
+  .cards-container::-webkit-scrollbar {
     width: 12px;
   }
 
-  .cards-grid::-webkit-scrollbar-track {
+  .cards-container::-webkit-scrollbar-track {
     background: var(--surface-elevated);
   }
 
-  .cards-grid::-webkit-scrollbar-thumb {
+  .cards-container::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 0;
   }
 
-  .cards-grid::-webkit-scrollbar-thumb:hover {
+  .cards-container::-webkit-scrollbar-thumb:hover {
     background: var(--border-hover);
   }
 

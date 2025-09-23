@@ -450,12 +450,7 @@ function generateCardElement(cardData) {
     <span class="card-date">${formatDate(cardData.card_date)}</span>
   `
 
-  const cardId = document.createElement("div")
-  cardId.className = "card-id"
-  cardId.textContent = `No.${cardData.id}`
-
   cardHeader.appendChild(cardMeta)
-  cardHeader.appendChild(cardId)
 
   const cardTitle = document.createElement("div")
   cardTitle.className = "card-title"
@@ -502,7 +497,6 @@ function generateCardElement(cardData) {
   cardDiv.appendChild(cardBody)
   cardDiv.appendChild(cardFooter)
 
-  // Add click handler for full card
   cardDiv.addEventListener("click", () => {
     viewCardComments(cardData.id)
   })
@@ -577,15 +571,10 @@ async function viewCardComments(cardId) {
     mainCardElement.classList.add("main-card")
     cardsGrid.appendChild(mainCardElement)
 
-    // Display comments with animation
-    data.comments.forEach((commentData, index) => {
-      setTimeout(
-        () => {
-          const commentElement = generateCommentElement(commentData)
-          cardsGrid.appendChild(commentElement)
-        },
-        (index + 1) * 100,
-      )
+    // Display ALL comments at once without lazy loading
+    data.comments.forEach((commentData) => {
+      const commentElement = generateCommentElement(commentData)
+      cardsGrid.appendChild(commentElement)
     })
 
     // Add comment form
@@ -717,20 +706,16 @@ function backToCards() {
 function formatDate(utcDateInput) {
   try {
     const date = new Date(utcDateInput)
-    const now = new Date()
-    const diffMs = now - date
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return "ahora"
-    if (diffMins < 60) return `${diffMins}m`
-    if (diffHours < 24) return `${diffHours}h`
-    if (diffDays < 7) return `${diffDays}d`
-
-    return date.toLocaleDateString("es-ES", {
+    // Return full datetime format as requested: 9/7/2025, 12:08:00 AM
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "numeric",
       day: "numeric",
-      month: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     })
   } catch (error) {
     return "fecha inválida"
