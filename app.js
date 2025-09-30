@@ -45,11 +45,8 @@ Instrucciones de respuesta:
 Habla en primera persona como asistente. No reveles que te llamas GFAS a menos que te pregunten directamente sobre tu nombre.
 `
 
-const genAI = new GoogleGenAI(GEMINI_API_KEY)
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-lite",
-  systemInstruction: systemInstruction,
-})
+// Updated initialization for new SDK
+const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY })
 
 // Middleware setup
 app.use(express.json())
@@ -285,6 +282,7 @@ app.post("/server/like", likeLimiter, async (request, response) => {
   }
 })
 
+// Updated /server/gemini endpoint for new SDK
 app.post("/server/gemini", cardLimiter, async (request, response) => {
   console.log("POST AI request received:", request.body)
 
@@ -299,7 +297,7 @@ app.post("/server/gemini", cardLimiter, async (request, response) => {
       return response.status(400).json({ error: "Título y contenido son obligatorios." })
     }
 
-    // Create prompt for Gemini
+    // Create prompt for Gemini (keep structured contents)
     const contents = [
       {
         role: 'user',
@@ -315,9 +313,15 @@ Por favor, genera una respuesta o complemento apropiado para este contenido en A
       }
     ]
 
-    // Get AI response
-    const result = await model.generateContent({ contents })
-    const aiResponse = result.response.text()
+    // Get AI response using new SDK method
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",  // Valid model name
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction  // Pass system instruction here
+      }
+    })
+    const aiResponse = result.text  // Updated extraction
 
     // Combine user content with AI response
     const combinedBody = `${cardBody}
