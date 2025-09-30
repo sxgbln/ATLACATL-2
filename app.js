@@ -14,7 +14,7 @@ const {
   poolGetCardById,
 } = require("./config/conn.js")
 const rateLimit = require("express-rate-limit")
-const { GoogleGenerativeAI } = require("@google/genai")
+const { GoogleGenAI } = require("@google/genai")
 
 const app = express()
 const port = 3000
@@ -45,7 +45,7 @@ Instrucciones de respuesta:
 Habla en primera persona como asistente. No reveles que te llamas GFAS a menos que te pregunten directamente sobre tu nombre.
 `
 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+const genAI = new GoogleGenAI(GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({
   model: "gemini-2.0-flash-lite",
   systemInstruction: systemInstruction,
