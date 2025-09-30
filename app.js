@@ -14,7 +14,7 @@ const {
   poolGetCardById,
 } = require("./config/conn.js")
 const rateLimit = require("express-rate-limit")
-const { GoogleGenerativeAI } = require("@google/generative-ai")
+const { GoogleGenerativeAI } = require("@google/genai")
 
 const app = express()
 const port = 3000
@@ -47,7 +47,7 @@ Habla en primera persona como asistente. No reveles que te llamas GFAS a menos q
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash-lite",
   systemInstruction: systemInstruction,
 })
 
@@ -300,14 +300,23 @@ app.post("/server/gemini", cardLimiter, async (request, response) => {
     }
 
     // Create prompt for Gemini
-    const prompt = `Usuario: ${cardAuthor || "anónimo"}
+    const contents = [
+      {
+        role: 'user',
+        parts: [
+          {
+            text: `Usuario: ${cardAuthor || "anónimo"}
 Título: ${cardTitle}
 Contenido: ${cardBody}
 
 Por favor, genera una respuesta o complemento apropiado para este contenido en Atlacatl.net.`
+          }
+        ]
+      }
+    ]
 
     // Get AI response
-    const result = await model.generateContent(prompt)
+    const result = await model.generateContent({ contents })
     const aiResponse = result.response.text()
 
     // Combine user content with AI response
