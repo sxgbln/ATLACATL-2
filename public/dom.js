@@ -26,7 +26,21 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeEventListeners()
   renderCards() // Load with default sorting (newest)
   updateActivePostsCount()
+  optimizeForMobile()
 })
+
+// Optimize for mobile devices
+function optimizeForMobile() {
+  const isMobile = window.innerWidth <= 768
+  if (isMobile) {
+    // Prevent zoom on iOS when focusing inputs
+    document.addEventListener('touchmove', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+     e.stopPropagation()
+      }
+    }, { passive: true })
+  }
+}
 
 // Initialize all event listeners
 function initializeEventListeners() {
@@ -60,7 +74,7 @@ function initializeEventListeners() {
     if (e.target.id === "cardGeneratorModal") closeCardGenerator()
   })
   document.getElementById("searchModal").addEventListener("click", (e) => {
-    if (e.target.id === "searchModal") closeSearchModal()
+ if (e.target.id === "searchModal") closeSearchModal()
   })
   document.getElementById("translateModal").addEventListener("click", (e) => {
     if (e.target.id === "translateModal") closeTranslateModal()
@@ -97,18 +111,18 @@ function initializeEventListeners() {
       // Apply filter and close modal
       renderCards(true)
       closeMobileFilterModal()
-    })
+})
   })
 
   // Sort toggle for mobile
-  const sortToggle = document.getElementById("sortToggle")
+const sortToggle = document.getElementById("sortToggle")
   if (sortToggle) {
     sortToggle.addEventListener("click", openMobileFilterModal)
-  }
+}
 
   // Filter tags functionality
   document.querySelectorAll(".filter-tag").forEach((tag) => {
-    tag.addEventListener("click", (e) => {
+  tag.addEventListener("click", (e) => {
       document.querySelectorAll(".filter-tag").forEach((t) => t.classList.remove("active"))
       e.currentTarget.classList.add("active")
       // Add filter logic here if needed
@@ -117,18 +131,23 @@ function initializeEventListeners() {
 
   // Keyboard shortcuts
   document.addEventListener("keydown", handleKeyboardShortcuts)
+
+  // Handle window resize for responsive adjustments
+  window.addEventListener("resize", debounce(() => {
+    optimizeForMobile()
+  }, 250))
 }
 
 // Keyboard shortcuts
 function handleKeyboardShortcuts(e) {
   // Only trigger if not typing in an input
-  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return
+if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return
 
   switch (e.key) {
-    case "n":
+  case "n":
     case "N":
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault()
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
         openCardGenerator()
       }
       break
@@ -137,8 +156,8 @@ function handleKeyboardShortcuts(e) {
       openSearchModal()
       break
     case "Escape":
-      closeAllModals()
-      break
+    closeAllModals()
+break
   }
 }
 
@@ -157,7 +176,10 @@ function openCardGenerator() {
   document.body.style.overflow = "hidden"
   // Focus on first input
   setTimeout(() => {
-    document.getElementById("cardAuthor").focus()
+    const authorInput = document.getElementById("cardAuthor")
+    if (authorInput) {
+      authorInput.focus()
+    }
   }, 100)
 }
 
@@ -170,7 +192,7 @@ function closeCardGenerator() {
 
 function openSearchModal() {
   document.getElementById("searchModal").classList.add("active")
-  document.body.style.overflow = "hidden"
+document.body.style.overflow = "hidden"
   // Focus on search input if it exists
   setTimeout(() => {
     const searchInput = document.querySelector(".search-input")
@@ -251,7 +273,7 @@ async function handleCardSubmit(e) {
 
   const cardData = {
     cardTitle: cardTitle,
-    cardBody: cardBody,
+  cardBody: cardBody,
     cardAuthor: cardAuthor,
   }
 
@@ -272,8 +294,8 @@ async function handleCardSubmit(e) {
     }
 
     if (!response.ok) {
-      const errorMsg = responseData.error || responseData || "Unknown error"
-      showNotification(`Error: ${errorMsg}`, "error")
+   const errorMsg = responseData.error || responseData || "Unknown error"
+    showNotification(`Error: ${errorMsg}`, "error")
       return
     }
 
@@ -284,7 +306,7 @@ async function handleCardSubmit(e) {
     updateActivePostsCount()
 
     if (isAIEnabled && responseData.aiResponse) {
-      console.log("AI Response:", responseData.aiResponse)
+ console.log("AI Response:", responseData.aiResponse)
     }
   } catch (error) {
     showNotification(`Error durante la publicación: ${error.message}`, "error")
@@ -295,7 +317,7 @@ async function handleCardSubmit(e) {
   }
 }
 
-// Show notification
+// Show notification with improved positioning
 function showNotification(message, type = "info") {
   // Create notification element
   const notification = document.createElement("div")
@@ -305,16 +327,21 @@ function showNotification(message, type = "info") {
   // Add styles
   Object.assign(notification.style, {
     position: "fixed",
-    top: "20px",
-    right: "20px",
-    padding: "12px 20px",
-    borderRadius: "8px",
+    top: "60px",
+ right: "12px",
+    left: "12px",
+    maxWidth: "calc(100% - 24px)",
+    padding: "12px 16px",
+    borderRadius: "0",
     color: "white",
     fontWeight: "500",
     zIndex: "1001",
-    transform: "translateX(100%)",
+    transform: "translateX(calc(100% + 24px))",
     transition: "transform 0.3s ease",
-    maxWidth: "300px",
+    wordWrap: "break-word",
+  fontSize: "12px",
+    textAlign: "center",
+ boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
   })
 
   // Set background color based on type
@@ -325,7 +352,7 @@ function showNotification(message, type = "info") {
     case "error":
       notification.style.background = "#ef4444"
       break
-    default:
+ default:
       notification.style.background = "#3b82f6"
   }
 
@@ -338,9 +365,9 @@ function showNotification(message, type = "info") {
 
   // Remove after 3 seconds
   setTimeout(() => {
-    notification.style.transform = "translateX(100%)"
+    notification.style.transform = "translateX(calc(100% + 24px))"
     setTimeout(() => {
-      document.body.removeChild(notification)
+ document.body.removeChild(notification)
     }, 300)
   }, 3000)
 }
@@ -357,8 +384,8 @@ async function renderCards(reset = true) {
     cardsGrid.innerHTML = `
       <div class="loading-indicator">
         <div style="text-align: center; padding: 20px; color: var(--foreground-subtle);">
-          <div style="margin-bottom: 10px;">⏳</div>
-          <div>Cargando posts...</div>
+   <div style="margin-bottom: 10px;">⏳</div>
+       <div>Cargando posts...</div>
         </div>
       </div>
     `
@@ -379,15 +406,15 @@ async function renderCards(reset = true) {
       hasMoreCards = true
     }
 
-    // Generate card elements with proper date display
+  // Generate card elements with proper date display
     recordsArray.forEach((cardData, index) => {
       setTimeout(() => {
-        const cardElement = generateCardElement(cardData)
+const cardElement = generateCardElement(cardData)
         cardsGrid.appendChild(cardElement)
-      }, index * 30) // Reduced stagger for faster loading
+}, index * 15) // Faster stagger for better UX
     })
 
-    if (recordsArray.length >= 20) {
+  if (recordsArray.length >= 20) {
       if (loadMoreBtn) {
         loadMoreBtn.style.display = "block"
         loadMoreBtn.onclick = () => loadMoreCards()
@@ -397,15 +424,15 @@ async function renderCards(reset = true) {
     currentPage++
     hasMoreCards = recordsArray.length >= 20
   } catch (error) {
-    console.error("Error loading cards:", error)
+console.error("Error loading cards:", error)
     if (reset) {
       cardsGrid.innerHTML = `
-        <div class="error-message">
-          <div style="text-align: center; padding: 20px;">
-            <div style="margin-bottom: 10px;">⚠️</div>
-            <div>Error cargando posts: ${error.message}</div>
-            <button onclick="renderCards(true)" style="margin-top: 10px; padding: 6px 12px; background: var(--primary); color: var(--primary-foreground); border: 1px solid var(--primary); border-radius: 0; cursor: pointer; font-size: 11px;">
-              Reintentar
+ <div class="error-message">
+        <div style="text-align: center; padding: 20px;">
+         <div style="margin-bottom: 10px;">⚠️</div>
+    <div>Error cargando posts: ${error.message}</div>
+      <button onclick="renderCards(true)" style="margin-top: 10px; padding: 8px 12px; background: var(--primary); color: var(--primary-foreground); border: 1px solid var(--primary); border-radius: 0; cursor: pointer; font-size: 11px; min-height: 32px;">
+   Reintentar
             </button>
           </div>
         </div>
@@ -522,18 +549,18 @@ async function handleLike(cardId) {
 
     if (!response.ok) {
       const errorMsg = responseData.error || responseData || "Unknown error"
-      showNotification(`Error: ${errorMsg}`, "error")
+   showNotification(`Error: ${errorMsg}`, "error")
       return
-    }
+  }
 
     // Show success feedback
     showNotification("¡Like agregado!", "success")
 
-    // Refresh current view
+// Refresh current view
     if (currentMode === "cards") {
       renderCards(true)
     } else {
-      viewCardComments(selectedCardId)
+  viewCardComments(selectedCardId)
     }
   } catch (error) {
     showNotification(`Error durante el like: ${error.message}`, "error")
@@ -550,9 +577,9 @@ async function viewCardComments(cardId) {
     <div class="loading-indicator">
       <div style="text-align: center; padding: 40px 20px; color: var(--foreground-subtle);">
         <div style="margin-bottom: 16px; font-size: 24px;">⏳</div>
-        <div>Cargando comentarios...</div>
+    <div>Cargando comentarios...</div>
       </div>
-    </div>
+  </div>
   `
 
   try {
@@ -577,38 +604,38 @@ async function viewCardComments(cardId) {
       cardsGrid.appendChild(commentElement)
     })
 
-    // Add comment form
+  // Add comment form
     const commentForm = document.createElement("div")
     commentForm.className = "comment-form"
     commentForm.innerHTML = `
       <h4><i class="bi bi-chat-plus"></i> Agregar comentario</h4>
-      <form id="commentForm">
+  <form id="commentForm">
         <div class="form-group">
-          <label class="form-label">Autor</label>
+  <label class="form-label">Autor</label>
           <input type="text" class="form-input" id="commentAuthor" placeholder="Tu nombre (opcional)" value="anónimo">
         </div>
         <div class="form-group">
           <label class="form-label">Comentario</label>
-          <textarea class="form-textarea" id="commentBody" placeholder="Escribe tu comentario..." required></textarea>
+    <textarea class="form-textarea" id="commentBody" placeholder="Escribe tu comentario..." required></textarea>
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" onclick="backToCards()">Cancelar</button>
-          <button type="submit" class="btn-primary">Publicar comentario</button>
-        </div>
+  <div class="form-actions">
+    <button type="button" class="btn-secondary" onclick="backToCards()">Cancelar</button>
+    <button type="submit" class="btn-primary">Publicar comentario</button>
+     </div>
       </form>
-    `
+ `
     cardsGrid.appendChild(commentForm)
 
     // Handle comment form submission
     document.getElementById("commentForm").addEventListener("submit", async (e) => {
       e.preventDefault()
-      const commentAuthor = document.getElementById("commentAuthor").value.trim() || "anónimo"
+const commentAuthor = document.getElementById("commentAuthor").value.trim() || "anónimo"
       const commentBody = document.getElementById("commentBody").value.trim()
 
       if (!commentBody) {
         showNotification("El contenido del comentario es obligatorio.", "error")
         return
-      }
+   }
 
       // Show loading state
       const submitBtn = e.target.querySelector(".btn-primary")
@@ -616,14 +643,14 @@ async function viewCardComments(cardId) {
       submitBtn.textContent = "Publicando..."
       submitBtn.disabled = true
 
-      try {
+ try {
         const response = await fetch(`${BASE_API_URL}/server/comment`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            cardId: cardId,
-            commentAuthor: commentAuthor,
-            commentBody: commentBody,
+  cardId: cardId,
+    commentAuthor: commentAuthor,
+ commentBody: commentBody,
           }),
         })
 
@@ -634,16 +661,16 @@ async function viewCardComments(cardId) {
         }
 
         // Success feedback
-        showNotification("Comentario publicado exitosamente", "success")
+     showNotification("Comentario publicado exitosamente", "success")
 
-        // Refresh comments view
-        viewCardComments(cardId)
-      } catch (error) {
+    // Refresh comments view
+     viewCardComments(cardId)
+  } catch (error) {
         showNotification(`Error durante el comentario: ${error.message}`, "error")
       } finally {
-        submitBtn.textContent = originalText
+   submitBtn.textContent = originalText
         submitBtn.disabled = false
-      }
+    }
     })
 
     // Add back to cards button
@@ -652,17 +679,24 @@ async function viewCardComments(cardId) {
     backButton.className = "back-to-cards-btn"
     backButton.addEventListener("click", backToCards)
     cardsGrid.appendChild(backButton)
+
+    // Scroll to top on mobile
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 100)
+    }
   } catch (error) {
-    console.error("Error loading card:", error)
+console.error("Error loading card:", error)
     cardsGrid.innerHTML = `
       <div class="error-message">
-        <div style="text-align: center; padding: 40px 20px;">
+     <div style="text-align: center; padding: 40px 20px;">
           <div style="margin-bottom: 16px; font-size: 24px;">⚠️</div>
           <div>Error cargando post: ${error.message}</div>
-          <button onclick="backToCards()" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">
-            Volver a posts
-          </button>
-        </div>
+   <button onclick="backToCards()" style="margin-top: 16px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; min-height: 32px;">
+    Volver a posts
+       </button>
+   </div>
       </div>
     `
   }
@@ -678,7 +712,7 @@ function generateCommentElement(commentData) {
   commentHeader.innerHTML = `
     <div>
       <i class="bi bi-chat" style="color: var(--primary); margin-right: 6px;"></i>
-      <span class="card-author">${commentData.comment_author}</span>
+   <span class="card-author">${commentData.comment_author}</span>
       <span style="color: var(--foreground-subtle); margin-left: 8px;">•</span>
       <span style="color: var(--foreground-subtle); margin-left: 8px; font-size: 12px;">${formatDate(commentData.comment_date)}</span>
     </div>
@@ -700,6 +734,13 @@ function backToCards() {
   selectedCardId = null
   selectedCardData = null
   renderCards(true)
+
+  // Scroll to top on mobile
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 100)
+  }
 }
 
 // Format date for display - Enhanced formatting
@@ -710,10 +751,10 @@ function formatDate(utcDateInput) {
     // Return full datetime format as requested: 9/7/2025, 12:08:00 AM
     return date.toLocaleString("en-US", {
       year: "numeric",
-      month: "numeric",
+  month: "numeric",
       day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
+  hour: "numeric",
+    minute: "2-digit",
       second: "2-digit",
       hour12: true,
     })
@@ -730,20 +771,27 @@ function scrollToTop() {
   })
 }
 
-// Setup infinite scroll
+// Setup infinite scroll with improved performance
 function setupInfiniteScroll() {
+  let ticking = false
   window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-      if (hasMoreCards && !isLoading && currentMode === "cards") {
-        // Remove existing loading indicator
-        const existingLoading = document.querySelector(".loading-indicator")
-        if (existingLoading) {
-          existingLoading.remove()
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        if (hasMoreCards && !isLoading && currentMode === "cards") {
+    // Remove existing loading indicator
+         const existingLoading = document.querySelector(".loading-indicator")
+     if (existingLoading) {
+  existingLoading.remove()
+       }
+            renderCards(false) // Load more cards without resetting
+          }
         }
-        renderCards(false) // Load more cards without resetting
-      }
-    }
-  })
+      ticking = false
+      })
+      ticking = true
+  }
+  }, { passive: true })
 }
 
 // Initialize infinite scroll
@@ -771,8 +819,8 @@ function initializeSearch() {
       debounce((e) => {
         const query = e.target.value.trim()
         if (query.length > 2) {
-          // Implement search functionality here
-          console.log("Searching for:", query)
+// Implement search functionality here
+  console.log("Searching for:", query)
         }
       }, 300),
     )

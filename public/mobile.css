@@ -4,12 +4,17 @@
 @media (max-width: 768px) {
   .page-container {
     height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Dashboard container adjustments for mobile */
   .dashboard-container {
     margin: 4px;
     padding: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Header always visible on mobile */
@@ -19,38 +24,47 @@
     left: 0;
     right: 0;
     z-index: 100;
+    padding: 0;
+    margin: 0;
   }
 
   .content-wrapper {
-    padding-top: 60px;
-    /* Account for fixed header */
+    padding-top: 52px;
     padding-left: 4px;
     padding-right: 4px;
-    padding-bottom: 4px;
+    padding-bottom: 70px;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .header-container {
-    padding: 8px 12px;
+  padding: 6px 12px;
+    max-width: 100%;
   }
 
   .site-title {
     font-size: 16px;
+    margin: 0;
   }
 
   .header-actions {
     gap: 4px;
+    flex-wrap: wrap;
   }
 
   .header-icon-button {
-    width: 28px;
+ width: 28px;
     height: 24px;
-    font-size: 12px;
+  font-size: 12px;
     padding: 4px 6px;
+  min-height: 28px;
   }
 
   .three-column-grid {
     grid-template-columns: 1fr;
     gap: 8px;
+    min-height: auto;
   }
 
   /* Hide sidebars on mobile */
@@ -61,6 +75,8 @@
 
   .middle-feed {
     order: 1;
+    flex: 1;
+    min-height: 0;
   }
 
   .feed-header {
@@ -69,17 +85,25 @@
     align-items: center;
     padding: 4px 8px;
     margin-bottom: 0;
+    font-size: 11px;
   }
 
   .feed-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
+    margin: 0;
   }
 
   /* Enhanced cards container for mobile */
   .cards-container {
-    max-height: calc(100vh - 160px);
+    max-height: none;
     padding: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface-elevated);
+    flex: 1;
+ overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   .cards-grid {
@@ -100,10 +124,10 @@
     height: 48px;
     border-radius: 0;
     color: var(--primary-foreground);
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
     box-shadow: 2px 2px 0 var(--border);
-    transition: all 0.2s ease;
+transition: all 0.15s ease;
     z-index: 50;
   }
 
@@ -113,80 +137,107 @@
     box-shadow: 4px 4px 0 var(--border);
   }
 
+  .mobile-filter-btn:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--border);
+  }
+
   /* Mobile card adjustments */
   .card {
     padding: 8px;
     border-radius: 0;
     min-height: 100px;
+    transition: background-color 0.15s ease;
   }
 
   .card-header {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 4px;
+    gap: 4px;
   }
 
   .card-meta {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     font-size: 10px;
+    flex: 1;
+    flex-wrap: wrap;
   }
 
   .card-title {
     font-size: 12px;
-    margin-bottom: 4px;
+margin-bottom: 4px;
+    line-height: 1.3;
+    word-wrap: break-word;
   }
 
   .card-body {
-    font-size: 11px;
+  font-size: 11px;
     max-height: 50px;
-    -webkit-line-clamp: 3;
+ -webkit-line-clamp: 3;
     margin-bottom: 6px;
+    word-wrap: break-word;
   }
 
   .card-footer {
     padding-top: 4px;
+    border-top: 1px solid var(--border);
   }
 
   .card-actions {
-    gap: 8px;
+    gap: 6px;
+  flex-wrap: wrap;
   }
 
   .action-btn {
-    padding: 3px 6px;
+  padding: 4px 8px;
     font-size: 10px;
+    min-height: 28px;
+    flex: 1;
+    min-width: 60px;
+justify-content: center;
   }
 
   /* Mobile modal adjustments */
   .modal-content {
-    width: 95%;
-    max-width: 350px;
-    margin: 10px;
-    max-height: calc(100vh - 20px);
+    width: 90vw;
+    max-width: 360px;
+    margin: auto;
+    max-height: calc(100vh - 60px);
     border-radius: 0;
+    padding: 4px;
   }
 
   .modal-header {
     padding: 8px 12px;
+ margin-bottom: 0;
   }
 
   .modal-body {
     padding: 12px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .modal-title {
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .modal-title-section i {
+    font-size: 14px;
   }
 
   /* Mobile form adjustments */
   .form-input,
   .form-textarea {
     font-size: 14px;
-    /* Prevent zoom on iOS */
-    padding: 6px 8px;
+    padding: 8px;
     border-radius: 0;
+    width: 100%;
   }
 
   .form-textarea {
@@ -195,14 +246,17 @@
 
   .form-actions {
     flex-direction: row;
-    gap: 6px;
+gap: 6px;
+    justify-content: stretch;
   }
 
   .btn-primary,
-  .btn-secondary {
-    padding: 6px 12px;
+.btn-secondary {
+    padding: 8px 12px;
     font-size: 11px;
     border-radius: 0;
+    flex: 1;
+    min-height: 36px;
   }
 
   /* Comment form mobile adjustments */
@@ -220,29 +274,64 @@
     padding: 8px 12px;
     font-size: 11px;
     border-radius: 0;
-  }
+    width: 100%;
+    min-height: 36px;
+}
 
   /* Footer adjustments */
   .footer {
     padding: 6px 12px;
+    position: relative;
+    z-index: 10;
+    background: var(--header-bg);
+    border-top: 1px solid var(--border);
   }
 
   .footer-text {
     font-size: 10px;
+    margin: 0;
+  }
+
+  /* Loading indicator for mobile */
+  .loading-indicator {
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  /* Error message for mobile */
+  .error-message {
+    margin: 8px 4px;
+    padding: 16px;
   }
 }
 
 @media (max-width: 480px) {
+  .page-container {
+    height: 100vh;
+  }
+
+  .sticky-header {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+  }
+
   .header-container {
-    padding: 6px 8px;
+    padding: 4px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .site-title {
     font-size: 14px;
+    margin: 0;
   }
 
   .header-actions {
     gap: 2px;
+    margin-left: auto;
   }
 
   .header-icon-button {
@@ -250,22 +339,24 @@
     height: 20px;
     font-size: 10px;
     padding: 2px 4px;
+    min-height: 24px;
   }
 
   .content-wrapper {
     padding-top: 50px;
     padding-left: 2px;
     padding-right: 2px;
-    padding-bottom: 2px;
+    padding-bottom: 70px;
   }
 
   .dashboard-container {
     margin: 2px;
     padding: 2px;
+    min-height: auto;
   }
 
   .feed-title {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .card {
@@ -273,14 +364,25 @@
     min-height: 90px;
   }
 
+  .card-header {
+    margin-bottom: 2px;
+  }
+
   .card-title {
-    font-size: 11px;
+  font-size: 11px;
+    margin-bottom: 3px;
   }
 
   .card-body {
     font-size: 10px;
     max-height: 40px;
     -webkit-line-clamp: 2;
+    margin-bottom: 4px;
+  }
+
+  .card-meta {
+    font-size: 9px;
+    gap: 2px;
   }
 
   .mobile-filter-btn {
@@ -288,12 +390,14 @@
     height: 44px;
     bottom: 12px;
     right: 12px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .modal-content {
-    width: 98%;
-    margin: 4px;
+    width: 96vw;
+    max-width: 320px;
+    margin: 10px auto;
+    max-height: calc(100vh - 40px);
   }
 
   .modal-header {
@@ -302,12 +406,48 @@
 
   .modal-body {
     padding: 8px;
+    max-height: calc(100vh - 100px);
+  }
+
+  .modal-title {
+  font-size: 12px;
+  }
+
+  .form-input,
+  .form-textarea {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 8px 12px;
+  font-size: 10px;
+    min-height: 32px;
+  }
+
+  .action-btn {
+    font-size: 9px;
+    padding: 3px 6px;
+    min-height: 24px;
+  }
+
+  .loading-indicator {
+    padding: 16px;
+  }
+
+  .footer {
+    padding: 4px 8px;
+  }
+
+  .footer-text {
+    font-size: 9px;
   }
 }
 
 /* Fixed mobile filter modal styles */
 .mobile-filter-modal .modal-content {
-  max-width: 280px;
+  max-width: 300px;
   border-radius: 0;
 }
 
@@ -316,61 +456,90 @@
 }
 
 .mobile-filter-modal .filter-option {
-  padding: 8px 12px;
+  padding: 10px 12px;
   font-size: 11px;
   border-radius: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--foreground);
+  min-height: 36px;
+  transition: all 0.15s ease;
 }
 
 .mobile-filter-modal .filter-option:hover {
   background: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+.mobile-filter-modal .filter-option:active {
+  transform: scale(0.98);
 }
 
 .mobile-filter-modal .filter-option.active {
   background: var(--primary);
   color: var(--primary-foreground);
+  border-color: var(--primary);
 }
 
 .mobile-filter-modal .filter-option i {
   font-size: 12px;
+  margin-right: 4px;
 }
 
 /* Touch-specific adjustments */
 @media (hover: none) and (pointer: coarse) {
-
   .header-icon-button,
   .action-btn,
   .btn-primary,
-  .btn-secondary {
+  .btn-secondary,
+  .filter-option,
+  .mobile-filter-btn {
     min-height: 32px;
-    /* Touch target guidelines */
+    padding: 6px 10px;
   }
 
-  /* Remove hover effects on touch devices */
-  .card:hover,
-  .header-icon-button:hover,
+  /* Remove hover effects on touch devices, keep focus visible */
+  .card:hover {
+    background: var(--surface);
+    cursor: default;
+  }
+
+.header-icon-button:hover,
   .action-btn:hover,
-  .btn-primary:hover,
-  .btn-secondary:hover {
+.btn-primary:hover,
+  .btn-secondary:hover,
+  .mobile-filter-btn:hover {
     transform: none;
     box-shadow: none;
+    background: inherit;
   }
 
-  /* Focus states for accessibility */
+  /* Strong focus states for accessibility */
+  .header-icon-button:active,
+  .action-btn:active,
+  .btn-primary:active,
+  .btn-secondary:active,
+  .filter-option:active,
+  .mobile-filter-btn:active,
+  .card:active {
+    background: var(--surface-hover);
+    transform: none;
+  }
+
   .header-icon-button:focus,
   .action-btn:focus,
   .btn-primary:focus,
-  .btn-secondary:focus {
-    outline: 1px solid var(--primary);
-    outline-offset: 1px;
+  .btn-secondary:focus,
+  .filter-option:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
   }
 
   .form-input:focus,
   .form-textarea:focus,
   .sort-select:focus {
-    outline: 1px solid var(--primary);
-    outline-offset: 1px;
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border: 1px solid var(--primary);
   }
 }
