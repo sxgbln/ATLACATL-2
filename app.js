@@ -297,31 +297,43 @@ app.post("/server/gemini", cardLimiter, async (request, response) => {
       return response.status(400).json({ error: "Título y contenido son obligatorios." })
     }
 
-    // Create prompt for Gemini (keep structured contents)
+    // Create prompt for Gemini
     const contents = [
       {
         role: 'user',
         parts: [
-          {
-            text: `Usuario: ${cardAuthor || "anónimo"}
+ {
+   text: `Usuario: ${cardAuthor || "anónimo"}
 Título: ${cardTitle}
 Contenido: ${cardBody}
 
 Por favor, genera una respuesta o complemento apropiado para este contenido en Atlacatl.net.`
-          }
+     }
         ]
       }
     ]
 
-    // Get AI response using new SDK method
+    // Get AI response using new SDK method - FIX: Correct property access
     const result = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",  // Valid model name
-      contents: contents,
+      model: "gemini-2.0-flash",
+contents: contents,
       config: {
-        systemInstruction: systemInstruction  // Pass system instruction here
+        systemInstruction: systemInstruction
       }
-    })
-    const aiResponse = result.text  // Updated extraction
+  })
+
+    // FIX: Access response text correctly
+    let aiResponse = ""
+    if (result.candidates && result.candidates.length > 0) {
+      const candidate = result.candidates[0]
+      if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+        aiResponse = candidate.content.parts[0].text || ""
+      }
+    }
+
+    if (!aiResponse) {
+      throw new Error("No response received from AI model")
+    }
 
     // Combine user content with AI response
     const combinedBody = `${cardBody}
@@ -336,12 +348,13 @@ Por favor, genera una respuesta o complemento apropiado para este contenido en A
       status: "success",
       message: "Tarjeta con IA publicada exitosamente",
       aiResponse: aiResponse,
-      data: queryResult,
+    data: queryResult,
     })
   } catch (error) {
     console.error("Error in AI card creation:", error)
     response.status(500).json({
       error: "Error procesando solicitud con IA. Intenta nuevamente.",
+  details: error.message
     })
   }
 })

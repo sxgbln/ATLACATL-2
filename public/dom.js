@@ -255,7 +255,7 @@ function startConsoleCursor() {
 async function handleCardSubmit(e) {
   e.preventDefault()
 
-  const cardTitle = document.getElementById("cardTitle").value.trim()
+const cardTitle = document.getElementById("cardTitle").value.trim()
   const cardBody = document.getElementById("cardBody").value.trim()
   const cardAuthor = document.getElementById("cardAuthor").value.trim() || "anónimo"
   const isAIEnabled = document.getElementById("aiSwitch").checked
@@ -268,12 +268,13 @@ async function handleCardSubmit(e) {
   // Show loading state
   const submitBtn = document.querySelector(".btn-primary")
   const originalText = submitBtn.textContent
-  submitBtn.textContent = "Publicando..."
+  const aiText = isAIEnabled ? "🤖 Mejorando con IA..." : "Publicando..."
+  submitBtn.textContent = aiText
   submitBtn.disabled = true
 
   const cardData = {
     cardTitle: cardTitle,
-  cardBody: cardBody,
+ cardBody: cardBody,
     cardAuthor: cardAuthor,
   }
 
@@ -294,22 +295,28 @@ async function handleCardSubmit(e) {
     }
 
     if (!response.ok) {
-   const errorMsg = responseData.error || responseData || "Unknown error"
-    showNotification(`Error: ${errorMsg}`, "error")
+  const errorMsg = responseData.error || responseData.details || responseData || "Unknown error"
+      showNotification(`Error: ${errorMsg}`, "error")
       return
     }
 
-    // Success - close modal and refresh cards
+// Success - close modal and refresh cards
     closeCardGenerator()
     renderCards(true)
-    showNotification("Post publicado exitosamente", "success")
+    
+    if (isAIEnabled) {
+  showNotification("✨ Post publicado con IA!", "success")
+    } else {
+      showNotification("Post publicado exitosamente", "success")
+}
+    
     updateActivePostsCount()
 
     if (isAIEnabled && responseData.aiResponse) {
- console.log("AI Response:", responseData.aiResponse)
+      console.log("AI Response:", responseData.aiResponse)
     }
   } catch (error) {
-    showNotification(`Error durante la publicación: ${error.message}`, "error")
+  showNotification(`Error durante la publicación: ${error.message}`, "error")
   } finally {
     // Reset button state
     submitBtn.textContent = originalText

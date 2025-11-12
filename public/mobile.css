@@ -235,28 +235,38 @@ justify-content: center;
   .form-input,
   .form-textarea {
     font-size: 14px;
-    padding: 8px;
+    padding: 10px;
     border-radius: 0;
     width: 100%;
+    min-height: 36px;
   }
 
   .form-textarea {
-    min-height: 60px;
+    min-height: 80px;
+    line-height: 1.5;
   }
 
   .form-actions {
     flex-direction: row;
-gap: 6px;
+    gap: 8px;
     justify-content: stretch;
   }
 
   .btn-primary,
 .btn-secondary {
-    padding: 8px 12px;
-    font-size: 11px;
+    padding: 10px 12px;
+    font-size: 12px;
     border-radius: 0;
-    flex: 1;
-    min-height: 36px;
+  flex: 1;
+ min-height: 40px;
+    font-weight: 600;
+  }
+
+  /* AI helper text for mobile */
+  .ai-helper-text {
+    padding-left: 0;
+    margin-top: 4px;
+    font-size: 9px;
   }
 
   /* Comment form mobile adjustments */
@@ -416,12 +426,12 @@ gap: 6px;
   .form-input,
   .form-textarea {
     font-size: 14px;
-    padding: 8px;
+    padding: 10px;
   }
 
   .btn-primary,
   .btn-secondary {
-    padding: 8px 12px;
+    padding: 10px 12px;
   font-size: 10px;
     min-height: 32px;
   }

@@ -705,6 +705,8 @@ color: var(--foreground);
   font-size: 11px;
   font-weight: bold;
   color: var(--foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-input,
@@ -717,75 +719,38 @@ color: var(--foreground);
   background: var(--surface);
   color: var(--foreground);
   transition: all 0.15s ease;
+  min-height: 28px;
 }
 
 .form-input:hover,
 .form-textarea:hover {
   border-color: var(--border-hover);
+  background: #fafafa;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(52, 52, 92, 0.2);
+  box-shadow: 0 0 0 2px rgba(52, 52, 92, 0.15);
+  background: var(--surface);
 }
 
 .form-textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
   font-family: inherit;
+  line-height: 1.4;
 }
 
-/* Switch component */
-.switch-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.switch-input {
-  position: relative;
-  width: 36px;
-  height: 20px;
-  appearance: none;
-  background: var(--surface-hover);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.switch-input:hover {
-  border-color: var(--border-hover);
-}
-
-.switch-input:checked {
-  background: var(--primary);
-  border-color: var(--primary);
-}
-
-.switch-input::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 14px;
-  height: 14px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.2s ease;
-}
-
-.switch-input:checked::before {
-  transform: translateX(16px);
-}
-
-.switch-text {
-  font-size: 11px;
-  color: var(--foreground-muted);
-  font-weight: bold;
+/* AI Helper text */
+.ai-helper-text {
+  display: block;
+  font-size: 10px;
+  color: var(--foreground-subtle);
+  margin-top: 2px;
+  font-style: italic;
+  padding-left: 44px;
 }
 
 /* Button styles */
