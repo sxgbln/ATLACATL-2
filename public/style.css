@@ -62,7 +62,7 @@ body {
 .dashboard-container {
   background: var(--surface);
   border: 2px solid var(--border);
-  margin: 8px;
+  margin: 12px; /* Increased margin for better spacing */
   padding: 8px;
   flex: 1;
 }
@@ -129,6 +129,7 @@ body {
 .header-icon-button:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px); /* Subtle lift effect */
 }
 
 /* 4chan-style layout */
@@ -287,14 +288,17 @@ body {
   margin-right: 4px;
 }
 
-.card-body {
+  .card-body {
   font-size: 12px;
   margin-bottom: 8px;
   color: var(--foreground);
-  line-height: 1.4;
-  max-height: 60px;
+  line-height: 1.5; /* Increased line-height for better readability */
+  max-height: 75px; /* Increased max-height to show more content */
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-line-clamp: 4; /* Ensure consistent line clamping */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
 
 .card-footer {
@@ -434,6 +438,8 @@ body {
   width: 100%;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
+  margin: auto; /* Center the modal content */
+  padding: 8px; /* Add default padding to modal content */
 }
 
 .modal-header {
@@ -625,6 +631,7 @@ body {
 .form-textarea:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(52, 52, 92, 0.3); /* Subtle primary color shadow */
 }
 
 .form-textarea {
