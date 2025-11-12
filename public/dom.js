@@ -268,9 +268,15 @@ const cardTitle = document.getElementById("cardTitle").value.trim()
   // Show loading state
   const submitBtn = document.querySelector(".btn-primary")
   const originalText = submitBtn.textContent
-  const aiText = isAIEnabled ? "🤖 Mejorando con IA..." : "Publicando..."
-  submitBtn.textContent = aiText
   submitBtn.disabled = true
+  
+  if (isAIEnabled) {
+    submitBtn.innerHTML = '<span class="ai-loading-pulse">🤖</span> Mejorando con IA...'
+    submitBtn.classList.add("loading")
+  } else {
+    submitBtn.textContent = "Publicando..."
+    submitBtn.classList.add("loading")
+  }
 
   const cardData = {
     cardTitle: cardTitle,
@@ -305,22 +311,20 @@ const cardTitle = document.getElementById("cardTitle").value.trim()
     renderCards(true)
     
     if (isAIEnabled) {
-  showNotification("✨ Post publicado con IA!", "success")
+  showNotification("✨ Post publicado con IA mejorado!", "success")
+      console.log("AI Enhancement:", responseData.aiResponse)
     } else {
-      showNotification("Post publicado exitosamente", "success")
+      showNotification("📝 Post publicado exitosamente", "success")
 }
     
     updateActivePostsCount()
-
-    if (isAIEnabled && responseData.aiResponse) {
-      console.log("AI Response:", responseData.aiResponse)
-    }
   } catch (error) {
   showNotification(`Error durante la publicación: ${error.message}`, "error")
   } finally {
     // Reset button state
     submitBtn.textContent = originalText
     submitBtn.disabled = false
+    submitBtn.classList.remove("loading")
   }
 }
 
@@ -335,7 +339,7 @@ function showNotification(message, type = "info") {
   Object.assign(notification.style, {
     position: "fixed",
     top: "60px",
- right: "12px",
+right: "12px",
     left: "12px",
     maxWidth: "calc(100% - 24px)",
     padding: "12px 16px",
@@ -344,23 +348,23 @@ function showNotification(message, type = "info") {
     fontWeight: "500",
     zIndex: "1001",
     transform: "translateX(calc(100% + 24px))",
-    transition: "transform 0.3s ease",
-    wordWrap: "break-word",
-  fontSize: "12px",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+ wordWrap: "break-word",
+fontSize: "12px",
     textAlign: "center",
  boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
   })
 
-  // Set background color based on type
+  // Set background color based on type with gradients for better UX
   switch (type) {
     case "success":
-      notification.style.background = "#10b981"
+      notification.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)"
       break
     case "error":
-      notification.style.background = "#ef4444"
+      notification.style.background = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
       break
  default:
-      notification.style.background = "#3b82f6"
+    notification.style.background = "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
   }
 
   document.body.appendChild(notification)
@@ -370,13 +374,14 @@ function showNotification(message, type = "info") {
     notification.style.transform = "translateX(0)"
   }, 100)
 
-  // Remove after 3 seconds
+  // Remove after 3.5 seconds
   setTimeout(() => {
     notification.style.transform = "translateX(calc(100% + 24px))"
+    notification.style.opacity = "0"
     setTimeout(() => {
  document.body.removeChild(notification)
     }, 300)
-  }, 3000)
+  }, 3500)
 }
 
 // Render cards with selected sorting

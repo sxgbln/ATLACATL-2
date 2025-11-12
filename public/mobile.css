@@ -267,6 +267,17 @@ justify-content: center;
     padding-left: 0;
     margin-top: 4px;
     font-size: 9px;
+  font-weight: 500;
+  }
+
+  .ai-form-group {
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 2px;
+  }
+
+  .ai-form-group .switch-container {
+    margin-bottom: 8px;
   }
 
   /* Comment form mobile adjustments */

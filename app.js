@@ -19,7 +19,7 @@ const { GoogleGenAI } = require("@google/genai")
 const app = express()
 const port = 3000
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyBW5ixIBqvhBFB3WvDeafeLSYhcEY7aH8Y"
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDVX7OSjxxxz6jUcEh81KXUruUZ5qsiZfQ"
 
 const systemInstruction = `
 Eres un asistente de IA integrado en Atlacatl.net, la primera red social salvadoreña. Tu función es generar respuestas concisas y contextualmente relevantes basadas en las solicitudes de los usuarios, adecuadas para compartir en la plataforma.
@@ -48,23 +48,18 @@ Habla en primera persona como asistente. No reveles que te llamas GFAS a menos q
 // Updated initialization for new SDK
 const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY })
 
-// Middleware setup
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
 
-// Helper function to get client IP (handle Cloudflare/proxy chains)
 function getClientIP(req) {
-  // Prefer Cloudflare's trusted header if present
   if (req.headers["cf-connecting-ip"]) {
     return req.headers["cf-connecting-ip"]
   }
-  // Fallback to X-Forwarded-For, taking the first (client) IP
   const forwarded = req.headers["x-forwarded-for"]
   if (forwarded) {
     return forwarded.split(",")[0].trim()
   }
-  // Other fallbacks
   return (
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
@@ -73,24 +68,20 @@ function getClientIP(req) {
   )
 }
 
-// Helper function to get or create device ID from cookie
 function getOrCreateDeviceId(req, res) {
   let deviceId = req.cookies.device_id
 
-  // If no device cookie exists, create a new one
   if (!deviceId) {
     deviceId = uuidv4()
-    // Set cookie to expire in 1 year
     res.cookie("device_id", deviceId, {
-      maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year in milliseconds
-      httpOnly: false, // Allow JavaScript access
+      maxAge: 365 * 24 * 60 * 60 * 1000,
+      httpOnly: false,
     })
   }
 
   return deviceId
 }
 
-// Helper function to sanitize card data (remove sensitive info)
 function sanitizeCardData(cards) {
   if (Array.isArray(cards)) {
     return cards.map((card) => sanitizeSingleCard(card))
@@ -98,13 +89,11 @@ function sanitizeCardData(cards) {
   return sanitizeSingleCard(cards)
 }
 
-// Helper function to sanitize single card
 function sanitizeSingleCard(card) {
   const { ip_address, device_id, ...sanitizedCard } = card
   return sanitizedCard
 }
 
-// Helper function to sanitize comment data
 function sanitizeCommentData(comments) {
   if (Array.isArray(comments)) {
     return comments.map((comment) => {
@@ -116,37 +105,31 @@ function sanitizeCommentData(comments) {
   return sanitizedComment
 }
 
-// Rate limiters for spam-prone endpoints
-// Strict limit for new cards: 2 per 5 minutes per IP
 const cardLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minute window
-  max: 2, // Limit each IP to 2 card posts per 5 minutes
+  windowMs: 5 * 60 * 1000,
+  max: 2,
   message: { error: "Too many requests from this network, please try again later." },
-  keyGenerator: (req) => getClientIP(req), // Use IP as key
+  keyGenerator: (req) => getClientIP(req),
 })
 
-// Moderate limit for comments: 2 per minute per IP
 const commentLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 2, // Limit each IP to 2 comments per minute
+  windowMs: 1 * 60 * 1000,
+  max: 2,
   message: { error: "Too many requests from this network, please try again later." },
   keyGenerator: (req) => getClientIP(req),
 })
 
-// Moderate limit for likes: 3 per minute per IP
 const likeLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute window
-  max: 3, // Limit each IP to 3 likes per minute
+  windowMs: 1 * 60 * 1000,
+  max: 3,
   message: { error: "Too many requests from this network, please try again later." },
   keyGenerator: (req) => getClientIP(req),
 })
 
-// New unified sorting endpoint with data sanitization
 app.get("/server/get/sorted/:sortType", async (request, response) => {
   const sortType = request.params.sortType
   console.log(`GET request received for sorting: ${sortType}`)
 
-  // Set device cookie for future use
   getOrCreateDeviceId(request, response)
 
   try {
@@ -168,7 +151,6 @@ app.get("/server/get/sorted/:sortType", async (request, response) => {
         rows = await poolGetByDateDesc()
     }
 
-    // Sanitize data before sending
     const sanitizedRows = sanitizeCardData(rows)
     response.send(sanitizedRows)
   } catch (error) {
@@ -176,7 +158,6 @@ app.get("/server/get/sorted/:sortType", async (request, response) => {
   }
 })
 
-// Keep old endpoints for backward compatibility
 app.get("/server/get/sortasc", async (request, response) => {
   console.log("GET request received for /server/get/sortasc")
   getOrCreateDeviceId(request, response)
@@ -203,7 +184,6 @@ app.get("/server/get/sortdesc", async (request, response) => {
   }
 })
 
-// POST - Create new card (with IP and device tracking, and rate limiting)
 app.post("/", cardLimiter, async (request, response) => {
   console.log("POST request received:", request.body)
 
@@ -223,7 +203,6 @@ app.post("/", cardLimiter, async (request, response) => {
   }
 })
 
-// GET - Single card with comments (sanitized)
 app.get("/server/card/:cardId", async (request, response) => {
   console.log(`GET request received for card ID: ${request.params.cardId}`)
   getOrCreateDeviceId(request, response)
@@ -237,7 +216,6 @@ app.get("/server/card/:cardId", async (request, response) => {
       return response.status(404).send({ error: "Card not found" })
     }
 
-    // Sanitize both card and comments data
     const sanitizedCard = sanitizeCardData(card)
     const sanitizedComments = sanitizeCommentData(comments)
 
@@ -250,7 +228,6 @@ app.get("/server/card/:cardId", async (request, response) => {
   }
 })
 
-// POST - Add comment to card (with device tracking, and rate limiting)
 app.post("/server/comment", commentLimiter, async (request, response) => {
   console.log("POST comment request received:", request.body)
 
@@ -266,7 +243,6 @@ app.post("/server/comment", commentLimiter, async (request, response) => {
   }
 })
 
-// POST - Like a card (with dual IP + device verification, and rate limiting)
 app.post("/server/like", likeLimiter, async (request, response) => {
   console.log("POST like request received:", request.body)
 
@@ -301,7 +277,7 @@ app.post("/server/gemini", cardLimiter, async (request, response) => {
     const contents = [
       {
         role: 'user',
-        parts: [
+   parts: [
  {
    text: `Usuario: ${cardAuthor || "anónimo"}
 Título: ${cardTitle}
@@ -313,21 +289,23 @@ Por favor, genera una respuesta o complemento apropiado para este contenido en A
       }
     ]
 
-    // Get AI response using new SDK method - FIX: Correct property access
-    const result = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",
-contents: contents,
+    // Get AI response using new model - gemini-flash-lite-latest
+    const result = await genAI.models.generateContentStream({
+      model: "gemini-flash-lite-latest",
       config: {
-        systemInstruction: systemInstruction
-      }
+     systemInstruction: systemInstruction,
+     thinkingConfig: {
+thinkingBudget: 0,
+     },
+      },
+      contents: contents,
   })
 
-    // FIX: Access response text correctly
+    // FIX: Extract text from stream
     let aiResponse = ""
-    if (result.candidates && result.candidates.length > 0) {
-      const candidate = result.candidates[0]
-      if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
-        aiResponse = candidate.content.parts[0].text || ""
+    for await (const chunk of result) {
+      if (chunk.text) {
+        aiResponse += chunk.text
       }
     }
 
@@ -353,7 +331,7 @@ contents: contents,
   } catch (error) {
     console.error("Error in AI card creation:", error)
     response.status(500).json({
-      error: "Error procesando solicitud con IA. Intenta nuevamente.",
+ error: "Error procesando solicitud con IA. Intenta nuevamente.",
   details: error.message
     })
   }
